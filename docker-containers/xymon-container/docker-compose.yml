@@ -1,0 +1,8 @@
+services:
+  xymon:
+    image: deweysasser/xymon
+    volumes:
+      - /home/loganp/container-data/xymon-data/etc-xymon:/etc/xymon
+      - /home/loganp/container-data/xymon-data/var-lib-xymon:/var/lib/xymon
+    network_mode: host
+    restart: unless-stopped

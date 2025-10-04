@@ -1,0 +1,15 @@
+services:
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    restart: unless-stopped
+    environment:
+      - TZ=Etc/UTC
+      - PLEX_UID=1000
+      - PLEX_GID=1000
+      - PLEX_CLAIM= #optional
+    network_mode: host
+    volumes:
+      - /home/loganp/container-data/plex-data:/config
+      - /home/loganp/Videos/transcode:/transcode
+      - /home/loganp/Videos/:/Videos

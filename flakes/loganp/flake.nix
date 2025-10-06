@@ -11,22 +11,7 @@
     buildEnv {
       name = "loganp-packages";
       paths = [
-        neovim
-        ripgrep
-        luajitPackages.jsregexp
-        fd
-
-        bash-completion
-        shellcheck
-        shfmt
-        bash-language-server
-        lua-language-server
-        typescript-language-server
-        nixd
-        nixfmt-classic
-        perl540Packages.PLS
-        tree-sitter
-
+        #GNOME
         gnome-tweaks
         xdg-terminal-exec
         rose-pine-cursor
@@ -38,7 +23,20 @@
         gnomeExtensions.wallpaper-slideshow
         gnomeExtensions.color-picker
         gnomeExtensions.executor
-
+        #neovim stuff
+        neovim
+        tree-sitter
+        luajitPackages.jsregexp
+        bash-completion
+        shellcheck
+        shfmt
+        bash-language-server
+        lua-language-server
+        typescript-language-server
+        nixd
+        nixfmt-classic
+        perl540Packages.PLS
+        #system
         efibootmgr
         git
         wget
@@ -55,7 +53,6 @@
         sysstat
         jre
         ffmpeg
-
         tmux
         btop-cuda
         wl-clipboard
@@ -65,12 +62,15 @@
         eza
         fastfetch
         fzf
+        ripgrep
+        fd
         nodePackages.nodejs
         iotop-c
-
+        #for fun
         lavat
         pokeget-rs
-
+        #GUI apps
+        firefox
         kitty
         vlc
         qbittorrent

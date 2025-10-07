@@ -3,10 +3,11 @@
   system.stateVersion = "24.11"; # Did you read the comment?
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   networking.hostName = "nixos-loganp";
   networking.networkmanager.enable = true;
+  security.rtkit.enable = true;
 
-  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.timeout = 1;
@@ -27,7 +28,6 @@
 
   services.printing.enable = false;
   services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -35,8 +35,13 @@
     pulse.enable = true;
   };
 
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [ rocmPackages.rocm-smi amf ];
+  };
+
   #environment.systemPackages = with pkgs; [ ];
-  programs.firefox.enable = true;
   programs.steam = {
     enable = true;
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
@@ -47,11 +52,9 @@
     enableBashCompletion = true;
   };
 
-  # SSH
   services.openssh.enable = true;
   services.fail2ban.enable = true;
 
-  # User Account
   users.users.loganp = {
     isNormalUser = true;
     description = "Logan";
@@ -61,7 +64,6 @@
   };
   security.sudo.wheelNeedsPassword = false;
 
-  #GNOME
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
   services.displayManager.autoLogin = {
@@ -107,18 +109,10 @@
     inter
   ];
 
-  # Docker & Firewall
   virtualisation.docker.enable = true;
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [ 80 2283 8096 32400 1984 ];
     allowedUDPPorts = [ 80 2283 8096 32400 1984 ];
-  };
-
-  #AMD GPU
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [ rocmPackages.rocm-smi amf ];
   };
 }

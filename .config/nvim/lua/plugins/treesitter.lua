@@ -8,6 +8,7 @@ return {
                 "bash",
                 "lua",
                 "perl",
+                "nix",
                 "vim",
                 "vimdoc",
                 "query",

@@ -67,6 +67,35 @@
     gnome-text-editor
   ];
 
+  environment.systemPackages = with pkgs; [
+    git
+    wget
+    curl
+    rsync
+    nmap
+    dnslookup
+    ipmitool
+    stow
+    tmux
+    docker
+    docker-compose
+    wireguard-tools
+    sysstat
+    ffmpeg
+    btop-cuda
+    lazydocker
+    lazygit
+    wl-clipboard
+    bat
+    eza
+    ripgrep
+    fd
+    fzf
+    fastfetch
+    nodePackages.nodejs
+    jre
+  ];
+
   programs.zsh = {
     enable = true;
     syntaxHighlighting.enable = true;
@@ -108,8 +137,8 @@
   virtualisation.docker.enable = true;
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 80 2283 8096 32400 1984 ];
-    allowedUDPPorts = [ 80 2283 8096 32400 1984 ];
+    allowedTCPPorts = [ 80 8096 32400 ];
+    allowedUDPPorts = [ 80 8096 32400 ];
   };
 
   hardware.graphics = {

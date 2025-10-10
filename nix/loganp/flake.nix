@@ -25,36 +25,7 @@
         nixfmt-classic
         perl540Packages.PLS
         #system
-        efibootmgr
-        git
-        wget
-        curl
-        rsync
-        nmap
-        dnslookup
-        stow
-        docker
-        docker-compose
-        gnumake
-        clang
-        wireguard-tools
-        sysstat
-        jre
-        ffmpeg
-        tmux
-        btop-cuda
-        wl-clipboard
-        lazydocker
-        lazygit
-        bat
-        eza
-        fastfetch
-        fzf
-        ripgrep
-        fd
-        nodePackages.nodejs
         iotop-c
-        ipmitool
         #for fun
         lavat
         pokeget-rs

@@ -12,7 +12,7 @@ alias bat="bat --color=always --theme=ansi --style=-numbers,-header,+changes"
 alias dcdu="docker compose down; docker compose up -d"
 alias nixsysupgrade="sudo nixos-rebuild switch --upgrade"
 alias nixlistgens="sudo nix-env --list-generations --profile /nix/var/nix/profiles/system"
-alias nixflakeup="nix profile upgrade flakes/loganp --verbose"
+alias nixflakeup="nix profile upgrade nix/loganp --verbose"
 alias lava="lavat -c black -k magenta -s 4"
 alias fzf="fzf --style full --preview 'bat --color=always --theme=ansi --style=-numbers,-header,+changes {}'"
 source <(fzf --zsh)

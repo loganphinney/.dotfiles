@@ -11,18 +11,6 @@
     buildEnv {
       name = "loganp-packages";
       paths = [
-        #GNOME
-        gnome-tweaks
-        xdg-terminal-exec
-        rose-pine-cursor
-        mission-center
-        gnomeExtensions.open-bar
-        gnomeExtensions.hide-top-bar
-        gnomeExtensions.user-themes
-        gnomeExtensions.vitals
-        gnomeExtensions.wallpaper-slideshow
-        gnomeExtensions.color-picker
-        gnomeExtensions.executor
         #neovim stuff
         neovim
         tree-sitter
@@ -66,9 +54,22 @@
         fd
         nodePackages.nodejs
         iotop-c
+        ipmitool
         #for fun
         lavat
         pokeget-rs
+        #GNOME
+        gnome-tweaks
+        xdg-terminal-exec
+        rose-pine-cursor
+        mission-center
+        gnomeExtensions.open-bar
+        gnomeExtensions.hide-top-bar
+        gnomeExtensions.user-themes
+        gnomeExtensions.vitals
+        gnomeExtensions.wallpaper-slideshow
+        gnomeExtensions.color-picker
+        gnomeExtensions.executor
         #GUI apps
         firefox
         kitty

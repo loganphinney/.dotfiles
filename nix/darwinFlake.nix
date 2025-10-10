@@ -21,6 +21,11 @@
           name = "loganphinney";
           home = "/Users/loganphinney";
         };
+        security.pam.services.sudo_local = {
+          enable = true;
+          reattach = true;
+          touchIdAuth = true;
+        };
         nixpkgs.config.allowUnfree = true;
         fonts.packages = with pkgs; [ nerd-fonts.hack ];
         programs.zsh = {

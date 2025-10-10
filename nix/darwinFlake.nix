@@ -23,6 +23,12 @@
         };
         nixpkgs.config.allowUnfree = true;
         fonts.packages = with pkgs; [ nerd-fonts.hack ];
+        programs.zsh = {
+          enable = true;
+          enableSyntaxHighlighting = true;
+          enableBashCompletion = true;
+          enableCompletion = true;
+        };
         environment.systemPackages = with pkgs; [
           kitty
           rectangle
@@ -63,12 +69,6 @@
             "figma"
           ];
           global.autoUpdate = true;
-        };
-        programs.zsh = {
-          enable = true;
-          enableSyntaxHighlighting = true;
-          enableBashCompletion = true;
-          enableCompletion = true;
         };
       };
 
@@ -114,8 +114,8 @@
               "fzf --style full --preview 'bat --color=always --theme=ansi --style=-numbers,-header,+changes {}'";
             lava = "lavat -c black -k magenta -s 3";
             cmatrix = "cmatrix -C magenta";
-            darwin-upgrade = "sudo darwin-rebuild switch --verbose";
-            darwin-ed = "nvsu /etc/nix-darwin/flake.nix";
+            darwinup = "sudo darwin-rebuild switch --verbose";
+            darwined = "nvsu /etc/nix-darwin/flake.nix";
           };
         };
         programs.fzf = {

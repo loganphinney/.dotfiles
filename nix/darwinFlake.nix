@@ -97,6 +97,36 @@
           lavat
           cmatrix
         ];
+        programs.zsh = {
+          enable = true;
+          initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";
+          shellAliases = {
+            ".." = "cd ../";
+            "~" = "cd ~/";
+            cl = "clear";
+            ls = "eza";
+            la = "eza -a";
+            ll = "eza -l";
+            l1 = "eza -1";
+            tree = "eza -T";
+            nv = "nvim";
+            nvsu = "sudo -E nvim";
+            bat =
+              "bat --color=always --theme=ansi --style=-numbers,-header,+changes";
+            dcdu = "docker compose down; docker compose up -d";
+            bug = "brew upgrade --greedy";
+            fzf =
+              "fzf --style full --preview 'bat --color=always --theme=ansi --style=-numbers,-header,+changes {}'";
+            lava = "lavat -c black -k magenta -s 3";
+            cmatrix = "cmatrix -C magenta";
+            darwinup = "sudo darwin-rebuild switch --verbose";
+            darwined = "nvsu /etc/nix-darwin/flake.nix";
+          };
+        };
+        programs.fzf = {
+          enable = true;
+          enableZshIntegration = true;
+        };
         programs.kitty = {
           enable = true;
           font.name = "Hack Nerd Font Mono";
@@ -143,35 +173,40 @@
             color15 = "#e0def4";
           };
         };
-        programs.zsh = {
+        programs.tmux = {
           enable = true;
-          initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";
-          shellAliases = {
-            ".." = "cd ../";
-            "~" = "cd ~/";
-            cl = "clear";
-            ls = "eza";
-            la = "eza -a";
-            ll = "eza -l";
-            l1 = "eza -1";
-            tree = "eza -T";
-            nv = "nvim";
-            nvsu = "sudo -E nvim";
-            bat =
-              "bat --color=always --theme=ansi --style=-numbers,-header,+changes";
-            dcdu = "docker compose down; docker compose up -d";
-            bug = "brew upgrade --greedy";
-            fzf =
-              "fzf --style full --preview 'bat --color=always --theme=ansi --style=-numbers,-header,+changes {}'";
-            lava = "lavat -c black -k magenta -s 3";
-            cmatrix = "cmatrix -C magenta";
-            darwinup = "sudo darwin-rebuild switch --verbose";
-            darwined = "nvsu /etc/nix-darwin/flake.nix";
-          };
-        };
-        programs.fzf = {
-          enable = true;
-          enableZshIntegration = true;
+          baseIndex = 1;
+          mouse = true;
+          focusEvents = true;
+          clock24 = true;
+          shortcut = "s";
+          extraConfig = ''
+            set-option -g status-position top
+            set -g renumber-windows on
+            set -g status-interval 3
+            bind-key "|" split-window -h -c "#{pane_current_path}"
+            bind-key "\\" split-window -fh -c "#{pane_current_path}"
+            bind-key "-" split-window -v -c "#{pane_current_path}"
+            bind-key "_" split-window -fv -c "#{pane_current_path}"
+          '';
+          plugins = with pkgs.tmuxPlugins; [
+            {
+              plugin = rose-pine;
+              extraConfig = ''
+                set -g @rose_pine_variant 'main'
+                set -g @rose_pine_disable_active_window_menu 'on'
+                set -g @rose_pine_show_current_program 'on'
+                set -g @rose_pine_host 'on'
+                set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
+                set -g @rose_pine_user 'on' 
+                set -g @rose_pine_directory 'on'
+                set -g @rose_pine_right_separator ' '
+                set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} #{battery_percentage} ' 
+              '';
+            }
+            cpu
+            battery
+          ];
         };
       };
 

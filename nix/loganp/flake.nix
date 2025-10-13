@@ -43,7 +43,6 @@
         gnomeExtensions.executor
         #GUI apps
         firefox
-        kitty
         vlc
         qbittorrent
         libreoffice-fresh

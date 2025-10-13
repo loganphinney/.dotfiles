@@ -4,11 +4,9 @@
   system.stateVersion = "24.11"; # Did you read the comment?
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
-
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.timeout = 1;
-
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
@@ -22,7 +20,6 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-
   services.printing.enable = false;
   services.pulseaudio.enable = false;
   services.pipewire = {
@@ -31,12 +28,10 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-
   networking.networkmanager.enable = true;
   security.rtkit.enable = true;
   services.openssh.enable = true;
   services.fail2ban.enable = true;
-
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
   services.xserver.enable = true;
@@ -66,7 +61,6 @@
     gnome-tour
     gnome-text-editor
   ];
-
   environment.systemPackages = with pkgs; [
     git
     wget
@@ -95,18 +89,16 @@
     nodePackages.nodejs
     jre
   ];
-
   programs.zsh = {
     enable = true;
     syntaxHighlighting.enable = true;
     enableBashCompletion = true;
+    enableCompletion = true;
   };
-
   programs.steam = {
     enable = true;
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
   };
-
   security.sudo.wheelNeedsPassword = false;
   users.users.loganp = {
     isNormalUser = true;
@@ -114,9 +106,99 @@
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     shell = pkgs.zsh;
   };
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "loganp";
+  };
+  fonts.packages = with pkgs; [
+    nerd-fonts.hack
+    corefonts
+    vista-fonts
+    wineWow64Packages.fonts
+    google-fonts
+    inter
+  ];
+  virtualisation.docker.enable = true;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 80 8096 32400 ];
+    allowedUDPPorts = [ 80 8096 32400 ];
+  };
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [ rocmPackages.rocm-smi amf ];
+  };
 
   home-manager.users.loganp = { pkgs, ... }: {
+    home.stateVersion = "25.11";
     #home.packages = with pkgs; [ ];
+    programs.zsh = {
+      enable = true;
+      initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";
+      shellAliases = {
+        ".." = "cd ../";
+        "~" = "cd ~/";
+        cl = "clear";
+        ls = "eza";
+        la = "eza -a";
+        ll = "eza -l";
+        l1 = "eza -1";
+        tree = "eza -T";
+        nv = "nvim";
+        nvsu = "sudo -E nvim";
+        bat =
+          "bat --color=always --theme=ansi --style=-numbers,-header,+changes";
+        dcdu = "docker compose down; docker compose up -d";
+        fzf =
+          "fzf --style full --preview 'bat --color=always --theme=ansi --style=-numbers,-header,+changes {}'";
+        lava = "lavat -c black -k magenta -s 3";
+        cmatrix = "cmatrix -C magenta";
+        nixsysup = "sudo nixos-rebuild switch --upgrade";
+        nixsysed = "nvsu /etc/nixos/configuration.nix";
+        nixlsgens =
+          "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
+        nixusrup = "nix profile upgrade nix/loganp --verbose";
+      };
+    };
+    programs.fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+    programs.tmux = {
+      enable = true;
+      baseIndex = 1;
+      mouse = true;
+      focusEvents = true;
+      clock24 = true;
+      shortcut = "s";
+      extraConfig = ''
+        set-option -g status-position top
+        set -g renumber-windows on
+        set -g status-interval 3
+        bind-key "|" split-window -h -c "#{pane_current_path}"
+        bind-key "\\" split-window -fh -c "#{pane_current_path}"
+        bind-key "-" split-window -v -c "#{pane_current_path}"
+        bind-key "_" split-window -fv -c "#{pane_current_path}"
+      '';
+      plugins = with pkgs.tmuxPlugins; [
+        {
+          plugin = rose-pine;
+          extraConfig = ''
+            set -g @rose_pine_variant 'main'
+            set -g @rose_pine_disable_active_window_menu 'on'
+            set -g @rose_pine_show_current_program 'on'
+            #set -g @rose_pine_host 'on'
+            set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
+            set -g @rose_pine_user 'on' 
+            set -g @rose_pine_directory 'on'
+            set -g @rose_pine_right_separator ' '
+            set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} ' 
+          '';
+        }
+        cpu
+      ];
+    };
     programs.kitty = {
       enable = true;
       font.name = "Hack Nerd Font Mono";
@@ -164,33 +246,5 @@
         color15 = "#e0def4";
       };
     };
-    home.stateVersion = "25.11";
-  };
-
-  services.displayManager.autoLogin = {
-    enable = true;
-    user = "loganp";
-  };
-
-  fonts.packages = with pkgs; [
-    nerd-fonts.hack
-    corefonts
-    vista-fonts
-    wineWow64Packages.fonts
-    google-fonts
-    inter
-  ];
-
-  virtualisation.docker.enable = true;
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 80 8096 32400 ];
-    allowedUDPPorts = [ 80 8096 32400 ];
-  };
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [ rocmPackages.rocm-smi amf ];
   };
 }

@@ -1,13 +1,27 @@
-{ config, pkgs, ... }: {
-  imports = [ ./hardware-configuration.nix <home-manager/nixos> ];
+{ config, pkgs, lib, ... }:
+let
+  lanzaboote = import (builtins.fetchTarball {
+    url = "https://github.com/nix-community/lanzaboote/archive/master.tar.gz";
+    sha256 = "0mdbbmzsqaqlakiy4hql1w9bf5yr2r6qghyvazvi1hdzqax5f9hk";
+  });
+in {
+  imports = [
+    ./hardware-configuration.nix
+    <home-manager/nixos>
+    lanzaboote.nixosModules.lanzaboote
+  ];
   networking.hostName = "nixos-loganp";
   system.stateVersion = "24.11"; # Did you read the comment?
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.optimise.automatic = true;
   nixpkgs.config.allowUnfree = true;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.consoleMode = "max";
-  boot.loader.timeout = 1;
+  boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
+  };
+  #boot.loader.systemd-boot.consoleMode = "max";
+  boot.loader.timeout = 3;
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
@@ -89,6 +103,7 @@
     fastfetch
     nodePackages.nodejs
     jre
+    sbctl
     firefox
     vlc
     libreoffice-fresh

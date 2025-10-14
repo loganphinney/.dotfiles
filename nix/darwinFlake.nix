@@ -12,6 +12,7 @@
     let
       configuration = { pkgs, ... }: {
         nix.settings.experimental-features = "nix-command flakes";
+        nix.optimise.automatic = true;
         system.configurationRevision = self.rev or self.dirtyRev or null;
         system.stateVersion = 6;
         nixpkgs.hostPlatform = "aarch64-darwin";
@@ -114,11 +115,11 @@
             bat =
               "bat --color=always --theme=ansi --style=-numbers,-header,+changes";
             dcdu = "docker compose down; docker compose up -d";
-            bug = "brew upgrade --greedy";
             fzf =
               "fzf --style full --preview 'bat --color=always --theme=ansi --style=-numbers,-header,+changes {}'";
             lava = "lavat -c black -k magenta -s 3";
             cmatrix = "cmatrix -C magenta";
+            bug = "brew upgrade --greedy";
             darwinup = "sudo darwin-rebuild switch --verbose";
             darwined = "nvsu /etc/nix-darwin/flake.nix";
           };
@@ -132,6 +133,7 @@
           font.name = "Hack Nerd Font Mono";
           font.size = 12;
           settings = {
+            confirm_os_window_close = 0;
             sync_to_monitor = false;
             cursor_shape = "beam";
             cursor_trail = 1;
@@ -183,7 +185,8 @@
           extraConfig = ''
             set-option -g status-position top
             set -g renumber-windows on
-            set -g status-interval 3
+            set -g pane-border-lines "single"
+            set -g pane-active-border-style "fg=#3e8fb0"
             bind-key "|" split-window -h -c "#{pane_current_path}"
             bind-key "\\" split-window -fh -c "#{pane_current_path}"
             bind-key "-" split-window -v -c "#{pane_current_path}"
@@ -198,7 +201,7 @@
                 set -g @rose_pine_show_current_program 'on'
                 set -g @rose_pine_host 'on'
                 set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
-                set -g @rose_pine_user 'on' 
+                #set -g @rose_pine_user 'on' 
                 set -g @rose_pine_directory 'on'
                 set -g @rose_pine_right_separator ' '
                 set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} #{battery_percentage} ' 

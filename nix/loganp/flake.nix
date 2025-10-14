@@ -24,8 +24,6 @@
         nixd
         nixfmt-classic
         perl540Packages.PLS
-        #system
-        iotop-c
         #for fun
         lavat
         pokeget-rs
@@ -42,10 +40,7 @@
         gnomeExtensions.color-picker
         gnomeExtensions.executor
         #GUI apps
-        firefox
-        vlc
         qbittorrent
-        libreoffice-fresh
         prismlauncher
       ];
     };

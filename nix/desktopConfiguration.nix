@@ -3,6 +3,7 @@
   networking.hostName = "nixos-loganp";
   system.stateVersion = "24.11"; # Did you read the comment?
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.optimise.automatic = true;
   nixpkgs.config.allowUnfree = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";
@@ -88,6 +89,9 @@
     fastfetch
     nodePackages.nodejs
     jre
+    firefox
+    vlc
+    libreoffice-fresh
   ];
   programs.zsh = {
     enable = true;
@@ -175,7 +179,8 @@
       extraConfig = ''
         set-option -g status-position top
         set -g renumber-windows on
-        set -g status-interval 3
+        set -g pane-border-lines "single"
+        set -g pane-active-border-style "fg=#3e8fb0"
         bind-key "|" split-window -h -c "#{pane_current_path}"
         bind-key "\\" split-window -fh -c "#{pane_current_path}"
         bind-key "-" split-window -v -c "#{pane_current_path}"
@@ -188,7 +193,7 @@
             set -g @rose_pine_variant 'main'
             set -g @rose_pine_disable_active_window_menu 'on'
             set -g @rose_pine_show_current_program 'on'
-            #set -g @rose_pine_host 'on'
+            set -g @rose_pine_host 'on'
             set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_user 'on' 
             set -g @rose_pine_directory 'on'

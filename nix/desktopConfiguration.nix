@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   lanzaboote = import (builtins.fetchTarball {
     url = "https://github.com/nix-community/lanzaboote/archive/master.tar.gz";
@@ -20,8 +20,8 @@ in {
     enable = true;
     pkiBundle = "/var/lib/sbctl";
   };
-  #boot.loader.systemd-boot.consoleMode = "max";
-  boot.loader.timeout = 3;
+  boot.loader.systemd-boot.consoleMode = "max";
+  boot.loader.timeout = 2;
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {

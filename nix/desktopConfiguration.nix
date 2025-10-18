@@ -21,7 +21,7 @@ in {
     pkiBundle = "/var/lib/sbctl";
   };
   boot.loader.systemd-boot.consoleMode = "max";
-  boot.loader.timeout = 2;
+  boot.loader.timeout = 1;
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
@@ -47,12 +47,32 @@ in {
   security.rtkit.enable = true;
   services.openssh.enable = true;
   services.fail2ban.enable = true;
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
   services.xserver.enable = true;
   services.xserver.xkb.layout = "us";
   services.xserver.xkb.variant = "";
   services.xserver.excludePackages = [ pkgs.xterm ];
+  virtualisation.docker.enable = true;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 80 8096 32400 ];
+    allowedUDPPorts = [ 80 8096 32400 ];
+  };
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [ rocmPackages.rocm-smi amf ];
+  };
+  security.sudo.wheelNeedsPassword = false;
+  users.users.loganp = {
+    isNormalUser = true;
+    description = "Logan";
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    shell = pkgs.zsh;
+  };
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "loganp";
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
   environment.gnome.excludePackages = with pkgs; [
     snapshot
     decibels
@@ -104,6 +124,7 @@ in {
     nodePackages.nodejs
     jre
     sbctl
+    gnumake
     firefox
     vlc
     libreoffice-fresh
@@ -118,17 +139,6 @@ in {
     enable = true;
     extraCompatPackages = with pkgs; [ proton-ge-bin ];
   };
-  security.sudo.wheelNeedsPassword = false;
-  users.users.loganp = {
-    isNormalUser = true;
-    description = "Logan";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
-    shell = pkgs.zsh;
-  };
-  services.displayManager.autoLogin = {
-    enable = true;
-    user = "loganp";
-  };
   fonts.packages = with pkgs; [
     nerd-fonts.hack
     corefonts
@@ -137,17 +147,6 @@ in {
     google-fonts
     inter
   ];
-  virtualisation.docker.enable = true;
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 80 8096 32400 ];
-    allowedUDPPorts = [ 80 8096 32400 ];
-  };
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [ rocmPackages.rocm-smi amf ];
-  };
 
   home-manager.users.loganp = { pkgs, ... }: {
     home.stateVersion = "25.11";

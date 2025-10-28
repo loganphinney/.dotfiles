@@ -7,7 +7,6 @@ services:
       - TZ=Etc/UTC
       - PLEX_UID=1000
       - PLEX_GID=1000
-      - PLEX_CLAIM= #optional
     network_mode: host
     volumes:
       - /home/loganp/container-data/plex-data:/config

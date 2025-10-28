@@ -2,7 +2,7 @@ services:
   jellyfin:
     image: jellyfin/jellyfin
     container_name: jellyfin
-    network_mode: 'host'
+    network_mode: "host"
     volumes:
       - /home/loganp/container-data/jellyfin-data/config:/config
       - /home/loganp/container-data/jellyfin-data/cache:/cache
@@ -19,7 +19,7 @@ services:
         source: /home/loganp/Videos/anime/
         target: /anime
     group_add:
-      - '303'
+      - "303"
     devices:
       - /dev/dri/renderD129:/dev/dri/renderD129
-    restart: 'unless-stopped'
+    restart: "unless-stopped"

@@ -14,6 +14,7 @@
         #neovim stuff
         neovim
         tree-sitter
+        gcc
         luajitPackages.jsregexp
         bash-completion
         shellcheck
@@ -24,6 +25,8 @@
         nixd
         nixfmt-classic
         perl540Packages.PLS
+        vscode-langservers-extracted
+        yaml-language-server
         #for fun
         lavat
         pokeget-rs

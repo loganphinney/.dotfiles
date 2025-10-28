@@ -60,7 +60,6 @@ in {
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-    extraPackages = with pkgs; [ rocmPackages.rocm-smi amf ];
   };
   security.sudo.wheelNeedsPassword = false;
   users.users.loganp = {
@@ -97,6 +96,7 @@ in {
     gnome-text-editor
   ];
   environment.systemPackages = with pkgs; [
+    openssh
     git
     wget
     curl
@@ -125,20 +125,17 @@ in {
     jre
     sbctl
     gnumake
-    firefox
     vlc
     libreoffice-fresh
   ];
+  programs.firefox.enable = true;
   programs.zsh = {
     enable = true;
-    syntaxHighlighting.enable = true;
     enableBashCompletion = true;
     enableCompletion = true;
   };
-  programs.steam = {
-    enable = true;
-    extraCompatPackages = with pkgs; [ proton-ge-bin ];
-  };
+  programs.steam.enable = true;
+  programs.steam.extraCompatPackages = with pkgs; [ proton-ge-bin ];
   fonts.packages = with pkgs; [
     nerd-fonts.hack
     corefonts
@@ -178,6 +175,11 @@ in {
           "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
         nixusrup = "nix profile upgrade nix/loganp --verbose";
       };
+      plugins = [{
+        name = "fast-syntax-highlighting";
+        src = pkgs.zsh-fast-syntax-highlighting;
+        file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
+      }];
     };
     programs.fzf = {
       enable = true;

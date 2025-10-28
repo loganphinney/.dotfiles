@@ -7,8 +7,10 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     mac-app-util.url = "github:hraban/mac-app-util";
+    rose-pine-tmux.url = "path:/Users/loganphinney/nix/flakes/rose-pine-tmux/";
   };
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, mac-app-util }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, mac-app-util
+    , rose-pine-tmux }:
     let
       configuration = { pkgs, ... }: {
         nix.settings.experimental-features = "nix-command flakes";
@@ -31,7 +33,7 @@
         fonts.packages = with pkgs; [ nerd-fonts.hack ];
         programs.zsh = {
           enable = true;
-          enableSyntaxHighlighting = true;
+          enableFastSyntaxHighlighting = true;
           enableBashCompletion = true;
           enableCompletion = true;
         };
@@ -44,6 +46,8 @@
           rsync
           wget
           curl
+          openssl
+          openssh
           nmap
           tmux
           nano
@@ -55,6 +59,7 @@
           stow
           btop
           unixtools.watch
+          gnumake
           docker-compose
           fastfetch
           lazygit
@@ -66,16 +71,11 @@
         ];
         homebrew = {
           enable = true;
-          #brews = [ "" ];
-          casks = [
-            "firefox"
-            "docker-desktop"
-            "macs-fan-control"
-            "minecraft"
-            "figma"
-          ];
+          casks =
+            [ "firefox" "docker-desktop" "macs-fan-control" "utm" "figma" ];
           global.autoUpdate = true;
         };
+        environment.variables = { EDITOR = "nvim"; };
       };
 
       homeManagerConfig = { pkgs, ... }: {
@@ -155,7 +155,7 @@
             active_tab_background = "#26233a";
             inactive_tab_foreground = "#6e6a86";
             inactive_tab_background = "#191724";
-            active_border_color = " #3e8fb0";
+            active_border_color = "#3e8fb0";
             inactive_border_color = "#403d52";
             color0 = "#26233a";
             color8 = "#6e6a86";
@@ -186,21 +186,22 @@
             set-option -g status-position top
             set -g renumber-windows on
             set -g pane-border-lines "single"
-            set -g pane-active-border-style "fg=#3e8fb0"
             bind-key "|" split-window -h -c "#{pane_current_path}"
             bind-key "\\" split-window -fh -c "#{pane_current_path}"
             bind-key "-" split-window -v -c "#{pane_current_path}"
             bind-key "_" split-window -fv -c "#{pane_current_path}"
+            set -g pane-active-border-style "fg=#3e8fb0"
           '';
           plugins = with pkgs.tmuxPlugins; [
             {
-              plugin = rose-pine;
+              plugin =
+                inputs.rose-pine-tmux.packages.${pkgs.system}.rose-pine-tmux;
               extraConfig = ''
                 set -g @rose_pine_variant 'main'
                 set -g @rose_pine_disable_active_window_menu 'on'
                 set -g @rose_pine_show_current_program 'on'
                 set -g @rose_pine_host 'on'
-                set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
+                set -g @rose_pine_date_time '%m-%d-%Y %H:%M:%S'
                 #set -g @rose_pine_user 'on' 
                 set -g @rose_pine_directory 'on'
                 set -g @rose_pine_right_separator ' '

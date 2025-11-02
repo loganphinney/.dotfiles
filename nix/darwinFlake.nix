@@ -30,10 +30,8 @@
           touchIdAuth = true;
         };
         nixpkgs.config.allowUnfree = true;
-        fonts.packages = with pkgs; [ nerd-fonts.hack ];
         programs.zsh = {
           enable = true;
-          enableFastSyntaxHighlighting = true;
           enableBashCompletion = true;
           enableCompletion = true;
         };
@@ -75,6 +73,7 @@
             [ "firefox" "docker-desktop" "macs-fan-control" "utm" "figma" ];
           global.autoUpdate = true;
         };
+        fonts.packages = with pkgs; [ nerd-fonts.hack ];
         environment.variables = { EDITOR = "nvim"; };
       };
 
@@ -89,9 +88,9 @@
           lua-language-server
           typescript-language-server
           nixd
+          nixfmt-classic
           shellcheck
           shfmt
-          nixfmt-classic
           perl540Packages.PLS
           luajitPackages.luarocks
           python313Packages.pynvim
@@ -123,6 +122,12 @@
             darwinup = "sudo darwin-rebuild switch --verbose";
             darwined = "nvsu /etc/nix-darwin/flake.nix";
           };
+          plugins = [{
+            name = "fast-syntax-highlighting";
+            src = pkgs.zsh-fast-syntax-highlighting;
+            file =
+              "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
+          }];
         };
         programs.fzf = {
           enable = true;

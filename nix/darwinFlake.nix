@@ -36,10 +36,6 @@
           enableCompletion = true;
         };
         environment.systemPackages = with pkgs; [
-          kitty
-          rectangle
-          jetbrains.datagrip
-          utm
           git
           rsync
           wget
@@ -73,7 +69,7 @@
             [ "firefox" "docker-desktop" "macs-fan-control" "utm" "figma" ];
           global.autoUpdate = true;
         };
-        fonts.packages = with pkgs; [ nerd-fonts.hack ];
+        fonts.packages = with pkgs; [ nerd-fonts.hack nerd-fonts.noto ];
         environment.variables = { EDITOR = "nvim"; };
       };
 
@@ -82,16 +78,21 @@
         home.username = "loganphinney";
         home.homeDirectory = "/Users/loganphinney";
         home.packages = with pkgs; [
+          #apps
+          rectangle
+          jetbrains.datagrip
+          utm
+          #neovim
           neovim
           tree-sitter
           bash-language-server
           lua-language-server
           typescript-language-server
           nixd
+          perl540Packages.PLS
           nixfmt-classic
           shellcheck
           shfmt
-          perl540Packages.PLS
           luajitPackages.luarocks
           python313Packages.pynvim
           lavat
@@ -195,7 +196,7 @@
             bind-key "\\" split-window -fh -c "#{pane_current_path}"
             bind-key "-" split-window -v -c "#{pane_current_path}"
             bind-key "_" split-window -fv -c "#{pane_current_path}"
-            set -g pane-active-border-style "fg=#3e8fb0"
+            set -g pane-active-border-style "fg=#403d52"
           '';
           plugins = with pkgs.tmuxPlugins; [
             {

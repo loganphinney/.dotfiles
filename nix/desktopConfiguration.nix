@@ -2,7 +2,7 @@
 let
   lanzaboote = import (builtins.fetchTarball {
     url = "https://github.com/nix-community/lanzaboote/archive/master.tar.gz";
-    sha256 = "0mdbbmzsqaqlakiy4hql1w9bf5yr2r6qghyvazvi1hdzqax5f9hk";
+    sha256 = "016pgbh27zjwbzq1li1d4r40b37vwmnz8khh04vspd5gw91szzi1";
   });
 in {
   imports = [
@@ -205,7 +205,17 @@ in {
       '';
       plugins = with pkgs.tmuxPlugins; [
         {
-          plugin = rose-pine;
+          plugin = (mkTmuxPlugin {
+            pluginName = "rose-pine-tmux";
+            version = "unstable-2025-08-26";
+            src = pkgs.fetchFromGitHub {
+              owner = "rose-pine";
+              repo = "tmux";
+              rev = "009800e5c892c0e75de648881f8ba09a90c145b0";
+              hash = "sha256-OJMBCZwqrEu2DTlojqQ3pIp2sfjIzT9ORw0ajVgZ8vo=";
+            };
+            rtpFilePath = "rose-pine.tmux";
+          });
           extraConfig = ''
             set -g @rose_pine_variant 'main'
             set -g @rose_pine_disable_active_window_menu 'on'

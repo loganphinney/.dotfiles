@@ -7,10 +7,8 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     mac-app-util.url = "github:hraban/mac-app-util";
-    rose-pine-tmux.url = "path:/Users/loganphinney/nix/flakes/rose-pine-tmux/";
   };
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, mac-app-util
-    , rose-pine-tmux }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, mac-app-util }:
     let
       configuration = { pkgs, ... }: {
         nix.settings.experimental-features = "nix-command flakes";
@@ -161,7 +159,7 @@
             active_tab_background = "#26233a";
             inactive_tab_foreground = "#6e6a86";
             inactive_tab_background = "#191724";
-            active_border_color = "#3e8fb0";
+            active_border_color = "#403d52";
             inactive_border_color = "#403d52";
             color0 = "#26233a";
             color8 = "#6e6a86";
@@ -196,12 +194,21 @@
             bind-key "\\" split-window -fh -c "#{pane_current_path}"
             bind-key "-" split-window -v -c "#{pane_current_path}"
             bind-key "_" split-window -fv -c "#{pane_current_path}"
-            set -g pane-active-border-style "fg=#403d52"
+            set -g pane-active-border-style "fg=#6e6a86"
           '';
           plugins = with pkgs.tmuxPlugins; [
             {
-              plugin =
-                inputs.rose-pine-tmux.packages.${pkgs.system}.rose-pine-tmux;
+              plugin = (mkTmuxPlugin {
+                pluginName = "rose-pine-tmux";
+                version = "unstable-2025-08-26";
+                src = pkgs.fetchFromGitHub {
+                  owner = "rose-pine";
+                  repo = "tmux";
+                  rev = "009800e5c892c0e75de648881f8ba09a90c145b0";
+                  hash = "sha256-OJMBCZwqrEu2DTlojqQ3pIp2sfjIzT9ORw0ajVgZ8vo=";
+                };
+                rtpFilePath = "rose-pine.tmux";
+              });
               extraConfig = ''
                 set -g @rose_pine_variant 'main'
                 set -g @rose_pine_disable_active_window_menu 'on'

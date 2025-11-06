@@ -31,8 +31,6 @@
             nixd
             nixfmt-rfc-style
             perl540Packages.PLS
-            vscode-langservers-extracted
-            yaml-language-server
             #for fun
             lavat
             pokeget-rs

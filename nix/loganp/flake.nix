@@ -21,9 +21,8 @@
             vim
             neovim
             tree-sitter
-            gcc
             luajitPackages.jsregexp
-            bash-completion
+            #language servers
             shellcheck
             shfmt
             bash-language-server
@@ -37,21 +36,10 @@
             #for fun
             lavat
             pokeget-rs
-            #GNOME
-            gnome-tweaks
-            xdg-terminal-exec
-            rose-pine-cursor
-            mission-center
-            gnomeExtensions.open-bar
-            gnomeExtensions.hide-top-bar
-            gnomeExtensions.user-themes
-            gnomeExtensions.vitals
-            gnomeExtensions.wallpaper-slideshow
-            gnomeExtensions.color-picker
-            gnomeExtensions.executor
             #GUI apps
             qbittorrent
             prismlauncher
+            mission-center
           ];
         };
     };

@@ -119,9 +119,11 @@ in
     wget
     curl
     rsync
+    gcc
     nmap
     dnslookup
     ipmitool
+    zsh-completions
     stow
     tmux
     docker
@@ -138,13 +140,24 @@ in
     ripgrep
     fd
     fzf
-    fastfetch
     nodePackages.nodejs
     jre
     sbctl
     gnumake
     vlc
     libreoffice-fresh
+    fastfetch
+    #GNOME
+    gnome-tweaks
+    xdg-terminal-exec
+    gnomeExtensions.open-bar
+    gnomeExtensions.hide-top-bar
+    gnomeExtensions.user-themes
+    gnomeExtensions.vitals
+    gnomeExtensions.wallpaper-slideshow
+    gnomeExtensions.color-picker
+    gnomeExtensions.executor
+    rose-pine-cursor
   ];
   programs.firefox.enable = true;
   programs.zsh = {

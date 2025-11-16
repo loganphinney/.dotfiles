@@ -3,7 +3,7 @@ let
   lanzaboote = import (
     builtins.fetchTarball {
       url = "https://github.com/nix-community/lanzaboote/archive/master.tar.gz";
-      sha256 = "016pgbh27zjwbzq1li1d4r40b37vwmnz8khh04vspd5gw91szzi1";
+      sha256 = "0h5iikl5pxqwl5f37r7gdlisksqrbz3v6izhvg9r7nlz5lqjp0ic";
     }
   );
 in
@@ -60,16 +60,8 @@ in
   virtualisation.docker.enable = true;
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [
-      80
-      8096
-      32400
-    ];
-    allowedUDPPorts = [
-      80
-      8096
-      32400
-    ];
+    allowedTCPPorts = [ 8096 ];
+    allowedUDPPorts = [ 8096 ];
   };
   hardware.graphics = {
     enable = true;
@@ -95,7 +87,7 @@ in
     decibels
     epiphany
     simple-scan
-    totem
+    showtime
     yelp
     geary
     seahorse
@@ -114,6 +106,7 @@ in
     gnome-text-editor
   ];
   environment.systemPackages = with pkgs; [
+    sbctl
     openssh
     git
     wget
@@ -142,7 +135,6 @@ in
     fzf
     nodePackages.nodejs
     jre
-    sbctl
     gnumake
     vlc
     libreoffice-fresh
@@ -180,7 +172,6 @@ in
     { pkgs, ... }:
     {
       home.stateVersion = "25.11";
-      #home.packages = with pkgs; [ ];
       programs.zsh = {
         enable = true;
         initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";

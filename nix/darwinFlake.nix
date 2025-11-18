@@ -98,9 +98,9 @@
           home.homeDirectory = "/Users/loganphinney";
           home.packages = with pkgs; [
             #apps
+            kitty
             iterm2
             rectangle
-            jetbrains.datagrip
             utm
             #neovim
             neovim
@@ -113,46 +113,13 @@
             nixfmt-rfc-style
             shellcheck
             shfmt
+            pyright
+            ruff
             luajitPackages.luarocks
             python313Packages.pynvim
             lavat
             cmatrix
           ];
-          programs.zsh = {
-            enable = true;
-            initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";
-            shellAliases = {
-              ".." = "cd ../";
-              "~" = "cd ~/";
-              cl = "clear";
-              ls = "eza";
-              la = "eza -a";
-              ll = "eza -l";
-              l1 = "eza -1";
-              tree = "eza -T";
-              nv = "nvim";
-              nvsu = "sudo -E nvim";
-              bat = "bat --color=always --theme=ansi --style=-numbers,-header,+changes";
-              dcdu = "docker compose down; docker compose up -d";
-              fzf = "fzf --style full --preview 'bat --color=always --theme=ansi --style=-numbers,-header,+changes {}'";
-              lava = "lavat -c black -k magenta -s 3";
-              cmatrix = "cmatrix -C magenta";
-              bug = "brew upgrade --greedy";
-              darwinup = "sudo darwin-rebuild switch --verbose";
-              darwined = "nvsu /etc/nix-darwin/flake.nix";
-            };
-            plugins = [
-              {
-                name = "fast-syntax-highlighting";
-                src = pkgs.zsh-fast-syntax-highlighting;
-                file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
-              }
-            ];
-          };
-          programs.fzf = {
-            enable = true;
-            enableZshIntegration = true;
-          };
           programs.kitty = {
             enable = true;
             font.name = "Hack Nerd Font Mono";
@@ -200,6 +167,36 @@
               color15 = "#e0def4";
             };
           };
+          programs.zsh = {
+            enable = true;
+            initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";
+            shellAliases = {
+              ".." = "cd ../";
+              "~" = "cd ~/";
+              cl = "clear";
+              ls = "eza";
+              la = "eza -a";
+              ll = "eza -l";
+              l1 = "eza -1";
+              tree = "eza -T";
+              nv = "nvim";
+              nvsu = "sudo -E nvim";
+              dcdu = "docker compose down; docker compose up -d";
+              lava = "lavat -c black -k magenta -s 3";
+              cmatrix = "cmatrix -C magenta";
+              bug = "brew upgrade --greedy";
+              darwinupdate = "sudo darwin-rebuild switch --verbose";
+              darwinupgrade = "sudo nix flake update --flake /etc/nix-darwin";
+              darwined = "nvsu /etc/nix-darwin/flake.nix";
+            };
+            plugins = [
+              {
+                name = "fast-syntax-highlighting";
+                src = pkgs.zsh-fast-syntax-highlighting;
+                file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
+              }
+            ];
+          };
           programs.tmux = {
             enable = true;
             baseIndex = 1;
@@ -223,12 +220,12 @@
                 plugin = (
                   mkTmuxPlugin {
                     pluginName = "rose-pine-tmux";
-                    version = "unstable-2025-08-26";
+                    version = "1-unstable-2025-11-09";
                     src = pkgs.fetchFromGitHub {
                       owner = "rose-pine";
                       repo = "tmux";
-                      rev = "009800e5c892c0e75de648881f8ba09a90c145b0";
-                      hash = "sha256-OJMBCZwqrEu2DTlojqQ3pIp2sfjIzT9ORw0ajVgZ8vo=";
+                      rev = "ab5068a95828cdbff20010c8873f9805e3626698";
+                      hash = "sha256-qZ5wGBpYGN951dW6MSAMFxcdLma6KC6/SeTv4XinwiQ=";
                     };
                     rtpFilePath = "rose-pine.tmux";
                   }
@@ -248,6 +245,33 @@
               cpu
               battery
             ];
+          };
+          programs.fzf = {
+            enable = true;
+            enableZshIntegration = true;
+            defaultOptions = [
+              "--style full"
+              "--preview 'bat --color=always --theme=rose-pine --style=-numbers,-header,-grid,+changes {}'"
+            ];
+          };
+          programs.bat = {
+            enable = true;
+            config = {
+              color = "always";
+              theme = "rose-pine";
+              style = "-numbers,-header,-grid,+changes";
+            };
+            themes = {
+              rose-pine = {
+                src = pkgs.fetchFromGitHub {
+                  owner = "rose-pine";
+                  repo = "tm-theme";
+                  rev = "417d201beb5f0964faded5448147c252ff12c4ae";
+                  sha256 = "sha256-aNDOqY81FLFQ6bvsTiYgPyS5lJrqZnFMpvpTCSNyY0Y=";
+                };
+                file = "dist/rose-pine.tmTheme";
+              };
+            };
           };
         };
 

@@ -66,6 +66,7 @@ in
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+    extraPackages = with pkgs; [ rocmPackages.rocm-smi ];
   };
   security.sudo.wheelNeedsPassword = false;
   users.users.loganp = {
@@ -172,89 +173,6 @@ in
     { pkgs, ... }:
     {
       home.stateVersion = "25.11";
-      programs.zsh = {
-        enable = true;
-        initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";
-        shellAliases = {
-          ".." = "cd ../";
-          "~" = "cd ~/";
-          cl = "clear";
-          ls = "eza";
-          la = "eza -a";
-          ll = "eza -l";
-          l1 = "eza -1";
-          tree = "eza -T";
-          nv = "nvim";
-          nvsu = "sudo -E nvim";
-          bat = "bat --color=always --theme=ansi --style=-numbers,-header,+changes";
-          dcdu = "docker compose down; docker compose up -d";
-          fzf = "fzf --style full --preview 'bat --color=always --theme=ansi --style=-numbers,-header,+changes {}'";
-          lava = "lavat -c black -k magenta -s 3";
-          cmatrix = "cmatrix -C magenta";
-          nixsysup = "sudo nixos-rebuild switch --upgrade";
-          nixsysed = "nvsu /etc/nixos/configuration.nix";
-          nixlsgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
-          nixusrup = "nix profile upgrade nix/loganp --verbose";
-        };
-        plugins = [
-          {
-            name = "fast-syntax-highlighting";
-            src = pkgs.zsh-fast-syntax-highlighting;
-            file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
-          }
-        ];
-      };
-      programs.fzf = {
-        enable = true;
-        enableZshIntegration = true;
-      };
-      programs.tmux = {
-        enable = true;
-        baseIndex = 1;
-        mouse = true;
-        focusEvents = true;
-        clock24 = true;
-        shortcut = "s";
-        extraConfig = ''
-          set-option -g status-position top
-          set -g renumber-windows on
-          set -g pane-border-lines "single"
-          set -g pane-active-border-style "fg=#3e8fb0"
-          bind-key "|" split-window -h -c "#{pane_current_path}"
-          bind-key "\\" split-window -fh -c "#{pane_current_path}"
-          bind-key "-" split-window -v -c "#{pane_current_path}"
-          bind-key "_" split-window -fv -c "#{pane_current_path}"
-        '';
-        plugins = with pkgs.tmuxPlugins; [
-          {
-            plugin = (
-              mkTmuxPlugin {
-                pluginName = "rose-pine-tmux";
-                version = "unstable-2025-08-26";
-                src = pkgs.fetchFromGitHub {
-                  owner = "rose-pine";
-                  repo = "tmux";
-                  rev = "009800e5c892c0e75de648881f8ba09a90c145b0";
-                  hash = "sha256-OJMBCZwqrEu2DTlojqQ3pIp2sfjIzT9ORw0ajVgZ8vo=";
-                };
-                rtpFilePath = "rose-pine.tmux";
-              }
-            );
-            extraConfig = ''
-              set -g @rose_pine_variant 'main'
-              set -g @rose_pine_disable_active_window_menu 'on'
-              set -g @rose_pine_show_current_program 'on'
-              set -g @rose_pine_host 'on'
-              set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
-              set -g @rose_pine_user 'on' 
-              set -g @rose_pine_directory 'on'
-              set -g @rose_pine_right_separator ' '
-              set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} ' 
-            '';
-          }
-          cpu
-        ];
-      };
       programs.kitty = {
         enable = true;
         font.name = "Hack Nerd Font Mono";
@@ -301,6 +219,110 @@ in
           color7 = "#e0def4";
           color15 = "#e0def4";
         };
+      };
+      programs.zsh = {
+        enable = true;
+        initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";
+        shellAliases = {
+          ".." = "cd ../";
+          "~" = "cd ~/";
+          cl = "clear";
+          ls = "eza";
+          la = "eza -a";
+          ll = "eza -l";
+          l1 = "eza -1";
+          tree = "eza -T";
+          nv = "nvim";
+          nvsu = "sudo -E nvim";
+          dcdu = "docker compose down; docker compose up -d";
+          lava = "lavat -c black -k magenta -s 3";
+          cmatrix = "cmatrix -C magenta";
+          nixsysup = "sudo nixos-rebuild switch --upgrade";
+          nixsysed = "nvsu /etc/nixos/configuration.nix";
+          nixlsgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
+          nixusrup = "nix profile upgrade nix/loganp --verbose";
+        };
+        plugins = [
+          {
+            name = "fast-syntax-highlighting";
+            src = pkgs.zsh-fast-syntax-highlighting;
+            file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
+          }
+        ];
+      };
+      programs.tmux = {
+        enable = true;
+        baseIndex = 1;
+        mouse = true;
+        focusEvents = true;
+        clock24 = true;
+        shortcut = "s";
+        extraConfig = ''
+          set-option -g status-position top
+          set -g renumber-windows on
+          set -g pane-border-lines "single"
+          set -g pane-active-border-style "fg=#3e8fb0"
+          bind-key "|" split-window -h -c "#{pane_current_path}"
+          bind-key "\\" split-window -fh -c "#{pane_current_path}"
+          bind-key "-" split-window -v -c "#{pane_current_path}"
+          bind-key "_" split-window -fv -c "#{pane_current_path}"
+        '';
+        plugins = with pkgs.tmuxPlugins; [
+          {
+            plugin = (
+              mkTmuxPlugin {
+                pluginName = "rose-pine-tmux";
+                version = "1-unstable-2025-11-09";
+                src = pkgs.fetchFromGitHub {
+                  owner = "rose-pine";
+                  repo = "tmux";
+                  rev = "ab5068a95828cdbff20010c8873f9805e3626698";
+                  hash = "sha256-qZ5wGBpYGN951dW6MSAMFxcdLma6KC6/SeTv4XinwiQ=";
+                };
+                rtpFilePath = "rose-pine.tmux";
+              }
+            );
+            extraConfig = ''
+              set -g @rose_pine_variant 'main'
+              set -g @rose_pine_disable_active_window_menu 'on'
+              set -g @rose_pine_show_current_program 'on'
+              set -g @rose_pine_host 'on'
+              set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
+              set -g @rose_pine_user 'on' 
+              set -g @rose_pine_directory 'on'
+              set -g @rose_pine_right_separator ' '
+              set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} ' 
+            '';
+          }
+          cpu
+        ];
+      };
+      programs.bat = {
+        enable = true;
+        config = {
+          color = "always";
+          theme = "rose-pine";
+          style = "-numbers,-header,-grid,+changes";
+        };
+        themes = {
+          rose-pine = {
+            src = pkgs.fetchFromGitHub {
+              owner = "rose-pine";
+              repo = "tm-theme";
+              rev = "417d201beb5f0964faded5448147c252ff12c4ae";
+              sha256 = "sha256-aNDOqY81FLFQ6bvsTiYgPyS5lJrqZnFMpvpTCSNyY0Y=";
+            };
+            file = "dist/rose-pine.tmTheme";
+          };
+        };
+      };
+      programs.fzf = {
+        enable = true;
+        enableZshIntegration = true;
+        defaultOptions = [
+          "--style full"
+          "--preview 'bat --color=always --theme=rose-pine --style=-numbers,-header,-grid,+changes {}'"
+        ];
       };
     };
 }

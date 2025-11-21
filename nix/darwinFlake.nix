@@ -76,8 +76,8 @@
               "firefox"
               "docker-desktop"
               "macs-fan-control"
-              "utm"
-              "figma"
+              "vlc"
+              "webstorm"
             ];
             global.autoUpdate = true;
           };
@@ -133,6 +133,7 @@
               enable_audio_bell = false;
               tab_bar_style = "slant";
               tab_bar_align = "right";
+              window_padding_width = 2;
               remember_window_size = false;
               initial_window_width = "120c";
               initial_window_height = "40c";

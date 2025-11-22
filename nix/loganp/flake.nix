@@ -26,11 +26,11 @@
             shellcheck
             shfmt
             bash-language-server
+            perl540Packages.PLS
             lua-language-server
-            typescript-language-server
             nixd
             nixfmt-rfc-style
-            perl540Packages.PLS
+            typescript-language-server
             #for fun
             lavat
             pokeget-rs

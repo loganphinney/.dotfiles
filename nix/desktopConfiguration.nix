@@ -1,11 +1,6 @@
 { pkgs, lib, ... }:
 let
-  lanzaboote = import (
-    builtins.fetchTarball {
-      url = "https://github.com/nix-community/lanzaboote/archive/master.tar.gz";
-      sha256 = "0h5iikl5pxqwl5f37r7gdlisksqrbz3v6izhvg9r7nlz5lqjp0ic";
-    }
-  );
+  lanzaboote = builtins.getFlake "github:nix-community/lanzaboote";
 in
 {
   imports = [

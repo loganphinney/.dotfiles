@@ -49,6 +49,7 @@
             curl
             openssl
             openssh
+            dnslookup
             nmap
             tmux
             nano
@@ -77,7 +78,7 @@
               "docker-desktop"
               "macs-fan-control"
               "vlc"
-              "webstorm"
+              "yubico-authenticator"
             ];
             global.autoUpdate = true;
           };
@@ -102,21 +103,9 @@
             iterm2
             rectangle
             utm
-            #neovim
-            neovim
-            tree-sitter
-            bash-language-server
-            lua-language-server
-            typescript-language-server
-            nixd
-            perl540Packages.PLS
-            nixfmt-rfc-style
-            shellcheck
-            shfmt
-            pyright
-            ruff
-            luajitPackages.luarocks
-            python313Packages.pynvim
+            jetbrains.webstorm
+            jetbrains.datagrip
+            #misc
             lavat
             cmatrix
           ];

@@ -63,17 +63,6 @@ in
     enable32Bit = true;
     extraPackages = with pkgs; [ rocmPackages.rocm-smi ];
   };
-  security.sudo.wheelNeedsPassword = false;
-  users.users.loganp = {
-    isNormalUser = true;
-    description = "Logan";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "docker"
-    ];
-    shell = pkgs.zsh;
-  };
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "loganp";
   services.displayManager.gdm.enable = true;
@@ -101,6 +90,14 @@ in
     gnome-tour
     gnome-text-editor
   ];
+  programs.firefox.enable = true;
+  programs.zsh = {
+    enable = true;
+    enableBashCompletion = true;
+    enableCompletion = true;
+  };
+  programs.steam.enable = true;
+  programs.steam.extraCompatPackages = with pkgs; [ proton-ge-bin ];
   environment.systemPackages = with pkgs; [
     sbctl
     openssh
@@ -132,8 +129,6 @@ in
     nodePackages.nodejs
     jre
     gnumake
-    vlc
-    libreoffice-fresh
     fastfetch
     #GNOME
     gnome-tweaks
@@ -147,14 +142,6 @@ in
     gnomeExtensions.executor
     rose-pine-cursor
   ];
-  programs.firefox.enable = true;
-  programs.zsh = {
-    enable = true;
-    enableBashCompletion = true;
-    enableCompletion = true;
-  };
-  programs.steam.enable = true;
-  programs.steam.extraCompatPackages = with pkgs; [ proton-ge-bin ];
   fonts.packages = with pkgs; [
     nerd-fonts.hack
     corefonts
@@ -163,6 +150,26 @@ in
     google-fonts
     inter
   ];
+  security.sudo.wheelNeedsPassword = false;
+  users.users.loganp = {
+    isNormalUser = true;
+    description = "Logan";
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+    ];
+    shell = pkgs.zsh;
+    packages = with pkgs; [
+      vlc
+      libreoffice-fresh
+      qbittorrent
+      prismlauncher
+      mission-center
+      lavat
+      pokeget-rs
+    ];
+  };
 
   home-manager.users.loganp =
     { pkgs, ... }:

@@ -241,8 +241,7 @@ in
           cmatrix = "cmatrix -C magenta";
           nixsysup = "sudo nixos-rebuild switch --upgrade";
           nixsysed = "nvsu /etc/nixos/configuration.nix";
-          nixlsgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
-          nixusrup = "nix profile upgrade nix/loganp --verbose";
+          nixlistgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
         };
         plugins = [
           {

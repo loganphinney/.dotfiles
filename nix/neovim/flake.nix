@@ -1,5 +1,5 @@
 {
-  description = "loganp's nix packages";
+  description = "packages for neovim";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
@@ -31,13 +31,6 @@
             nixd
             nixfmt-rfc-style
             typescript-language-server
-            #for fun
-            lavat
-            pokeget-rs
-            #GUI apps
-            qbittorrent
-            prismlauncher
-            mission-center
           ];
         };
     };

@@ -159,7 +159,7 @@
           };
           programs.zsh = {
             enable = true;
-            initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";
+            initContent = "PROMPT='%B%F{2}[%1~]%f%b%F{8}%#%f '";
             shellAliases = {
               ".." = "cd ../";
               "~" = "cd ~/";
@@ -171,6 +171,7 @@
               tree = "eza -T";
               nv = "nvim";
               nvsu = "sudo -E nvim";
+              lg = "lazygit";
               dcdu = "docker compose down; docker compose up -d";
               lava = "lavat -c black -k magenta -s 3";
               cmatrix = "cmatrix -C magenta";
@@ -210,7 +211,7 @@
                 plugin = (
                   mkTmuxPlugin {
                     pluginName = "rose-pine-tmux";
-                    version = "1-unstable-2025-11-09";
+                    version = "1-unstable-2025-11-22";
                     src = pkgs.fetchFromGitHub {
                       owner = "rose-pine";
                       repo = "tmux";
@@ -226,7 +227,7 @@
                   set -g @rose_pine_show_current_program 'on'
                   set -g @rose_pine_host 'on'
                   set -g @rose_pine_date_time '%m-%d-%Y %H:%M:%S'
-                  #set -g @rose_pine_user 'on' 
+                  set -g @rose_pine_user 'on' 
                   set -g @rose_pine_directory 'on'
                   set -g @rose_pine_right_separator ' '
                   set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} #{battery_percentage} ' 

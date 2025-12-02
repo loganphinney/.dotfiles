@@ -224,7 +224,7 @@ in
       };
       programs.zsh = {
         enable = true;
-        initContent = "PROMPT='%B%F{green}[%1~]%f%b%F{grey}%#%f '";
+        initContent = "PROMPT='%B%F{2}[%1~]%f%b%F{8}%#%f '";
         shellAliases = {
           ".." = "cd ../";
           "~" = "cd ~/";
@@ -236,6 +236,7 @@ in
           tree = "eza -T";
           nv = "nvim";
           nvsu = "sudo -E nvim";
+          lg = "lazygit";
           dcdu = "docker compose down; docker compose up -d";
           lava = "lavat -c black -k magenta -s 3";
           cmatrix = "cmatrix -C magenta";

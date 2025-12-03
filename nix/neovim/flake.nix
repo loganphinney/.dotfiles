@@ -22,6 +22,8 @@
             neovim
             tree-sitter
             luajitPackages.jsregexp
+            python313Packages.pynvim
+            luajitPackages.luarocks
             #language servers
             shellcheck
             shfmt

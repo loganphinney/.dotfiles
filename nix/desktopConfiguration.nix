@@ -9,7 +9,7 @@ in
     lanzaboote.nixosModules.lanzaboote
   ];
   networking.hostName = "nixos-loganp";
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "24.11";
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -164,7 +164,6 @@ in
       libreoffice-fresh
       qbittorrent
       prismlauncher
-      mission-center
       lavat
       pokeget-rs
     ];
@@ -194,7 +193,7 @@ in
           remember_window_size = false;
           initial_window_width = "120c";
           initial_window_height = "40c";
-          window_padding_width = 1;
+          window_padding_width = 2;
           foreground = "#e0def4";
           background = "#191724";
           selection_foreground = "#e0def4";
@@ -206,8 +205,8 @@ in
           active_tab_background = "#26233a";
           inactive_tab_foreground = "#6e6a86";
           inactive_tab_background = "#191724";
-          active_border_color = " #3e8fb0";
-          inactive_border_color = "#403d52";
+          active_border_color = "#403d52";
+          inactive_border_color = "#2a283e";
           color0 = "#26233a";
           color8 = "#6e6a86";
           color1 = "#eb6f92";
@@ -267,7 +266,8 @@ in
           set-option -g status-position top
           set -g renumber-windows on
           set -g pane-border-lines "single"
-          set -g pane-active-border-style "fg=#3e8fb0"
+          set -g pane-border-style "fg=#2a283e"
+          set -g pane-active-border-style "fg=#403d52"
           bind-key "|" split-window -h -c "#{pane_current_path}"
           bind-key "\\" split-window -fh -c "#{pane_current_path}"
           bind-key "-" split-window -v -c "#{pane_current_path}"

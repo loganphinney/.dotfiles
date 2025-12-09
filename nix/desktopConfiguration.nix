@@ -109,7 +109,6 @@ in
     nmap
     dnslookup
     ipmitool
-    zsh-completions
     stow
     tmux
     docker
@@ -174,6 +173,10 @@ in
   home-manager.users.loganp =
     { pkgs, ... }:
     {
+      home.sessionVariables = {
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+      };
       home.stateVersion = "25.11";
       programs.kitty = {
         enable = true;
@@ -191,6 +194,7 @@ in
           remember_window_size = false;
           initial_window_width = "120c";
           initial_window_height = "40c";
+          window_padding_width = 1;
           foreground = "#e0def4";
           background = "#191724";
           selection_foreground = "#e0def4";

@@ -18,7 +18,6 @@
           name = "loganp-packages";
           paths = [
             #neovim stuff
-            vim
             neovim
             tree-sitter
             luajitPackages.jsregexp

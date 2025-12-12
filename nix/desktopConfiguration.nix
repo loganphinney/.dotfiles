@@ -243,8 +243,9 @@ in
           dcdu = "docker compose down; docker compose up -d";
           lava = "lavat -c black -k magenta -s 3";
           cmatrix = "cmatrix -C magenta";
-          nixsysup = "sudo nixos-rebuild switch --upgrade";
-          nixsysed = "nvsu /etc/nixos/configuration.nix";
+          nixupdate = "sudo nixos-rebuild switch";
+          nixupgrade = "sudo nixos-rebuild switch --upgrade";
+          nixed = "nvsu /etc/nixos/configuration.nix";
           nixlistgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
         };
         plugins = [

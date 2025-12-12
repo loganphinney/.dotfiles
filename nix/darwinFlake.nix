@@ -25,18 +25,34 @@
           system.configurationRevision = self.rev or self.dirtyRev or null;
           system.stateVersion = 6;
           nixpkgs.hostPlatform = "aarch64-darwin";
+          nixpkgs.config.allowUnfree = true;
           networking.hostName = "mac-loganp";
           system.primaryUser = "loganphinney";
           users.users."loganphinney" = {
             name = "loganphinney";
             home = "/Users/loganphinney";
+            packages = with pkgs; [
+              #apps
+              firefox-bin
+              kitty
+              iterm2
+              rectangle
+              utm
+              jetbrains.webstorm
+              jetbrains.datagrip
+              #misc
+              lavat
+              cmatrix
+            ];
           };
           security.pam.services.sudo_local = {
             enable = true;
             reattach = true;
             touchIdAuth = true;
           };
-          nixpkgs.config.allowUnfree = true;
+          services.openssh = {
+            enable = true;
+          };
           programs.zsh = {
             enable = true;
             enableBashCompletion = true;
@@ -69,25 +85,25 @@
             perl
             ruby
             lua
-            nodePackages_latest.nodejs
+            nodejs_24
           ];
-          homebrew = {
-            enable = true;
-            casks = [
-              "firefox"
-              "docker-desktop"
-              "macs-fan-control"
-              "vlc"
-              "yubico-authenticator"
-            ];
-            global.autoUpdate = true;
-          };
           fonts.packages = with pkgs; [
             nerd-fonts.hack
             nerd-fonts.noto
           ];
           environment.variables = {
             EDITOR = "nvim";
+            VISUAL = "nvim";
+          };
+          homebrew = {
+            enable = true;
+            global.autoUpdate = true;
+            casks = [
+              "docker-desktop"
+              "macs-fan-control"
+              "vlc"
+              "yubico-authenticator"
+            ];
           };
         };
 
@@ -97,18 +113,6 @@
           home.stateVersion = "25.11";
           home.username = "loganphinney";
           home.homeDirectory = "/Users/loganphinney";
-          home.packages = with pkgs; [
-            #apps
-            kitty
-            iterm2
-            rectangle
-            utm
-            jetbrains.webstorm
-            jetbrains.datagrip
-            #misc
-            lavat
-            cmatrix
-          ];
           programs.kitty = {
             enable = true;
             font.name = "Hack Nerd Font Mono";

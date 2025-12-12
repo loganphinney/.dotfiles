@@ -172,11 +172,11 @@ in
   home-manager.users.loganp =
     { pkgs, ... }:
     {
+      home.stateVersion = "25.11";
       home.sessionVariables = {
         EDITOR = "nvim";
         VISUAL = "nvim";
       };
-      home.stateVersion = "25.11";
       programs.kitty = {
         enable = true;
         font.name = "Hack Nerd Font Mono";
@@ -254,6 +254,31 @@ in
             file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
           }
         ];
+      };
+      programs.vim = {
+        enable = true;
+        plugins = with pkgs.vimPlugins; [
+          lightline-vim
+          (pkgs.vimUtils.buildVimPlugin {
+            pname = "rose-pine-vim";
+            version = "2025-11-09";
+            src = pkgs.fetchFromGitHub {
+              owner = "rose-pine";
+              repo = "vim";
+              rev = "ea0ad226b851b3aa132e2e234cc74ceecf9f4c7c";
+              sha256 = "sha256-QAZKLTliWwZR6Zm0qyGpJiY2lFvBypBqBxpA0BlVcDc=";
+            };
+          })
+        ];
+        extraConfig = ''
+          syntax on
+          set relativenumber
+          set background=dark
+          let g:disable_bg = 1
+          colorscheme rosepine
+          set laststatus=2
+          let g:lightline = { 'colorscheme': 'rosepine' }
+        '';
       };
       programs.tmux = {
         enable = true;

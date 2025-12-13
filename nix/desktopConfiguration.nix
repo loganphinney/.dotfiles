@@ -46,6 +46,7 @@ in
   };
   networking.networkmanager.enable = true;
   security.rtkit.enable = true;
+  services.pcscd.enable = true;
   services.openssh.enable = true;
   services.fail2ban.enable = true;
   services.xserver.enable = true;
@@ -160,8 +161,10 @@ in
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [
-      vlc
+      yubioath-flutter
       libreoffice-fresh
+      vlc
+      protonvpn-gui
       qbittorrent
       prismlauncher
       lavat

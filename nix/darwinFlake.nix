@@ -84,8 +84,8 @@
             casks = [
               "docker-desktop"
               "macs-fan-control"
-              "vlc"
               "yubico-authenticator"
+              "protonvpn"
             ];
           };
         };
@@ -99,8 +99,10 @@
             homeDirectory = "/Users/loganphinney";
             packages = with pkgs; [
               firefox-bin
+              vlc-bin
               kitty
               iterm2
+              qbittorrent
               rectangle
               utm
               jetbrains.webstorm
@@ -287,6 +289,32 @@
                 };
               };
             };
+            vim = {
+              enable = true;
+              plugins = with pkgs.vimPlugins; [
+                (pkgs.vimUtils.buildVimPlugin {
+                  pname = "rose-pine-vim";
+                  version = "2025-11-09";
+                  src = pkgs.fetchFromGitHub {
+                    owner = "rose-pine";
+                    repo = "vim";
+                    rev = "ea0ad226b851b3aa132e2e234cc74ceecf9f4c7c";
+                    sha256 = "sha256-QAZKLTliWwZR6Zm0qyGpJiY2lFvBypBqBxpA0BlVcDc=";
+                  };
+                })
+                lightline-vim
+              ];
+              extraConfig = ''
+                syntax on
+                set relativenumber
+                set background=dark
+                let g:disable_bg = 1
+                colorscheme rosepine
+                set laststatus=2
+                let g:lightline = { 'colorscheme': 'rosepine' }
+              '';
+            };
+
           };
         };
 

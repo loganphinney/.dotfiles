@@ -13,7 +13,7 @@ return {
                     left_bottom = "╰",
                     right_arrow = "─",
                 },
-            },--]]
+            },]] --
             blank = {
                 enable = true,
                 style = '#524f67',

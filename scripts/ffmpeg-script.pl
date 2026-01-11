@@ -4,6 +4,11 @@ use warnings;
 use File::Basename;
 use File::Spec;
 
+$SIG{INT} = sub {
+    print "\nInterrupted by user (Ctrl+C). Aborting.\n";
+    exit 130;
+};
+
 my $input_path = $ARGV[0];
 unless ($input_path) { die "Usage: $0 <input_file.mkv>\n"; }
 
@@ -43,6 +48,15 @@ foreach my $file (@input_files) {
       . "\"$output_file\"";
 
     print "Running: $cmd\n";
-    system($cmd) == 0 or warn "Failed to run ffmpeg on $file: $!\n";
+    my $ret = system($cmd);
+    if ( $ret == -1 ) {
+        die "Failed to execute ffmpeg: $!\n";
+    }
+    elsif ( $ret & 127 ) {
+        die sprintf( "ffmpeg died with signal %d\n", ( $ret & 127 ) );
+    }
+    elsif ( $ret != 0 ) {
+        die sprintf( "ffmpeg exited with non-zero status %d\n", ( $ret >> 8 ) );
+    }
     print "Output: $output_file\n";
 }

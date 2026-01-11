@@ -1,4 +1,8 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 let
   lanzaboote = builtins.getFlake "github:nix-community/lanzaboote";
 in
@@ -68,6 +72,9 @@ in
   services.displayManager.autoLogin.user = "loganp";
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+  programs.hyprland = {
+    enable = true;
+  };
   environment.gnome.excludePackages = with pkgs; [
     snapshot
     decibels
@@ -90,6 +97,21 @@ in
     gnome-connections
     gnome-tour
     gnome-text-editor
+  ];
+  programs.dconf.profiles.user.databases = [
+    {
+      lockAll = true;
+      settings = {
+        "org/gnome/desktop/interface" = {
+          accent-color = "purple";
+          color-scheme = "prefer-dark";
+          cursor-theme = "BreezeX-RosePine-Linux";
+        };
+        "org/gnome/settings-daemon/plugins/power" = {
+          idle-brightness = lib.gvariant.mkInt32 100;
+        };
+      };
+    }
   ];
   programs.firefox.enable = true;
   programs.zsh = {
@@ -141,6 +163,7 @@ in
     gnomeExtensions.color-picker
     gnomeExtensions.executor
     rose-pine-cursor
+    waybar
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.hack
@@ -166,6 +189,7 @@ in
       vlc
       protonvpn-gui
       qbittorrent
+      darktable
       prismlauncher
       lavat
       pokeget-rs
@@ -196,7 +220,7 @@ in
           remember_window_size = false;
           initial_window_width = "120c";
           initial_window_height = "40c";
-          window_padding_width = 2;
+          window_padding_width = 1;
           foreground = "#e0def4";
           background = "#191724";
           selection_foreground = "#e0def4";
@@ -243,6 +267,7 @@ in
           nv = "nvim";
           nvsu = "sudo -E nvim";
           lg = "lazygit";
+          lzd = "lazydocker";
           dcdu = "docker compose down; docker compose up -d";
           lava = "lavat -c black -k magenta -s 3";
           cmatrix = "cmatrix -C magenta";

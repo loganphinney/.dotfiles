@@ -6,9 +6,6 @@ return {
             backdrop = 1.0,
             width = 120,
             height = 0.95,
-            options = {
-                relativenumber = false,
-            }
         }
     }
 }

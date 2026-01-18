@@ -9,7 +9,6 @@ return {
                 "bash",
                 "lua",
                 "perl",
-                "nix",
                 "vim",
                 "vimdoc",
                 "query",
@@ -18,7 +17,8 @@ return {
                 "json",
                 "yaml",
                 "html",
-                "regex"
+                "regex",
+                "nix",
             },
             sync_install = false,
             highlight = {

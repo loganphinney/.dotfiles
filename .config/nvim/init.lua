@@ -8,6 +8,6 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
-vim.cmd [[autocmd BufRead,BufNewFile *.yaml.ansible setfiletype yaml.ansible]]
 require('config.lazy')
 require('config.user-config')
+vim.cmd [[autocmd BufRead,BufNewFile *.yaml.ansible setfiletype yaml.ansible]]

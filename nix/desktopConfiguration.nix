@@ -127,22 +127,11 @@ in
       openFirewall = true;
       group = "media";
     };
-    plex = {
-      enable = true;
-      openFirewall = true;
-      group = "media";
-    };
   };
   users.groups.media = {
     members = [
       "jellyfin"
-      "plex"
     ];
-  };
-  systemd.services.plexmediaserver = {
-    serviceConfig = {
-      TimeoutStopSec = "10s";
-    };
   };
   environment.systemPackages = with pkgs; [
     sbctl
@@ -312,7 +301,6 @@ in
         vim = {
           enable = true;
           plugins = with pkgs.vimPlugins; [
-            lightline-vim
             (pkgs.vimUtils.buildVimPlugin {
               pname = "rose-pine-vim";
               version = "2025-11-09";
@@ -327,11 +315,8 @@ in
           extraConfig = ''
             syntax on
             set relativenumber
-            set background=dark
             let g:disable_bg = 1
             colorscheme rosepine
-            set laststatus=2
-            let g:lightline = { 'colorscheme': 'rosepine' }
           '';
         };
         tmux = {

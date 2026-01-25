@@ -40,6 +40,7 @@
           services.openssh = {
             enable = true;
           };
+          services.tailscale.enable = true;
           programs.zsh = {
             enable = true;
             enableBashCompletion = true;
@@ -73,6 +74,8 @@
             ruby
             lua
             nodejs_24
+            ffmpeg
+            yt-dlp
           ];
           fonts.packages = with pkgs; [
             nerd-fonts.hack
@@ -104,9 +107,6 @@
               iterm2
               qbittorrent
               rectangle
-              utm
-              jetbrains.webstorm
-              jetbrains.datagrip
               #misc
               lavat
               cmatrix

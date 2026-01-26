@@ -12,7 +12,7 @@ in
     <home-manager/nixos>
     lanzaboote.nixosModules.lanzaboote
   ];
-  networking.hostName = "nixos-loganp";
+  networking.hostName = "nixos-desktop";
   system.stateVersion = "24.11";
   nix.settings.experimental-features = [
     "nix-command"
@@ -51,7 +51,6 @@ in
   networking.networkmanager.enable = true;
   security.rtkit.enable = true;
   services.pcscd.enable = true;
-  services.openssh.enable = true;
   services.fail2ban.enable = true;
   services.xserver.enable = true;
   services.xserver.xkb.layout = "us";
@@ -62,6 +61,10 @@ in
     enable = true;
     allowedTCPPorts = [ 8096 ];
     allowedUDPPorts = [ 8096 ];
+  };
+  services.openssh = {
+    enable = true;
+    ports = [ 2222 ];
   };
   hardware.graphics = {
     enable = true;
@@ -122,6 +125,7 @@ in
   programs.steam.enable = true;
   programs.steam.extraCompatPackages = with pkgs; [ proton-ge-bin ];
   services = {
+    tailscale.enable = true;
     jellyfin = {
       enable = true;
       openFirewall = true;
@@ -300,7 +304,7 @@ in
         };
         vim = {
           enable = true;
-          plugins = with pkgs.vimPlugins; [
+          plugins = [
             (pkgs.vimUtils.buildVimPlugin {
               pname = "rose-pine-vim";
               version = "2025-11-09";

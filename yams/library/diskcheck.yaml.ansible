@@ -1,0 +1,30 @@
+---
+- name: Disk Usage Report
+  hosts: 192.168.8.4
+  gather_facts: false
+
+  tasks:
+    - name: Get NVME Stats
+      shell: df -H | grep nvme0n1p2 | awk '{print $3, $4, $5}'
+      register: nvme_raw
+      changed_when: false
+
+    - name: Get HDD Stats
+      shell: df -H | grep /dev/sda1 | awk '{print $3, $4, $5}'
+      register: hdd_raw
+      changed_when: false
+
+    - name: Display Formatted Output
+      vars:
+        nvme: "{{ nvme_raw.stdout.split() }}"
+        hdd: "{{ hdd_raw.stdout.split() }}"
+      debug:
+        msg:
+          - "Disk Space Available:"
+          - "  nvme: {{ nvme[1] }}"
+          - "  hdd:  {{ hdd[1] }}"
+          - ""
+          - "Disk Space Used:"
+          - "  nvme: {{ nvme[2] }} {{ nvme[0] }}"
+          - "  hdd:  {{ hdd[2] }} {{ hdd[0] }}"
+ 

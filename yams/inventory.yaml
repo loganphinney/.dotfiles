@@ -1,0 +1,14 @@
+---
+all:
+  vars:
+    ansible_python_interpreter: /run/current-system/sw/bin/python3 
+
+local_hosts:
+  hosts:
+    192.168.8.4:
+      ansible_port: 2222
+
+external_hosts:
+  hosts:
+    71.76.80.250:
+      ansible_port: 2222

@@ -1,6 +1,4 @@
 {
-  config,
-  lib,
   pkgs,
   ...
 }:
@@ -52,6 +50,7 @@
     };
   };
   services.fail2ban.enable = true;
+  networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [
     80
     443
@@ -62,12 +61,20 @@
     virtualHosts."jellyfin.loganphinney.com".extraConfig = ''
       reverse_proxy localhost:8096
     '';
+    virtualHosts."immich.loganphinney.com".extraConfig = ''
+      reverse_proxy localhost:2283
+    '';
   };
   services = {
     jellyfin = {
       enable = true;
       group = "media";
       openFirewall = true;
+    };
+    immich = {
+      enable = true;
+      openFirewall = true;
+      host = "0.0.0.0";
     };
   };
   users.groups.media = {

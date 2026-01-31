@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   home.username = "loganp";
   home.homeDirectory = "/home/loganp";
@@ -10,7 +10,7 @@
   programs = {
     zsh = {
       enable = true;
-      initContent = "PROMPT='%B%F{2}[%1~]%f%b%F{8}%#%f '";
+      initContent = "PROMPT='%F{8}[%1~]%#%f '";
       shellAliases = {
         ".." = "cd ../";
         "~" = "cd ~/";

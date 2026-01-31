@@ -75,8 +75,8 @@
         dcdu = "docker compose down; docker compose up -d";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
-        nixupdate = "sudo nixos-rebuild switch";
-        nixupgrade = "sudo nixos-rebuild switch --upgrade";
+        nixupdate = "sudo nixos-rebuild switch --flake /etc/nixos#nixos-desktop";
+        nixupgrade = "sudo nix flake update --flake /etc/nixos";
         nixed = "nvsu /etc/nixos/configuration.nix";
         nixlistgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
       };

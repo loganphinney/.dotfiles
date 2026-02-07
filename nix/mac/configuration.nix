@@ -1,0 +1,91 @@
+{
+  pkgs,
+  self,
+  ...
+}:
+{
+  system.stateVersion = 6;
+  system.configurationRevision = self.rev or self.dirtyRev or null;
+  system.primaryUser = "loganphinney";
+  networking.hostName = "mac-loganp";
+  nixpkgs = {
+    hostPlatform = "aarch64-darwin";
+    config.allowUnfree = true;
+  };
+  nix = {
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      trusted-users = [
+        "@admin"
+        "loganphinney"
+      ];
+      auto-optimise-store = true;
+    };
+  };
+  users.users.loganphinney = {
+    name = "loganphinney";
+    home = "/Users/loganphinney";
+  };
+  security.pam.services.sudo_local = {
+    enable = true;
+    reattach = true;
+    touchIdAuth = true;
+  };
+  services = {
+    openssh.enable = true;
+    tailscale.enable = true;
+  };
+  programs.zsh = {
+    enable = true;
+    enableBashCompletion = true;
+    enableCompletion = true;
+  };
+  environment.systemPackages = with pkgs; [
+    git
+    rsync
+    wget
+    curl
+    openssl
+    openssh
+    dnslookup
+    nmap
+    tmux
+    nano
+    fzf
+    bat
+    ripgrep
+    fd
+    eza
+    stow
+    btop
+    unixtools.watch
+    gnumake
+    docker-compose
+    fastfetch
+    lazygit
+    lazydocker
+    perl
+    ruby
+    lua
+    nodejs_24
+    ffmpeg
+    yt-dlp
+  ];
+  fonts.packages = with pkgs; [
+    nerd-fonts.hack
+    nerd-fonts.noto
+  ];
+  homebrew = {
+    enable = true;
+    global.autoUpdate = true;
+    casks = [
+      "docker-desktop"
+      "macs-fan-control"
+      "yubico-authenticator"
+      "protonvpn"
+    ];
+  };
+}

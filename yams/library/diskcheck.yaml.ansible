@@ -25,6 +25,6 @@
           - "  hdd:  {{ hdd[1] }}"
           - ""
           - "Disk Space Used:"
-          - "  nvme: {{ nvme[2] }} {{ nvme[0] }}"
-          - "  hdd:  {{ hdd[2] }} {{ hdd[0] }}"
+          - "  nvme: {{ nvme[0] }} {{ nvme[2] }}"
+          - "  hdd: {{ hdd[0] }} {{ hdd[2] }}"
  

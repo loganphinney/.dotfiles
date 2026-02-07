@@ -9,11 +9,6 @@
   ];
   networking.hostName = "nixos-desktop";
   system.stateVersion = "24.11";
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  nix.optimise.automatic = true;
   nixpkgs.config.allowUnfree = true;
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.lanzaboote = {

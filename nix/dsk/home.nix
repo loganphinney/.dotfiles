@@ -13,7 +13,6 @@
       font.name = "Hack Nerd Font Mono";
       font.size = 11;
       settings = {
-        linux_display_server = "x11";
         sync_to_monitor = false;
         cursor_shape = "beam";
         cursor_trail = 1;

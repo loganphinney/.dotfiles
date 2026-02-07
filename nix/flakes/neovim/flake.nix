@@ -27,7 +27,7 @@
             shellcheck
             shfmt
             bash-language-server
-            perl540Packages.PLS
+            perl5Packages.PLS
             lua-language-server
             nixd
             nixfmt-rfc-style

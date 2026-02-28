@@ -1,8 +1,8 @@
 {
   description = "packages for ansible";
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
+    flake-utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
   };
   outputs =
     {

@@ -25,7 +25,8 @@
         lg = "lazygit";
         lzd = "lazydocker";
         dcdu = "docker compose down; docker compose up -d";
-        nixupdate = "sudo nixos-rebuild switch --flake /etc/nixos#determinate-lab";
+        nixupdate = "sudo nixos-rebuild switch --verbose --flake /etc/nixos#determinate-lab";
+        nixupgrade = "sudo nix flake update --verbose --flake /etc/nixos";
         nixed = "nvsu /etc/nixos/configuration.nix";
         nixlistgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
       };
@@ -75,6 +76,8 @@
         bind-key "\\" split-window -fh -c "#{pane_current_path}"
         bind-key "-" split-window -v -c "#{pane_current_path}"
         bind-key "_" split-window -fv -c "#{pane_current_path}"
+        set -g default-terminal "tmux-256color"
+        set -as terminal-features ",*:RGB"
       '';
       plugins = with pkgs.tmuxPlugins; [
         {

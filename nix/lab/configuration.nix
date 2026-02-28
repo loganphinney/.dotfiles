@@ -25,6 +25,7 @@
   };
   security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = with pkgs; [
+    tmux
     gcc
     neovim
     git

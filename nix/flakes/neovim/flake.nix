@@ -30,7 +30,7 @@
             perl5Packages.PLS
             lua-language-server
             nixd
-            nixfmt-rfc-style
+            nixfmt
             typescript-language-server
           ];
         };

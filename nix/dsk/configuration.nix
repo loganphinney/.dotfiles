@@ -199,6 +199,8 @@
       qbittorrent
       darktable
       prismlauncher
+      vscodium
+      cava
       lavat
       pokeget-rs
     ];

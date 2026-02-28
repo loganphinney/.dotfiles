@@ -37,6 +37,9 @@
         inactive_tab_background = "#191724";
         active_border_color = "#403d52";
         inactive_border_color = "#2a283e";
+        wayland_titlebar_color = "#191724";
+        linux_display_server = "wayland";
+        title = "kitty";
         color0 = "#26233a";
         color8 = "#6e6a86";
         color1 = "#eb6f92";
@@ -74,8 +77,8 @@
         dcdu = "docker compose down; docker compose up -d";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
-        nixupdate = "sudo nixos-rebuild switch --flake /etc/nixos#nixos-desktop";
-        nixupgrade = "sudo nix flake update --flake /etc/nixos";
+        nixupdate = "sudo nixos-rebuild switch --verbose --flake /etc/nixos#nixos-desktop";
+        nixupgrade = "sudo nix flake update --verbose --flake /etc/nixos";
         nixed = "nvsu /etc/nixos/configuration.nix";
         nixlistgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
       };

@@ -50,6 +50,7 @@
         inactive_tab_background = "#191724";
         active_border_color = "#403d52";
         inactive_border_color = "#403d52";
+        macos_titlebar_color = "background";
         color0 = "#26233a";
         color8 = "#6e6a86";
         color1 = "#eb6f92";
@@ -86,9 +87,8 @@
         dcdu = "docker compose down; docker compose up -d";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
-        bug = "brew upgrade --greedy";
-        darwinupdate = "sudo darwin-rebuild switch --flake /etc/nix-darwin --verbose";
-        darwinupgrade = "sudo nix flake update --flake /etc/nix-darwin --verbose";
+        darwinupdate = "sudo darwin-rebuild switch --verbose --flake /etc/nix-darwin --verbose";
+        darwinupgrade = "sudo nix flake update --verbose --flake /etc/nix-darwin --verbose";
         darwined = "nvsu /etc/nix-darwin/flake.nix";
       };
       plugins = [

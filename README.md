@@ -19,5 +19,3 @@ The following are kept for reference only and are no longer used:
 - `.zshrc`
 - `.config/tmux/`
 - `.config/kitty/`
-- `docker/`
-- `scripts/wireguard.pl`

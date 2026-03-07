@@ -70,7 +70,6 @@
     perl
     ruby
     lua
-    nodejs_24
     ffmpeg
     yt-dlp
   ];

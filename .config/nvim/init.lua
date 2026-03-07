@@ -1,4 +1,7 @@
 vim.opt.mouse = 'a'
+vim.opt.scrolloff = 10
+vim.opt.signcolumn = 'yes'
+vim.opt.clipboard = 'unnamedplus'
 vim.opt.termguicolors = true
 vim.opt.wrap = false
 vim.opt.number = true
@@ -10,4 +13,3 @@ vim.opt.expandtab = true
 vim.opt.smartindent = true
 require('config.lazy')
 require('config.user-config')
-vim.cmd [[autocmd BufRead,BufNewFile *.yaml.ansible setfiletype yaml.ansible]]

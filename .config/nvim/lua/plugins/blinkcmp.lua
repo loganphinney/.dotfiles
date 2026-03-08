@@ -3,8 +3,8 @@ return {
     dependencies = {
         {
             'L3MON4D3/LuaSnip',
-            dependencies = { "rafamadriz/friendly-snippets" },
-            build = "make install_jsregexp"
+            dependencies = { 'rafamadriz/friendly-snippets' },
+            build = 'make install_jsregexp'
         }
     },
     version = '1.*',
@@ -26,5 +26,5 @@ return {
             completion = { menu = { auto_show = true } }
         }
     },
-    opts_extend = { "sources.default" },
+    opts_extend = { 'sources.default' },
 }

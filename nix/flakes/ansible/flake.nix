@@ -25,12 +25,9 @@
         packages.default = pkgs.buildEnv {
           name = "loganp-packages";
           paths = with pkgs; [
-            python314
-            pyenv
             ansible
             ansible-lint
             yamllint
-            nodejs_24
             ansible-language-server
           ];
         };

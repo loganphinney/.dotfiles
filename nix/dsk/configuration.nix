@@ -138,6 +138,9 @@
     nmap
     dnslookup
     ipmitool
+    python314
+    pyenv
+    nodejs_24
     stow
     tmux
     docker
@@ -159,6 +162,7 @@
     jre
     gnumake
     fastfetch
+    terraform
     #GNOME
     gnome-tweaks
     xdg-terminal-exec
@@ -200,6 +204,7 @@
       darktable
       prismlauncher
       vscodium
+      the-powder-toy
       cava
       lavat
       pokeget-rs

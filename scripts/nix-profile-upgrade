@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+import subprocess
+
+
+def sh(cmd):
+    return subprocess.check_output(cmd, shell=True, text=True).strip().splitlines()
+
+
+urls = sh("nix profile list | awk '/Original flake URL:/ {print $4}'")
+for url in urls:
+    url = url.replace("git+file://", "")
+    base, subdir = url.split("?dir=")
+    path = f"{base}/{subdir}"
+
+    print(f"$ nix flake update {path}")
+    subprocess.run(["nix", "flake", "update"], cwd=path, check=True)
+print("$ nix profile upgrade --all")
+subprocess.run(["nix", "profile", "upgrade", "--all"], check=True)

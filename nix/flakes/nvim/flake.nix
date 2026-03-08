@@ -36,6 +36,8 @@
               shellcheck
               shfmt
               bash-language-server
+              pyright
+              ruff
               perl5Packages.PLS
               lua-language-server
               nixd

@@ -1,5 +1,5 @@
 return {
-    "folke/zen-mode.nvim",
+    'folke/zen-mode.nvim',
     vim.keymap.set('n', '<leader>zz', ':ZenMode<CR>', { desc = 'Zen Mode' }),
     opts = {
         window = {

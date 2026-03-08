@@ -12,20 +12,21 @@ return {
             }
         }
         require('nvim-treesitter').install {
-            "bash",
-            "lua",
-            "perl",
-            "vim",
-            "vimdoc",
-            "query",
-            "markdown",
-            "markdown_inline",
-            "json",
-            "yaml",
-            "html",
-            "regex",
-            "hcl",
-            "nix",
+            'bash',
+            'lua',
+            'perl',
+            'python',
+            'vim',
+            'vimdoc',
+            'query',
+            'markdown',
+            'markdown_inline',
+            'json',
+            'yaml',
+            'html',
+            'regex',
+            'hcl',
+            'nix',
         }
     end
 }

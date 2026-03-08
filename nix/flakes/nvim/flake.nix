@@ -41,6 +41,7 @@
               nixd
               nixfmt
               typescript-language-server
+              terraform-ls
             ];
           };
         }

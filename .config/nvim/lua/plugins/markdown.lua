@@ -4,5 +4,4 @@ return {
     ft = { "markdown" },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
-    --opts = {},
 }

@@ -3,7 +3,7 @@ return {
     dependencies = { 'saghen/blink.cmp', 'nvimdev/lspsaga.nvim' },
     config = function()
         local capabilities = require('blink.cmp').get_lsp_capabilities()
-        vim.lsp.enable({ 'lua_ls', 'bashls', 'perlpls', 'nixd', 'ts_ls', 'ansiblels' })
+        vim.lsp.enable({ 'lua_ls', 'bashls', 'perlpls', 'nixd', 'ts_ls', 'ansiblels', 'terraformls' })
         vim.lsp.config('*', { capabilities = capabilities })
         vim.lsp.config('lua_ls', {
             settings = {
@@ -12,6 +12,14 @@ return {
                     workspace = { library = { vim.env.VIMRUNTIME } }
                 }
             }
+        })
+        vim.filetype.add({
+            extension = {
+                tf = "terraform",
+                tfvars = "terraform",
+                terraform = "terraform",
+                ansible = "yaml.ansible"
+            },
         })
     end,
 }

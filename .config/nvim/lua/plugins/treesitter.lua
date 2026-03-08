@@ -24,6 +24,7 @@ return {
             "yaml",
             "html",
             "regex",
+            "hcl",
             "nix",
         }
     end

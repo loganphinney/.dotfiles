@@ -201,5 +201,31 @@
         };
       };
     };
+    obsidian = {
+      enable = true;
+      vaults.notes = {
+        target = "Documents/Notes";
+        settings = {
+          themes = [
+            {
+              pkg = pkgs.fetchFromGitHub {
+                owner = "rose-pine";
+                repo = "obsidian";
+                rev = "e2b47ad4ff24626b597d0b2a36250e22073760e7";
+                hash = "sha256-HSGFmmQcH2WlJBpPv2yek16iiz92leQbIspCN6oB1AA=";
+              };
+              enable = true;
+            }
+          ];
+          cssSnippets = [
+            {
+              name = "wide-body";
+              enable = true;
+              text = "body { --file-line-width: 33vw; }";
+            }
+          ];
+        };
+      };
+    };
   };
 }

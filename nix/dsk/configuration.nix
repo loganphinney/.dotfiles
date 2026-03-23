@@ -10,6 +10,10 @@
   networking.hostName = "nixos-desktop";
   system.stateVersion = "24.11";
   nixpkgs.config.allowUnfree = true;
+  nix.settings.trusted-users = [
+    "root"
+    "loganp"
+  ];
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.lanzaboote = {
     enable = true;

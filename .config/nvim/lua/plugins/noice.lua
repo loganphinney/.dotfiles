@@ -4,6 +4,7 @@ return {
     dependencies = { 'MunifTanjim/nui.nvim' },
     config = function()
         require('noice').setup({
+            presets = { command_palette = true },
             lsp = {
                 override = {
                     ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
@@ -11,7 +12,11 @@ return {
                     ['cmp.entry.get_documentation'] = true,
                 },
             },
-            presets = { command_palette = true }
+            views = {
+                cmdline_popup = {
+                    border = { style = { '┌', '─', '┐', '│', '┘', '─', '└', '│' } }
+                },
+            },
         })
     end
 }

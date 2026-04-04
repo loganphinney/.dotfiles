@@ -3,7 +3,8 @@ return {
     config = function()
         require('nvim-highlight-colors').setup({
             render = 'virtual',
-            enable_short_hex = false,
+            virtual_symbol = '●',
+            virtual_symbol_position = 'eol',
             enable_named_colors = false,
         })
     end

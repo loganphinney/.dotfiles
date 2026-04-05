@@ -10,6 +10,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     inputs@{
@@ -18,6 +26,8 @@
       determinate,
       lanzaboote,
       home-manager,
+      niri,
+      noctalia,
       ...
     }:
     {
@@ -30,7 +40,11 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.loganp = import ./home.nix;
+            home-manager.users.loganp.imports = [
+              ./home.nix
+              niri.homeModules.niri
+              noctalia.homeModules.default
+            ];
           }
         ];
       };

@@ -69,9 +69,7 @@
   services.displayManager.autoLogin.user = "loganp";
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
-  programs.hyprland = {
-    enable = true;
-  };
+  services.displayManager.defaultSession = "niri";
   environment.gnome.excludePackages = with pkgs; [
     snapshot
     decibels
@@ -106,10 +104,18 @@
         };
         "org/gnome/settings-daemon/plugins/power" = {
           idle-brightness = lib.gvariant.mkInt32 100;
+          idle-dim = false;
+        };
+        "org/gnome/desktop/session" = {
+          idle-delay = lib.gvariant.mkUint32 0;
+        };
+        "org/gnome/desktop/wm/preferences" = {
+          num-workspaces = lib.gvariant.mkInt32 1;
         };
       };
     }
   ];
+  programs.niri.enable = true;
   programs.firefox.enable = true;
   programs.zsh = {
     enable = true;
@@ -132,6 +138,7 @@
     ];
   };
   environment.systemPackages = with pkgs; [
+    xwayland-satellite
     sbctl
     openssh
     git
@@ -143,7 +150,7 @@
     dnslookup
     ipmitool
     python314
-    pyenv
+    uv
     nodejs_24
     stow
     tmux
@@ -162,11 +169,13 @@
     ripgrep
     fd
     fzf
-    nodePackages.nodejs
+    nodejs_24
     jre
     gnumake
     fastfetch
     terraform
+    kubectl
+    minikube
     #GNOME
     gnome-tweaks
     xdg-terminal-exec
@@ -178,7 +187,6 @@
     gnomeExtensions.color-picker
     gnomeExtensions.executor
     rose-pine-cursor
-    waybar
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.hack
@@ -203,8 +211,9 @@
       yubioath-flutter
       libreoffice-fresh
       vlc
-      protonvpn-gui
+      proton-vpn
       qbittorrent
+      transmission_4
       darktable
       prismlauncher
       vscodium

@@ -27,9 +27,9 @@
         dcdu = "docker compose down; docker compose up -d";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
-        nixupdate = "sudo nixos-rebuild switch --verbose --flake /etc/nixos#nixos-desktop";
-        nixupgrade = "sudo nix flake update --verbose --flake /etc/nixos";
-        nixed = "nvsu /etc/nixos/configuration.nix";
+        nixedit = "nvsu /etc/nixos/configuration.nix";
+        nixupdate = "sudo nixos-rebuild switch --flake /etc/nixos#nixos-desktop";
+        nixupgrade = "sudo nix flake update --flake /etc/nixos";
         nixlistgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
       };
       plugins = [
@@ -238,7 +238,16 @@
         };
         layout = {
           gaps = 0;
-          border.width = 1;
+          struts.top = 1;
+          border.enable = true;
+          border.active = {
+            color = "#c4a7e7";
+          };
+          border.inactive = {
+            color = "#524f67";
+          };
+          border.width = 2;
+          focus-ring.enable = false;
           default-column-width.proportion = 0.5;
           always-center-single-column = true;
         };
@@ -246,7 +255,7 @@
         binds = {
           "Mod+Shift+Slash".action.show-hotkey-overlay = [ ];
           "Mod+Space".action.spawn-sh = "noctalia-shell ipc call launcher toggle";
-          "Mod+Alt+L".action.spawn-sh = "noctalia-shell ipc call lockScreen lock";
+          "Mod+Ctrl+Q".action.spawn-sh = "noctalia-shell ipc call lockScreen lock";
           "Mod+S".action.spawn-sh = "noctalia-shell ipc call controlCenter toggle";
           "Mod+T".action.spawn = "kitty";
           "Mod+B".action.spawn = "firefox";
@@ -495,7 +504,7 @@
               {
                 id = "ActiveWindow";
                 showIcon = true;
-                showText = true;
+                showText = false;
                 scrollingMode = "hover";
                 hideMode = "hidden";
                 maxWidth = 145;
@@ -677,7 +686,7 @@
           automationEnabled = true;
           wallpaperChangeMode = "random";
           randomIntervalSec = 240;
-          transitionDuration = 1000;
+          transitionDuration = 1500;
           transitionType = [ "stripes" ];
           skipStartupTransition = false;
           transitionEdgeSmoothness = 0.05;

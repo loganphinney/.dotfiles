@@ -238,19 +238,18 @@
         };
         layout = {
           gaps = 0;
-          border.width = 0.1;
+          border.width = 1;
           default-column-width.proportion = 0.5;
+          always-center-single-column = true;
         };
         cursor.theme = "BreezeX-RosePine-Linux";
         binds = {
           "Mod+Shift+Slash".action.show-hotkey-overlay = [ ];
           "Mod+Space".action.spawn-sh = "noctalia-shell ipc call launcher toggle";
+          "Mod+Alt+L".action.spawn-sh = "noctalia-shell ipc call lockScreen lock";
+          "Mod+S".action.spawn-sh = "noctalia-shell ipc call controlCenter toggle";
           "Mod+T".action.spawn = "kitty";
           "Mod+B".action.spawn = "firefox";
-          "Super+Alt+S" = {
-            action.spawn-sh = "pkill orca || exec orca";
-            allow-when-locked = true;
-          };
           "XF86AudioRaiseVolume" = {
             action.spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1.0";
             allow-when-locked = true;
@@ -449,8 +448,8 @@
           contentPadding = 2;
           fontScale = 1;
           enableExclusionZoneInset = true;
-          backgroundOpacity = 0.93;
-          useSeparateOpacity = false;
+          backgroundOpacity = 1;
+          useSeparateOpacity = true;
           marginVertical = 4;
           marginHorizontal = 4;
           frameThickness = 8;

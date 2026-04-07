@@ -115,6 +115,12 @@
       };
     }
   ];
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "all --keep 4";
+    flake = "/etc/nixos";
+  };
   programs.niri.enable = true;
   programs.firefox.enable = true;
   programs.zsh = {
@@ -219,6 +225,8 @@
       vscodium
       the-powder-toy
       cava
+      cbonsai
+      cmatrix
       lavat
       pokeget-rs
     ];

@@ -27,10 +27,11 @@
         dcdu = "docker compose down; docker compose up -d";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
-        nixedit = "nvsu /etc/nixos/configuration.nix";
+        nixed = "nvsu /etc/nixos/configuration.nix";
         nixupdate = "sudo nixos-rebuild switch --flake /etc/nixos#nixos-desktop";
         nixupgrade = "sudo nix flake update --flake /etc/nixos";
-        nixlistgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
+        nixinfo = "nh os info";
+        nixclean = "nh clean all -k 4";
       };
       plugins = [
         {
@@ -473,7 +474,7 @@
             left = [
               {
                 id = "Launcher";
-                icon = "rocket";
+                icon = "code";
                 enableColorization = false;
                 iconColor = "none";
                 colorizeSystemIcon = "none";
@@ -482,8 +483,8 @@
               }
               {
                 id = "Clock";
-                formatHorizontal = "HH:mm ddd, MMM dd";
-                formatVertical = "HH mm - dd MM";
+                formatHorizontal = "ddd, MMM dd";
+                formatVertical = "HH:mm:ss";
                 tooltipFormat = "HH:mm ddd, MMM dd";
                 useCustomFont = false;
                 customFont = "";
@@ -494,6 +495,7 @@
                 compactMode = true;
                 showCpuUsage = true;
                 showCpuTemp = true;
+                showGpuTemp = true;
                 showMemoryUsage = true;
                 useMonospaceFont = true;
                 usePadding = false;
@@ -557,6 +559,7 @@
               {
                 id = "ControlCenter";
                 icon = "noctalia";
+                useDistroLogo = true;
               }
             ];
           };

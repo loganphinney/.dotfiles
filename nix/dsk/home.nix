@@ -231,6 +231,7 @@
     niri = {
       enable = true;
       settings = {
+        hotkey-overlay.skip-at-startup = true;
         spawn-at-startup = [ { command = [ "noctalia-shell" ]; } ];
         outputs."ASUSTek COMPUTER INC VG27AQ5A T6LMQV003508".mode = {
           width = 2560;
@@ -242,10 +243,10 @@
           struts.top = 1;
           border.enable = true;
           border.active = {
-            color = "#c4a7e7";
+            color = "#403d52";
           };
           border.inactive = {
-            color = "#524f67";
+            color = "#21202e";
           };
           border.width = 2;
           focus-ring.enable = false;
@@ -260,6 +261,7 @@
           "Mod+S".action.spawn-sh = "noctalia-shell ipc call controlCenter toggle";
           "Mod+T".action.spawn = "kitty";
           "Mod+B".action.spawn = "firefox";
+          "Mod+N".action.spawn = "nautilus ~";
           "XF86AudioRaiseVolume" = {
             action.spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1.0";
             allow-when-locked = true;
@@ -689,7 +691,7 @@
           automationEnabled = true;
           wallpaperChangeMode = "random";
           randomIntervalSec = 240;
-          transitionDuration = 1500;
+          transitionDuration = 2000;
           transitionType = [ "stripes" ];
           skipStartupTransition = false;
           transitionEdgeSmoothness = 0.05;

@@ -33,6 +33,7 @@
     {
       nixosConfigurations.nixos-desktop = nixpkgs.lib.nixosSystem {
         modules = [
+          { nixpkgs.overlays = [ niri.overlays.niri ]; }
           determinate.nixosModules.default
           ./configuration.nix
           lanzaboote.nixosModules.lanzaboote

@@ -10,10 +10,22 @@
   networking.hostName = "nixos-desktop";
   system.stateVersion = "24.11";
   nixpkgs.config.allowUnfree = true;
-  nix.settings.trusted-users = [
-    "root"
-    "loganp"
-  ];
+  nix.settings = {
+    trusted-users = [
+      "root"
+      "loganp"
+    ];
+    extra-substituters = [
+      "https://install.determinate.systems"
+      "https://niri.cachix.org"
+      "https://noctalia.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
+    ];
+  };
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.lanzaboote = {
     enable = true;
@@ -118,10 +130,14 @@
   programs.nh = {
     enable = true;
     clean.enable = true;
-    clean.extraArgs = "all --keep 4";
+    clean.extraArgs = "--keep 4";
+    clean.dates = "daily";
     flake = "/etc/nixos";
   };
-  programs.niri.enable = true;
+  programs.niri = {
+    enable = true;
+    package = pkgs.niri-unstable;
+  };
   programs.firefox.enable = true;
   programs.zsh = {
     enable = true;
@@ -158,6 +174,7 @@
     python314
     uv
     nodejs_24
+    jq
     stow
     tmux
     docker

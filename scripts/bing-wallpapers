@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+WHITE="$(tput setaf 7)"
+BLACK="$(tput setaf 0)"
+RED="$(tput setaf 1)"
+GREEN="$(tput setaf 2)"
+YELLOW="$(tput setaf 3)"
+BLUE="$(tput setaf 4)"
+MAGENTA="$(tput setaf 5)"
+CYAN="$(tput setaf 6)"
+BOLD="$(tput bold)"
+RESET="$(tput sgr0)"
+
+set -euo pipefail
+trap 'echo -e "${RED}Script failed at line $LINENO${RESET}"' ERR
+
+COUNT=8
+DIR="$HOME/Pictures/Bing Wallpapers"
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+    -n | --number)
+        if [[ -z "${2:-}" ]]; then
+            echo -e "${RED}${BOLD}Error:${RESET} -n requires a value"
+            exit 1
+        fi
+        COUNT="$2"
+        shift
+        ;;
+    -d | --directory)
+        if [[ -z "${2:-}" ]]; then
+            echo -e "${RED}${BOLD}Error:${RESET} -d requires a value"
+            exit 1
+        fi
+        DIR="$2"
+        shift
+        ;;
+    *)
+        echo -e "${RED}${BOLD}Error:${RESET} unknown parameter ${YELLOW}$1${RESET}"
+        exit 1
+        ;;
+    esac
+    shift
+done
+if ! [[ "$COUNT" =~ ^[0-9]+$ ]] || ((COUNT <= 0)); then
+    echo -e "${RED}${BOLD}Error:${RESET} -n must be a positive integer"
+    exit 1
+fi
+mkdir -p "$DIR"
+API="https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=$COUNT&mkt=en-US"
+if ! JSON=$(curl -fsSL "$API"); then
+    echo -e "${RED}${BOLD}Error:${RESET} Failed to fetch data from Bing"
+    exit 1
+fi
+if ! jq -e '.images' >/dev/null 2>&1 <<<"$JSON"; then
+    echo -e "${RED}${BOLD}Error:${RESET} Invalid JSON from Bing"
+    exit 1
+fi
+AVAILABLE=$(jq '.images | length' <<<"$JSON")
+if ((COUNT > AVAILABLE)); then echo -e "${YELLOW}Warning:${RESET} Bing only provides $AVAILABLE recent wallpapers"; fi
+while IFS= read -r img; do
+    URLBASE=$(jq -r '.urlbase' <<<"$img")
+    STARTDATE=$(jq -r '.startdate' <<<"$img")
+    if [[ -z "$URLBASE" || -z "$STARTDATE" || "$URLBASE" == "null" ]]; then
+        echo -e "${YELLOW}Skipping:${RESET} invalid entry"
+        continue
+    fi
+    NAME=$(sed -E 's/^.*OHR\.//' <<<"$URLBASE" | cut -d'_' -f1)
+    FILE="$DIR/${STARTDATE}-${NAME}-UHD.jpg"
+    URL="https://bing.com${URLBASE}_UHD.jpg"
+    if [[ -f "$FILE" ]]; then
+        echo -e "${CYAN}Skipping:${RESET} $FILE"
+        continue
+    fi
+    if curl -fsSL "$URL" -o "$FILE"; then echo -e "${GREEN}Saved:${RESET}    $FILE"; else echo -e "${RED}Failed:${RESET}   $URL"; fi
+done < <(jq -c '.images[]' <<<"$JSON")
+mapfile -d '' FILES < <(find "$DIR" -maxdepth 1 -type f -name '*.jpg' -print0 | sort -z)
+TOTAL=${#FILES[@]}
+if ((TOTAL > COUNT)); then
+    REMOVE_COUNT=$((TOTAL - COUNT))
+    for ((i = 0; i < REMOVE_COUNT; i++)); do
+        echo -e "${YELLOW}Deleting:${RESET} ${FILES[i]}"
+        rm -f "${FILES[i]}"
+    done
+fi

@@ -38,9 +38,17 @@
     fd
     ripgrep
     gnumake
+    jq
     python314
     kitty.terminfo
   ];
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep 4";
+    clean.dates = "daily";
+    flake = "/etc/nixos";
+  };
   programs.zsh.enable = true;
   services.openssh = {
     enable = true;

@@ -25,10 +25,11 @@
         lg = "lazygit";
         lzd = "lazydocker";
         dcdu = "docker compose down; docker compose up -d";
-        nixupdate = "sudo nixos-rebuild switch --verbose --flake /etc/nixos#determinate-lab";
-        nixupgrade = "sudo nix flake update --verbose --flake /etc/nixos";
         nixed = "nvsu /etc/nixos/configuration.nix";
-        nixlistgens = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system";
+        nixupdate = "sudo nixos-rebuild switch --flake /etc/nixos#determinate-lab";
+        nixupgrade = "sudo nix flake update --flake /etc/nixos";
+        nixinfo = "nh os info";
+        nixclean = "nh clean all -k 4";
       };
       plugins = [
         {
@@ -57,6 +58,8 @@
         set relativenumber
         let g:disable_bg = 1
         colorscheme rosepine
+        highlight StatusLine guibg=NONE ctermbg=NONE
+        highlight StatusLineNC guibg=NONE ctermbg=NONE
       '';
     };
     tmux = {

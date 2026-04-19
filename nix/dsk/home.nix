@@ -108,6 +108,8 @@
         set relativenumber
         let g:disable_bg = 1
         colorscheme rosepine
+        highlight StatusLine guibg=NONE ctermbg=NONE
+        highlight StatusLineNC guibg=NONE ctermbg=NONE
       '';
     };
     tmux = {
@@ -261,7 +263,7 @@
           "Mod+S".action.spawn-sh = "noctalia-shell ipc call controlCenter toggle";
           "Mod+T".action.spawn = "kitty";
           "Mod+B".action.spawn = "firefox";
-          "Mod+N".action.spawn = "nautilus ~";
+          "Mod+N".action.spawn-sh = "nautilus -w ~";
           "XF86AudioRaiseVolume" = {
             action.spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1.0";
             allow-when-locked = true;

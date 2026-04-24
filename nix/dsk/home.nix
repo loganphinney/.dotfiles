@@ -27,11 +27,11 @@
         dcdu = "docker compose down; docker compose up -d";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
-        nixed = "nvsu /etc/nixos/configuration.nix";
+        nixed = "nvsu /etc/nixos/";
         nixupdate = "sudo nixos-rebuild switch --flake /etc/nixos#nixos-desktop";
         nixupgrade = "sudo nix flake update --flake /etc/nixos";
-        nixinfo = "nh os info";
-        nixclean = "nh clean all -k 4";
+        nhupgrade = "nh os switch -u --elevation-strategy=passwordless";
+        nhclean = "nh clean all -k 4";
       };
       plugins = [
         {
@@ -192,15 +192,47 @@
         theme = "rose-pine";
         style = "-numbers,-header,-grid,+changes";
       };
-      themes = {
-        rose-pine = {
-          src = pkgs.fetchFromGitHub {
-            owner = "rose-pine";
-            repo = "tm-theme";
-            rev = "417d201beb5f0964faded5448147c252ff12c4ae";
-            sha256 = "sha256-aNDOqY81FLFQ6bvsTiYgPyS5lJrqZnFMpvpTCSNyY0Y=";
-          };
-          file = "dist/rose-pine.tmTheme";
+      themes.rose-pine = {
+        src =
+          let
+            src = pkgs.fetchFromGitHub {
+              owner = "rose-pine";
+              repo = "tm-theme";
+              rev = "417d201beb5f0964faded5448147c252ff12c4ae";
+              sha256 = "sha256-aNDOqY81FLFQ6bvsTiYgPyS5lJrqZnFMpvpTCSNyY0Y=";
+            };
+          in
+          pkgs.runCommand "rose-pine-patched" { } ''
+            cp -r ${src} $out
+            chmod -R u+w $out
+            substituteInPlace $out/dist/rose-pine.tmTheme --replace "#31748f" "#3e8fb0"
+            file = "dist/rose-pine.tmTheme";
+          '';
+        file = "dist/rose-pine.tmTheme";
+      };
+    };
+    yazi = {
+      enable = true;
+      shellWrapperName = "y";
+      flavors = {
+        rose-pine =
+          let
+            src = pkgs.fetchFromGitHub {
+              owner = "rose-pine";
+              repo = "yazi";
+              rev = "c89d745573d4fcfe0550fe6646f9f9ab1c0e51db";
+              sha256 = "sha256-9e3dXViWl1rK9BPrGAFfs9ZL/tsG6Njz6ksuU6AIrFY=";
+            };
+          in
+          pkgs.runCommand "rose-pine-patched" { } ''
+            cp -r ${src}/flavors/rose-pine.yazi $out
+            chmod -R u+w $out
+            substituteInPlace $out/flavor.toml --replace "#31748f" "#3e8fb0"
+          '';
+      };
+      theme = {
+        flavor = {
+          dark = "rose-pine";
         };
       };
     };

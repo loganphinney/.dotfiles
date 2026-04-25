@@ -1,43 +1,39 @@
 {
-  description = "packages for ansible";
-  inputs = {
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
-    flake-utils.url = "https://flakehub.com/f/numtide/flake-utils/0.1.102";
-  };
+  description = "packages for neovim";
+  inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
   outputs =
+    { nixpkgs, ... }:
+    let
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+      forEachSupportedSystem =
+        f:
+        nixpkgs.lib.genAttrs supportedSystems (
+          system:
+          f {
+            pkgs = import nixpkgs {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          }
+        );
+    in
     {
-      self,
-      nixpkgs,
-      flake-utils,
-    }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
-        ansible-language-server = pkgs.writeShellScriptBin "ansible-language-server" ''
-          exec ${pkgs.nodejs_24}/bin/npx --yes @ansible/ansible-language-server@1.2.3 "$@"
-        '';
-      in
-      {
-        packages.default = pkgs.buildEnv {
-          name = "loganp-packages";
-          paths = with pkgs; [
-            ansible
-            ansible-lint
-            yamllint
-            ansible-language-server
-          ];
-        };
-        devShells.default = pkgs.mkShell {
-          packages = [ self.packages.${system}.default ];
-          shellHook = ''
-            export PATH="$PATH:$(pwd)/node_modules/.bin"
-            echo "Ansible Dev Environment Loaded"
-          '';
-        };
-      }
-    );
+      packages = forEachSupportedSystem (
+        { pkgs }:
+        {
+          default = pkgs.buildEnv {
+            name = "loganp-packages";
+            paths = with pkgs; [
+              ansible
+              ansible-lint
+              yamllint
+              ansible-language-server
+            ];
+          };
+        }
+      );
+    };
 }

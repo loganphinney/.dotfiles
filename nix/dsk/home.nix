@@ -30,7 +30,6 @@
         nixed = "nvsu /etc/nixos/";
         nixupdate = "sudo nixos-rebuild switch --flake /etc/nixos#nixos-desktop";
         nixupgrade = "sudo nix flake update --flake /etc/nixos";
-        nhupgrade = "nh os switch -u --elevation-strategy=passwordless";
         nhclean = "nh clean all -k 4";
       };
       plugins = [
@@ -89,29 +88,6 @@
         color15 = "#e0def4";
       };
     };
-    vim = {
-      enable = true;
-      plugins = [
-        (pkgs.vimUtils.buildVimPlugin {
-          pname = "rose-pine-vim";
-          version = "2025-11-09";
-          src = pkgs.fetchFromGitHub {
-            owner = "rose-pine";
-            repo = "vim";
-            rev = "ea0ad226b851b3aa132e2e234cc74ceecf9f4c7c";
-            sha256 = "sha256-QAZKLTliWwZR6Zm0qyGpJiY2lFvBypBqBxpA0BlVcDc=";
-          };
-        })
-      ];
-      extraConfig = ''
-        syntax on
-        set relativenumber
-        let g:disable_bg = 1
-        colorscheme rosepine
-        highlight StatusLine guibg=NONE ctermbg=NONE
-        highlight StatusLineNC guibg=NONE ctermbg=NONE
-      '';
-    };
     tmux = {
       enable = true;
       baseIndex = 1;
@@ -159,6 +135,29 @@
         }
         cpu
       ];
+    };
+    vim = {
+      enable = true;
+      plugins = [
+        (pkgs.vimUtils.buildVimPlugin {
+          pname = "rose-pine-vim";
+          version = "2025-11-09";
+          src = pkgs.fetchFromGitHub {
+            owner = "rose-pine";
+            repo = "vim";
+            rev = "ea0ad226b851b3aa132e2e234cc74ceecf9f4c7c";
+            sha256 = "sha256-QAZKLTliWwZR6Zm0qyGpJiY2lFvBypBqBxpA0BlVcDc=";
+          };
+        })
+      ];
+      extraConfig = ''
+        syntax on
+        set relativenumber
+        let g:disable_bg = 1
+        colorscheme rosepine
+        highlight StatusLine guibg=NONE ctermbg=NONE
+        highlight StatusLineNC guibg=NONE ctermbg=NONE
+      '';
     };
     fzf = {
       enable = true;
@@ -209,31 +208,6 @@
             file = "dist/rose-pine.tmTheme";
           '';
         file = "dist/rose-pine.tmTheme";
-      };
-    };
-    yazi = {
-      enable = true;
-      shellWrapperName = "y";
-      flavors = {
-        rose-pine =
-          let
-            src = pkgs.fetchFromGitHub {
-              owner = "rose-pine";
-              repo = "yazi";
-              rev = "c89d745573d4fcfe0550fe6646f9f9ab1c0e51db";
-              sha256 = "sha256-9e3dXViWl1rK9BPrGAFfs9ZL/tsG6Njz6ksuU6AIrFY=";
-            };
-          in
-          pkgs.runCommand "rose-pine-patched" { } ''
-            cp -r ${src}/flavors/rose-pine.yazi $out
-            chmod -R u+w $out
-            substituteInPlace $out/flavor.toml --replace "#31748f" "#3e8fb0"
-          '';
-      };
-      theme = {
-        flavor = {
-          dark = "rose-pine";
-        };
       };
     };
     obsidian = {

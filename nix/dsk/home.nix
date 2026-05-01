@@ -115,8 +115,8 @@
               src = pkgs.fetchFromGitHub {
                 owner = "rose-pine";
                 repo = "tmux";
-                rev = "ab5068a95828cdbff20010c8873f9805e3626698";
-                hash = "sha256-qZ5wGBpYGN951dW6MSAMFxcdLma6KC6/SeTv4XinwiQ=";
+                rev = "b6138c51573425ccdc33c91464597323baec3b7e";
+                hash = "sha256-HDmCCRhTCPfu7gL9VPHVGCiG5IcnkpQ4EaXN4IsQ0YE=";
               };
               rtpFilePath = "rose-pine.tmux";
             }
@@ -129,6 +129,7 @@
             set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_user 'on' 
             set -g @rose_pine_directory 'on'
+            set -g @rose_pine_field_separator ' '
             set -g @rose_pine_right_separator ' '
             set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} ' 
           '';

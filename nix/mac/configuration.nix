@@ -29,6 +29,9 @@
     name = "loganphinney";
     home = "/Users/loganphinney";
   };
+  security.sudo.extraConfig = ''
+    %admin ALL=(ALL) NOPASSWD: ALL
+  '';
   security.pam.services.sudo_local = {
     enable = true;
     reattach = true;
@@ -63,6 +66,7 @@
     btop
     unixtools.watch
     gnumake
+    nh
     docker-compose
     fastfetch
     lazygit

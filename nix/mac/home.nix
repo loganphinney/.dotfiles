@@ -87,9 +87,11 @@
         dcdu = "docker compose down; docker compose up -d";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
-        darwinupdate = "sudo darwin-rebuild switch --verbose --flake /etc/nix-darwin --verbose";
-        darwinupgrade = "sudo nix flake update --verbose --flake /etc/nix-darwin --verbose";
-        darwined = "nvsu /etc/nix-darwin/flake.nix";
+        nixupdate = "sudo darwin-rebuild switch --flake /etc/nix-darwin --verbose";
+        nixupgrade = "sudo nix flake update --flake /etc/nix-darwin --verbose";
+        nixed = "nvsu /etc/nix-darwin/";
+        nhupdate = "nh darwin switch /etc/nix-darwin -H mac-loganp --no-nom";
+        nhupgrade = "nh darwin switch -u /etc/nix-darwin -H mac-loganp --no-nom";
       };
       plugins = [
         {
@@ -125,8 +127,8 @@
             src = pkgs.fetchFromGitHub {
               owner = "rose-pine";
               repo = "tmux";
-              rev = "ab5068a95828cdbff20010c8873f9805e3626698";
-              hash = "sha256-qZ5wGBpYGN951dW6MSAMFxcdLma6KC6/SeTv4XinwiQ=";
+              rev = "b6138c51573425ccdc33c91464597323baec3b7e";
+              hash = "sha256-HDmCCRhTCPfu7gL9VPHVGCiG5IcnkpQ4EaXN4IsQ0YE=";
             };
             rtpFilePath = "rose-pine.tmux";
           };
@@ -138,6 +140,7 @@
             set -g @rose_pine_date_time '%m-%d-%Y %H:%M:%S'
             set -g @rose_pine_user 'on'
             set -g @rose_pine_directory 'on'
+            set -g @rose_pine_field_separator ' '
             set -g @rose_pine_right_separator ' '
             set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} #{battery_percentage} '
           '';

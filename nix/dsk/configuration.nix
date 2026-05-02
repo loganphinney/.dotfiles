@@ -196,7 +196,6 @@
     jre
     gnumake
     fastfetch
-    terraform
     kubectl
     minikube
     #GNOME

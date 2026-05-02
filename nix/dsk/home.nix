@@ -27,9 +27,11 @@
         dcdu = "docker compose down; docker compose up -d";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
-        nixed = "nvsu /etc/nixos/";
-        nixupdate = "sudo nixos-rebuild switch --flake /etc/nixos#nixos-desktop";
-        nixupgrade = "sudo nix flake update --flake /etc/nixos";
+        nixed = "nvim ~/.dotfiles/nix/dsk";
+        nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/dsk";
+        nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/dsk";
+        nhupdate = "nh os switch ~/.dotfiles/nix/dsk --no-nom";
+        nhupgrade = "nh os switch -u ~/.dotfiles/nix/dsk --no-nom";
         nhclean = "nh clean all -k 4";
       };
       plugins = [
@@ -44,6 +46,7 @@
       enable = true;
       font.name = "Hack Nerd Font Mono";
       font.size = 11;
+      shellIntegration.mode = "no-rc no-title";
       settings = {
         sync_to_monitor = false;
         cursor_shape = "beam";
@@ -112,12 +115,19 @@
             mkTmuxPlugin {
               pluginName = "rose-pine-tmux";
               version = "1-unstable-2025-11-09";
-              src = pkgs.fetchFromGitHub {
-                owner = "rose-pine";
-                repo = "tmux";
-                rev = "b6138c51573425ccdc33c91464597323baec3b7e";
-                hash = "sha256-HDmCCRhTCPfu7gL9VPHVGCiG5IcnkpQ4EaXN4IsQ0YE=";
-              };
+              src = pkgs.runCommand "rose-pine-tmux-patched" { } ''
+                cp -r ${
+                  pkgs.fetchFromGitHub {
+                    owner = "rose-pine";
+                    repo = "tmux";
+                    rev = "b6138c51573425ccdc33c91464597323baec3b7e";
+                    hash = "sha256-HDmCCRhTCPfu7gL9VPHVGCiG5IcnkpQ4EaXN4IsQ0YE=";
+                  }
+                } $out
+                chmod -R u+w $out
+                substituteInPlace $out/rose-pine.tmux \
+                  --replace "#31748f" "#3e8fb0"
+              '';
               rtpFilePath = "rose-pine.tmux";
             }
           );
@@ -131,7 +141,7 @@
             set -g @rose_pine_directory 'on'
             set -g @rose_pine_field_separator ' '
             set -g @rose_pine_right_separator ' '
-            set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} ' 
+            set -g @rose_pine_status_right_prepend_section '#[fg=green]#{cpu_icon}#{cpu_percentage}#[default]'
           '';
         }
         cpu
@@ -143,12 +153,19 @@
         (pkgs.vimUtils.buildVimPlugin {
           pname = "rose-pine-vim";
           version = "2025-11-09";
-          src = pkgs.fetchFromGitHub {
-            owner = "rose-pine";
-            repo = "vim";
-            rev = "ea0ad226b851b3aa132e2e234cc74ceecf9f4c7c";
-            sha256 = "sha256-QAZKLTliWwZR6Zm0qyGpJiY2lFvBypBqBxpA0BlVcDc=";
-          };
+          src = pkgs.runCommand "rose-pine-vim-patched" { } ''
+            cp -r ${
+              pkgs.fetchFromGitHub {
+                owner = "rose-pine";
+                repo = "vim";
+                rev = "ea0ad226b851b3aa132e2e234cc74ceecf9f4c7c";
+                sha256 = "sha256-QAZKLTliWwZR6Zm0qyGpJiY2lFvBypBqBxpA0BlVcDc=";
+              }
+            } $out
+            chmod -R u+w $out
+            substituteInPlace $out/colors/rosepine.vim \
+              --replace "#31748f" "#3e8fb0"
+          '';
         })
       ];
       extraConfig = ''

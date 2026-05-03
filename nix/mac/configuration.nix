@@ -41,11 +41,8 @@
     openssh.enable = true;
     tailscale.enable = true;
   };
-  programs.zsh = {
-    enable = true;
-    enableBashCompletion = true;
-    enableCompletion = true;
-  };
+  programs.zsh.enable = true;
+  programs.zsh.enableGlobalCompInit = false;
   environment.systemPackages = with pkgs; [
     git
     rsync

@@ -20,12 +20,45 @@
     };
   };
   programs = {
+    zsh = {
+      enable = true;
+      initContent = "PROMPT='%B%F{2}[%1~]%f%b%F{8}%#%f '";
+      shellAliases = {
+        ".." = "cd ../";
+        "~" = "cd ~/";
+        cl = "clear";
+        ls = "eza";
+        la = "eza -a";
+        ll = "eza -l";
+        l1 = "eza -1";
+        tree = "eza -T";
+        nv = "nvim";
+        nvsu = "sudo -E nvim";
+        lg = "lazygit";
+        lzd = "lazydocker";
+        dcdu = "docker compose down; docker compose up -d";
+        lava = "lavat -c black -k magenta -s 3";
+        cmatrix = "cmatrix -C magenta";
+        nixed = "nvim ~/.dotfiles/nix/mac";
+        nixupdate = "sudo darwin-rebuild switch --flake ~/.dotfiles/nix/mac";
+        nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/mac --verbose";
+        nhupdate = "nh darwin switch ~/.dotfiles/nix/mac -H mac-loganp --no-nom";
+        nhupgrade = "nh darwin switch -u ~/.dotfiles/nix/mac -H mac-loganp --no-nom";
+      };
+      plugins = [
+        {
+          name = "fast-syntax-highlighting";
+          src = pkgs.zsh-fast-syntax-highlighting;
+          file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
+        }
+      ];
+    };
     kitty = {
       enable = true;
       font.name = "Hack Nerd Font Mono";
       font.size = 12;
+      shellIntegration.mode = "no-rc no-title";
       settings = {
-        confirm_os_window_close = 0;
         sync_to_monitor = false;
         cursor_shape = "beam";
         cursor_trail = 1;
@@ -69,38 +102,6 @@
         color15 = "#e0def4";
       };
     };
-    zsh = {
-      enable = true;
-      initContent = "PROMPT='%B%F{2}[%1~]%f%b%F{8}%#%f '";
-      shellAliases = {
-        ".." = "cd ../";
-        "~" = "cd ~/";
-        cl = "clear";
-        ls = "eza";
-        la = "eza -a";
-        ll = "eza -l";
-        l1 = "eza -1";
-        tree = "eza -T";
-        nv = "nvim";
-        nvsu = "sudo -E nvim";
-        lg = "lazygit";
-        dcdu = "docker compose down; docker compose up -d";
-        lava = "lavat -c black -k magenta -s 3";
-        cmatrix = "cmatrix -C magenta";
-        nixupdate = "sudo darwin-rebuild switch --flake /etc/nix-darwin --verbose";
-        nixupgrade = "sudo nix flake update --flake /etc/nix-darwin --verbose";
-        nixed = "nvsu /etc/nix-darwin/";
-        nhupdate = "nh darwin switch /etc/nix-darwin -H mac-loganp --no-nom";
-        nhupgrade = "nh darwin switch -u /etc/nix-darwin -H mac-loganp --no-nom";
-      };
-      plugins = [
-        {
-          name = "fast-syntax-highlighting";
-          src = pkgs.zsh-fast-syntax-highlighting;
-          file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
-        }
-      ];
-    };
     tmux = {
       enable = true;
       baseIndex = 1;
@@ -121,17 +122,26 @@
       '';
       plugins = with pkgs.tmuxPlugins; [
         {
-          plugin = pkgs.tmuxPlugins.mkTmuxPlugin {
-            pluginName = "rose-pine-tmux";
-            version = "1-unstable-2025-11-22";
-            src = pkgs.fetchFromGitHub {
-              owner = "rose-pine";
-              repo = "tmux";
-              rev = "b6138c51573425ccdc33c91464597323baec3b7e";
-              hash = "sha256-HDmCCRhTCPfu7gL9VPHVGCiG5IcnkpQ4EaXN4IsQ0YE=";
-            };
-            rtpFilePath = "rose-pine.tmux";
-          };
+          plugin = (
+            mkTmuxPlugin {
+              pluginName = "rose-pine-tmux";
+              version = "1-unstable-2025-11-09";
+              src = pkgs.runCommand "rose-pine-tmux-patched" { } ''
+                cp -r ${
+                  pkgs.fetchFromGitHub {
+                    owner = "rose-pine";
+                    repo = "tmux";
+                    rev = "b6138c51573425ccdc33c91464597323baec3b7e";
+                    hash = "sha256-HDmCCRhTCPfu7gL9VPHVGCiG5IcnkpQ4EaXN4IsQ0YE=";
+                  }
+                } $out
+                chmod -R u+w $out
+                substituteInPlace $out/rose-pine.tmux \
+                  --replace "#31748f" "#3e8fb0"
+              '';
+              rtpFilePath = "rose-pine.tmux";
+            }
+          );
           extraConfig = ''
             set -g @rose_pine_variant 'main'
             set -g @rose_pine_disable_active_window_menu 'on'
@@ -142,7 +152,7 @@
             set -g @rose_pine_directory 'on'
             set -g @rose_pine_field_separator ' '
             set -g @rose_pine_right_separator ' '
-            set -g @rose_pine_status_right_prepend_section '#{cpu_icon}#{cpu_percentage} #{battery_percentage} '
+            set -g @rose_pine_status_right_prepend_section '#[fg=green]#{cpu_icon}#{cpu_percentage} #{battery_percentage}#[default] '
           '';
         }
         cpu
@@ -182,12 +192,21 @@
         style = "-numbers,-header,-grid,+changes";
       };
       themes.rose-pine = {
-        src = pkgs.fetchFromGitHub {
-          owner = "rose-pine";
-          repo = "tm-theme";
-          rev = "417d201beb5f0964faded5448147c252ff12c4ae";
-          sha256 = "sha256-aNDOqY81FLFQ6bvsTiYgPyS5lJrqZnFMpvpTCSNyY0Y=";
-        };
+        src =
+          let
+            src = pkgs.fetchFromGitHub {
+              owner = "rose-pine";
+              repo = "tm-theme";
+              rev = "417d201beb5f0964faded5448147c252ff12c4ae";
+              sha256 = "sha256-aNDOqY81FLFQ6bvsTiYgPyS5lJrqZnFMpvpTCSNyY0Y=";
+            };
+          in
+          pkgs.runCommand "rose-pine-patched" { } ''
+            cp -r ${src} $out
+            chmod -R u+w $out
+            substituteInPlace $out/dist/rose-pine.tmTheme --replace "#31748f" "#3e8fb0"
+            file = "dist/rose-pine.tmTheme";
+          '';
         file = "dist/rose-pine.tmTheme";
       };
     };
@@ -197,12 +216,19 @@
         (pkgs.vimUtils.buildVimPlugin {
           pname = "rose-pine-vim";
           version = "2025-11-09";
-          src = pkgs.fetchFromGitHub {
-            owner = "rose-pine";
-            repo = "vim";
-            rev = "ea0ad226b851b3aa132e2e234cc74ceecf9f4c7c";
-            sha256 = "sha256-QAZKLTliWwZR6Zm0qyGpJiY2lFvBypBqBxpA0BlVcDc=";
-          };
+          src = pkgs.runCommand "rose-pine-vim-patched" { } ''
+            cp -r ${
+              pkgs.fetchFromGitHub {
+                owner = "rose-pine";
+                repo = "vim";
+                rev = "ea0ad226b851b3aa132e2e234cc74ceecf9f4c7c";
+                sha256 = "sha256-QAZKLTliWwZR6Zm0qyGpJiY2lFvBypBqBxpA0BlVcDc=";
+              }
+            } $out
+            chmod -R u+w $out
+            substituteInPlace $out/colors/rosepine.vim \
+              --replace "#31748f" "#3e8fb0"
+          '';
         })
       ];
       extraConfig = ''
@@ -210,6 +236,8 @@
         set relativenumber
         let g:disable_bg = 1
         colorscheme rosepine
+        highlight StatusLine guibg=NONE ctermbg=NONE
+        highlight StatusLineNC guibg=NONE ctermbg=NONE
       '';
     };
   };

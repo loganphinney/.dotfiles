@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   home.username = "loganp";
   home.homeDirectory = "/home/loganp";
@@ -41,6 +41,11 @@
           file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
         }
       ];
+    };
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
     };
     kitty = {
       enable = true;
@@ -502,7 +507,7 @@
             left = [
               {
                 id = "Launcher";
-                icon = "code";
+                icon = "terminal-2";
                 enableColorization = false;
                 iconColor = "none";
                 colorizeSystemIcon = "none";
@@ -703,7 +708,7 @@
         wallpaper = {
           enabled = true;
           overviewEnabled = false;
-          directory = "/home/loganp/Pictures/Bing Wallpapers Saved";
+          directory = "/home/loganp/Pictures/Bing-Saved";
           monitorDirectories = [ ];
           enableMultiMonitorDirectories = false;
           showHiddenFiles = false;

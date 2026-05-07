@@ -21,12 +21,12 @@ return {
             'query',
             'markdown',
             'markdown_inline',
+            'regex',
             'json',
             'yaml',
-            'html',
-            'regex',
-            'hcl',
             'nix',
+            'html',
+            'hcl',
         }
     end
 }

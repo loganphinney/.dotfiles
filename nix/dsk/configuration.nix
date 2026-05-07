@@ -196,6 +196,7 @@
     jre
     gnumake
     fastfetch
+    ansible
     kubectl
     minikube
     #GNOME

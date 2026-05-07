@@ -42,6 +42,8 @@
               lua-language-server
               nixd
               nixfmt
+              ansible-language-server
+              ansible-lint
               typescript-language-server
               terraform-ls
             ];

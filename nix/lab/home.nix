@@ -81,6 +81,8 @@
             }
           );
           extraConfig = ''
+            set -g default-terminal "xterm-256color"
+            set -as terminal-overrides ',xterm*:Tc'
             set -g @rose_pine_variant 'main'
             set -g @rose_pine_disable_active_window_menu 'on'
             set -g @rose_pine_show_current_program 'on'

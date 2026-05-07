@@ -14,6 +14,7 @@
   networking.hostName = "determinate-lab";
   networking.networkmanager.enable = true;
   time.timeZone = "America/New_York";
+  security.sudo.wheelNeedsPassword = false;
   users.users.loganp = {
     isNormalUser = true;
     extraGroups = [
@@ -23,12 +24,6 @@
     shell = pkgs.zsh;
     # packages = with pkgs; [ ];
   };
-  users.groups.media = {
-    members = [
-      "jellyfin"
-    ];
-  };
-  security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = with pkgs; [
     gcc
     git
@@ -43,7 +38,7 @@
     ripgrep
     gnumake
     jq
-    python314
+    python313
     uv
     kitty.terminfo
   ];
@@ -67,7 +62,6 @@
   networking.firewall.allowedTCPPorts = [
     80
     443
-    3000
   ];
   networking.firewall.allowedUDPPorts = [ 443 ];
   services.caddy = {
@@ -78,6 +72,14 @@
     virtualHosts."immich.loganphinney.com".extraConfig = ''
       reverse_proxy localhost:2283
     '';
+    virtualHosts."grafana.loganphinney.com".extraConfig = ''
+      reverse_proxy localhost:3000
+    '';
+  };
+  users.groups.media = {
+    members = [
+      "jellyfin"
+    ];
   };
   services = {
     jellyfin = {
@@ -92,6 +94,7 @@
     };
     grafana = {
       enable = true;
+      openFirewall = true;
       settings.security.secret_key = "77764cbb7ee9e979b8bae4b843808566";
       settings.server = {
         http_addr = "0.0.0.0";
@@ -112,15 +115,24 @@
             type = "prometheus";
             access = "proxy";
             url = "http://127.0.0.1:9090";
+            jsonData = {
+              timeInterval = "30s";
+            };
           }
         ];
       };
     };
     prometheus = {
       enable = true;
-      exporters.node = {
-        enable = true;
-        port = 9100;
+      exporters = {
+        node = {
+          enable = true;
+          port = 9100;
+          enabledCollectors = [
+            "systemd"
+            "processes"
+          ];
+        };
       };
       scrapeConfigs = [
         {
@@ -169,11 +181,16 @@
       enable = true;
       settings = {
         service = {
-          flush = 1;
+          flush = 15;
           log_level = "info";
         };
         pipeline = {
           inputs = [
+            {
+              name = "systemd";
+              tag = "services.caddy";
+              systemd_filter = "_SYSTEMD_UNIT=caddy.service";
+            }
             {
               name = "systemd";
               tag = "services.jellyfin";

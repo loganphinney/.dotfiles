@@ -133,15 +133,25 @@
             "processes"
           ];
         };
+        process = {
+          enable = true;
+          port = 9256;
+          settings.process_names = [
+            {
+              name = "{{.Comm}}";
+              cmdline = [ ".*" ];
+            }
+          ];
+        };
       };
       scrapeConfigs = [
         {
           job_name = "node";
-          static_configs = [
-            {
-              targets = [ "127.0.0.1:9100" ];
-            }
-          ];
+          static_configs = [ { targets = [ "127.0.0.1:9100" ]; } ];
+        }
+        {
+          job_name = "process-exporter";
+          static_configs = [ { targets = [ "127.0.0.1:9256" ]; } ];
         }
       ];
     };

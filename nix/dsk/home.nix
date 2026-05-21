@@ -708,7 +708,7 @@
         wallpaper = {
           enabled = true;
           overviewEnabled = false;
-          directory = "/home/loganp/Pictures/Bing-Saved";
+          directory = "/home/loganp/Pictures/rose-pine";
           monitorDirectories = [ ];
           enableMultiMonitorDirectories = false;
           showHiddenFiles = false;

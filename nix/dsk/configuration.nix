@@ -134,10 +134,7 @@
     clean.dates = "daily";
     flake = "/etc/nixos";
   };
-  programs.niri = {
-    enable = true;
-    package = pkgs.niri-unstable;
-  };
+  programs.niri.enable = true;
   programs.firefox.enable = true;
   programs.zsh = {
     enable = true;
@@ -160,10 +157,12 @@
     ];
   };
   environment.systemPackages = with pkgs; [
+    nom
     xwayland-satellite
     sbctl
     openssh
     git
+    delta
     wget
     curl
     rsync

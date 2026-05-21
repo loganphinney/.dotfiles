@@ -1,20 +1,12 @@
 #!/usr/bin/env bash
-WHITE="$(tput setaf 7)"
-BLACK="$(tput setaf 0)"
-RED="$(tput setaf 1)"
-GREEN="$(tput setaf 2)"
-YELLOW="$(tput setaf 3)"
-BLUE="$(tput setaf 4)"
-MAGENTA="$(tput setaf 5)"
-CYAN="$(tput setaf 6)"
-BOLD="$(tput bold)"
-RESET="$(tput sgr0)"
+RED="$(tput setaf 1)" GREEN="$(tput setaf 2)" YELLOW="$(tput setaf 3)"
+MAGENTA="$(tput setaf 5)" BOLD="$(tput bold)" RESET="$(tput sgr0)"
 
 set -euo pipefail
-trap 'echo -e "${RED}Script failed at line $LINENO${RESET}"' ERR
+trap 'echo -e "${RED}${BOLD}Script failed at line $LINENO${RESET}"' ERR
 
 COUNT=8
-DIR="$HOME/Pictures/Bing Wallpapers"
+DIR="$HOME/Pictures/Bing"
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
     -n | --number)
@@ -67,7 +59,7 @@ while IFS= read -r img; do
     FILE="$DIR/${STARTDATE}-${NAME}-UHD.jpg"
     URL="https://bing.com${URLBASE}_UHD.jpg"
     if [[ -f "$FILE" ]]; then
-        echo -e "${CYAN}Skipping:${RESET} $FILE"
+        echo -e "${MAGENTA}Skipping:${RESET} $FILE"
         continue
     fi
     if curl -fsSL "$URL" -o "$FILE"; then echo -e "${GREEN}Saved:${RESET}    $FILE"; else echo -e "${RED}Failed:${RESET}   $URL"; fi

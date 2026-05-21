@@ -14,7 +14,7 @@
       register: hdd_raw
       changed_when: false
 
-    - name: Display Formatted Output
+    - name: Formatted Output
       vars:
         nvme: "{{ nvme_raw.stdout.split() }}"
         hdd: "{{ hdd_raw.stdout.split() }}"

@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 {
   home.username = "loganp";
   home.homeDirectory = "/home/loganp";
@@ -98,6 +98,7 @@
     };
     tmux = {
       enable = true;
+      terminal = "xterm-kitty";
       baseIndex = 1;
       mouse = true;
       focusEvents = true;
@@ -525,11 +526,14 @@
               }
               {
                 id = "SystemMonitor";
-                compactMode = true;
+                compactMode = false;
                 showCpuUsage = true;
                 showCpuTemp = true;
                 showGpuTemp = true;
                 showMemoryUsage = true;
+                showMemoryAsPercent = true;
+                showDiskUsage = true;
+                showDiskUsageAsPercent = true;
                 useMonospaceFont = true;
                 usePadding = false;
                 iconColor = "none";
@@ -1031,15 +1035,15 @@
                   showBackground = true;
                   useCustomFont = false;
                   x = 2400;
-                  y = 1320;
+                  y = 60;
                 }
                 {
                   id = "Weather";
                   roundedCorners = true;
                   scale = 0.876912537108929;
                   showBackground = true;
-                  x = 2120;
-                  y = 1320;
+                  x = 40;
+                  y = 60;
                 }
               ];
             }

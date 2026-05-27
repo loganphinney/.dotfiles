@@ -191,8 +191,12 @@
       enable = true;
       settings = {
         service = {
-          flush = 15;
+          flush = 5;
           log_level = "info";
+          storage_path = "/var/log/flb-storage/";
+          storage_type = "filesystem";
+          storage_inherit = true;
+          storage_sync = "normal";
         };
         pipeline = {
           inputs = [

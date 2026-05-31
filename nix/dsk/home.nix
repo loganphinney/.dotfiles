@@ -19,7 +19,7 @@
         la = "eza -a";
         ll = "eza -l";
         l1 = "eza -1";
-        tree = "eza -T";
+        lt = "eza -T";
         nv = "nvim";
         nvsu = "sudo -E nvim";
         lg = "lazygit";
@@ -486,7 +486,7 @@
           density = "default";
           showOutline = false;
           showCapsule = true;
-          capsuleOpacity = 1;
+          capsuleOpacity = 0;
           capsuleColorKey = "none";
           widgetSpacing = 6;
           contentPadding = 2;
@@ -517,7 +517,7 @@
               }
               {
                 id = "Clock";
-                formatHorizontal = "ddd, MMM dd";
+                formatHorizontal = "ddd, MMM dd | HH:mm:ss";
                 formatVertical = "HH:mm:ss";
                 tooltipFormat = "HH:mm ddd, MMM dd";
                 useCustomFont = false;
@@ -539,15 +539,6 @@
                 iconColor = "none";
                 textColor = "none";
                 diskPath = "/";
-              }
-              {
-                id = "ActiveWindow";
-                showIcon = true;
-                showText = false;
-                scrollingMode = "hover";
-                hideMode = "hidden";
-                maxWidth = 145;
-                textColor = "none";
               }
             ];
             center = [
@@ -582,11 +573,6 @@
                 id = "NotificationHistory";
                 showUnreadBadge = true;
                 unreadBadgeColor = "primary";
-              }
-              {
-                id = "Battery";
-                displayMode = "graphic-clean";
-                hideIfNotDetected = true;
               }
               {
                 id = "Volume";
@@ -723,10 +709,10 @@
           fillColor = "#000000";
           useSolidColor = false;
           solidColor = "#1a1a2e";
-          automationEnabled = true;
+          automationEnabled = false;
           wallpaperChangeMode = "random";
           randomIntervalSec = 240;
-          transitionDuration = 2000;
+          transitionDuration = 1.5;
           transitionType = [ "stripes" ];
           skipStartupTransition = false;
           transitionEdgeSmoothness = 0.05;
@@ -1023,29 +1009,7 @@
           monitorWidgets = [
             {
               name = "DP-2";
-              widgets = [
-                {
-                  id = "Clock";
-                  clockColor = "none";
-                  clockStyle = "minimal";
-                  customFont = "";
-                  format = "HH:mm\\nd MMMM yyyy";
-                  roundedCorners = true;
-                  scale = 0.996261845187898;
-                  showBackground = true;
-                  useCustomFont = false;
-                  x = 2400;
-                  y = 60;
-                }
-                {
-                  id = "Weather";
-                  roundedCorners = true;
-                  scale = 0.876912537108929;
-                  showBackground = true;
-                  x = 40;
-                  y = 60;
-                }
-              ];
+              widgets = [ ];
             }
           ];
         };

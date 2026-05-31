@@ -11,6 +11,7 @@
   system.stateVersion = "24.11";
   nixpkgs.config.allowUnfree = true;
   nix.settings = {
+    auto-optimise-store = true;
     trusted-users = [
       "root"
       "loganp"
@@ -32,7 +33,7 @@
     pkiBundle = "/var/lib/sbctl";
   };
   boot.loader.systemd-boot.consoleMode = "max";
-  boot.loader.timeout = 1;
+  boot.loader.timeout = 2;
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {

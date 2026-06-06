@@ -19,12 +19,11 @@
         la = "eza -a";
         ll = "eza -l";
         l1 = "eza -1";
-        tree = "eza -T";
+        lt = "eza -T";
         nv = "nvim";
         nvsu = "sudo -E nvim";
         lg = "lazygit";
         lzd = "lazydocker";
-        dcdu = "docker compose down; docker compose up -d";
         nixed = "nvim ~/.dotfiles/nix/lab";
         nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/lab";
         nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/lab";
@@ -39,6 +38,11 @@
           file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
         }
       ];
+    };
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
     };
     tmux = {
       enable = true;
@@ -177,6 +181,15 @@
             file = "dist/rose-pine.tmTheme";
           '';
         file = "dist/rose-pine.tmTheme";
+      };
+    };
+    lazygit = {
+      enable = true;
+      settings = {
+        promptToReturnFromSubprocess = false;
+        gui.theme = {
+          inactiveBorderColor = [ "#6e6a86" ];
+        };
       };
     };
   };

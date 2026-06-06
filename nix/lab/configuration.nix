@@ -32,7 +32,6 @@
     rsync
     btop
     lazydocker
-    lazygit
     eza
     fd
     ripgrep

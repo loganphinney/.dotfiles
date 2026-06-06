@@ -1,7 +1,7 @@
-# Keybindings
+# Keybinds
 
-|`<space>` +|cmd|
-|---|:--|
+|`<space>` +|command|
+|---|---|
 |`tt`|auto fmt|
 |`xx`|err msgs|
 |`ff`|find files|

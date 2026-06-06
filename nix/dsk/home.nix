@@ -213,7 +213,7 @@
       config = {
         color = "always";
         theme = "rose-pine";
-        style = "-numbers,-header,-grid,+changes";
+        style = "-numbers,-header,-grid,-changes";
       };
       themes.rose-pine = {
         src =
@@ -516,15 +516,6 @@
                 useDistroLogo = false;
               }
               {
-                id = "Clock";
-                formatHorizontal = "ddd, MMM dd | HH:mm:ss";
-                formatVertical = "HH:mm:ss";
-                tooltipFormat = "HH:mm ddd, MMM dd";
-                useCustomFont = false;
-                customFont = "";
-                clockColor = "none";
-              }
-              {
                 id = "SystemMonitor";
                 compactMode = false;
                 showCpuUsage = true;
@@ -553,21 +544,13 @@
             ];
             right = [
               {
-                id = "Tray";
-                drawerEnabled = true;
-                colorizeIcons = false;
-                hidePassive = false;
-                pinned = [ ];
-                blacklist = [ ];
-              }
-              {
-                id = "MediaMini";
-                showAlbumArt = true;
-                panelShowAlbumArt = true;
-                showArtistFirst = true;
-                showProgressRing = true;
-                scrollingMode = "hover";
-                maxWidth = 145;
+                id = "Clock";
+                formatHorizontal = "HH:mm:ss  ddd, MMM dd";
+                formatVertical = "HH:mm:ss";
+                tooltipFormat = "HH:mm ddd, MMM dd";
+                useCustomFont = false;
+                customFont = "";
+                clockColor = "none";
               }
               {
                 id = "NotificationHistory";

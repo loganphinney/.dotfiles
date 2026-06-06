@@ -27,7 +27,7 @@
           default = pkgs.buildEnv {
             name = "loganp-packages";
             paths = with pkgs; [
-              neovim
+              neovim-unwrapped
               tree-sitter
               luajitPackages.jsregexp
               # language servers

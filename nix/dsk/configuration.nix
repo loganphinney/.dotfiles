@@ -158,6 +158,7 @@
     ];
   };
   environment.systemPackages = with pkgs; [
+    neovim-unwrapped
     nom
     xwayland-satellite
     sbctl
@@ -194,11 +195,28 @@
     fzf
     nodejs_24
     jre
+    cargo
     gnumake
     fastfetch
     ansible
     kubectl
     minikube
+    tree-sitter
+    luajitPackages.jsregexp
+    bash-language-server
+    shellcheck
+    shfmt
+    lua-language-server
+    perl5Packages.PLS
+    nixd
+    nixfmt
+    pyright
+    ruff
+    vscode-json-languageserver
+    ansible-language-server
+    ansible-lint
+    terraform-ls
+    typescript-language-server
     #GNOME
     gnome-tweaks
     xdg-terminal-exec
@@ -231,6 +249,7 @@
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [
+      #apps
       yubioath-flutter
       libreoffice-fresh
       vlc
@@ -241,6 +260,7 @@
       prismlauncher
       vscodium
       the-powder-toy
+      #fun
       cava
       cbonsai
       cmatrix

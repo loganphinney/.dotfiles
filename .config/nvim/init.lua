@@ -10,6 +10,10 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
+vim.opt.smarttab = true
 vim.opt.smartindent = true
-require('config.lazy')
-require('config.user-config')
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.g.mapleader = ' '
+vim.g.maplocalleader = '\\'
+require('config')

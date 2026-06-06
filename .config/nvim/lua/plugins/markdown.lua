@@ -1,7 +1,4 @@
-return {
-    'MeanderingProgrammer/render-markdown.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
-    ft = { 'markdown' },
-    ---@module 'render-markdown'
-    ---@type render.md.UserConfig
-}
+vim.pack.add({
+    'https://github.com/MeanderingProgrammer/render-markdown.nvim',
+    'https://github.com/nvim-tree/nvim-web-devicons'
+})

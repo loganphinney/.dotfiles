@@ -234,6 +234,15 @@
         file = "dist/rose-pine.tmTheme";
       };
     };
+    lazygit = {
+      enable = true;
+      settings = {
+        promptToReturnFromSubprocess = false;
+        gui.theme = {
+          inactiveBorderColor = [ "#6e6a86" ];
+        };
+      };
+    };
     obsidian = {
       enable = true;
       vaults.notes = {

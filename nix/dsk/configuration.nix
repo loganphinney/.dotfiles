@@ -186,7 +186,6 @@
     ffmpeg
     btop-cuda
     lazydocker
-    lazygit
     wl-clipboard
     bat
     eza

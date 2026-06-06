@@ -40,6 +40,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = ".bak";
             home-manager.users.loganp.imports = [
               ./home.nix
               niri.homeModules.niri

@@ -4,12 +4,13 @@ return {
     config = function()
         local capabilities = require('blink.cmp').get_lsp_capabilities()
         vim.lsp.enable({
-            'lua_ls',
             'bashls',
+            'lua_ls',
             'perlpls',
             'nixd',
             'pyright',
             'ruff',
+            'jsonls',
             'ansiblels',
             'terraformls',
             'ts_ls'

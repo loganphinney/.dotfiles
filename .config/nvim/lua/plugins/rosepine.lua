@@ -7,7 +7,7 @@ require('rose-pine').setup({
     },
     styles = { transparency = true },
     highlight_groups = {
-        jsonKeyword = { fg = 'pine' },
+        jsonKeyword = { fg = 'foam' },
         jsonKeywordMatch = { fg = 'subtle' },
         jsonString = { fg = 'text' },
         jsonNumber = { fg = 'text' },

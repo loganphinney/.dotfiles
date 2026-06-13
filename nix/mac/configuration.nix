@@ -63,16 +63,35 @@
     btop
     unixtools.watch
     gnumake
+    cargo
     nh
     docker-compose
     fastfetch
     lazygit
     lazydocker
+    python313
     perl
     ruby
     lua
     ffmpeg
     yt-dlp
+    # neovim
+    neovim-unwrapped
+    tree-sitter
+    luajitPackages.jsregexp
+    # language servers
+    shellcheck
+    shfmt
+    bash-language-server
+    pyright
+    ruff
+    perl5Packages.PLS
+    lua-language-server
+    nixd
+    nixfmt
+    typescript-language-server
+    terraform-ls
+    sourcekit-lsp
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.hack

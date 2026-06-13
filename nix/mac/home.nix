@@ -17,6 +17,7 @@
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
+      HOMEBREW_UPGRADE_GREEDY = 1;
     };
   };
   programs = {
@@ -104,6 +105,7 @@
     };
     tmux = {
       enable = true;
+      terminal = "xterm-kitty";
       baseIndex = 1;
       mouse = true;
       focusEvents = true;
@@ -210,6 +212,15 @@
         file = "dist/rose-pine.tmTheme";
       };
     };
+    lazygit = {
+      enable = true;
+      settings = {
+        promptToReturnFromSubprocess = false;
+        gui.theme = {
+          inactiveBorderColor = [ "#6e6a86" ];
+        };
+      };
+    };
     vim = {
       enable = true;
       plugins = [
@@ -234,6 +245,7 @@
       extraConfig = ''
         syntax on
         set relativenumber
+        set termguicolors
         let g:disable_bg = 1
         colorscheme rosepine
         highlight StatusLine guibg=NONE ctermbg=NONE

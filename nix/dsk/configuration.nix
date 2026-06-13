@@ -55,7 +55,6 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-  networking.networkmanager.enable = true;
   security.rtkit.enable = true;
   services.pcscd.enable = true;
   services.fail2ban.enable = true;
@@ -142,7 +141,10 @@
     enable = true;
     enableBashCompletion = true;
     enableCompletion = true;
+    enableGlobalCompInit = false;
+    promptInit = "";
   };
+  environment.pathsToLink = [ "/share/zsh" ];
   programs.steam.enable = true;
   programs.steam.extraCompatPackages = with pkgs; [ proton-ge-bin ];
   services = {

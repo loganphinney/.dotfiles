@@ -11,6 +11,11 @@
     zsh = {
       enable = true;
       initContent = "PROMPT='%B%F{2}[%1~]%f%b%F{8}%#%f '";
+      completionInit = ''
+        fpath=(/run/current-system/sw/share/zsh/site-functions /run/current-system/sw/share/zsh/$ZSH_VERSION/functions $fpath)
+        autoload -Uz compinit bashcompinit
+        compinit -C; bashcompinit
+      '';
       shellAliases = {
         ".." = "cd ../";
         "~" = "cd ~/";
@@ -505,7 +510,7 @@
             "network_rx"
             "sysmon"
           ];
-          thickness = 32;
+          thickness = 28;
           widget_spacing = 9;
         };
         control_center.shortcuts = [
@@ -517,11 +522,9 @@
         desktop_widgets = {
           enabled = false;
           schema_version = 2;
-          widget_order = [ ];
           grid.cell_size = 16;
           grid.major_interval = 4;
           grid.visible = true;
-          widget = { };
         };
         dock.auto_hide = true;
         idle.pre_action_fade_seconds = 0;

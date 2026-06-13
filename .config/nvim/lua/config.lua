@@ -5,6 +5,9 @@ for _, file in ipairs(vim.fn.readdir(dir)) do
         require("plugins." .. file:gsub("%.lua$", ""))
     end
 end
+vim.api.nvim_create_user_command('PackUpdate', function()
+    vim.pack.update()
+end, {})
 --DIAGNOSTIC MESSAGES
 vim.diagnostic.config({
     virtual_text = {

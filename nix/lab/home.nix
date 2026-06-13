@@ -1,11 +1,13 @@
 { pkgs, ... }:
 {
-  home.username = "loganp";
-  home.homeDirectory = "/home/loganp";
-  home.stateVersion = "26.05";
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
+  home = {
+    username = "loganp";
+    homeDirectory = "/home/loganp";
+    stateVersion = "26.05";
+    sessionVariables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
   };
   programs = {
     zsh = {

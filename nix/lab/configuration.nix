@@ -1,31 +1,36 @@
+{ pkgs, ... }:
 {
-  pkgs,
-  ...
-}:
-{
-  imports = [
-    ./hardware-configuration.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
   system.stateVersion = "26.05";
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.timeout = 1;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  networking.hostName = "determinate-lab";
-  networking.networkmanager.enable = true;
+  nix.settings = {
+    auto-optimise-store = true;
+    extra-substituters = [ "https://install.determinate.systems" ];
+    extra-trusted-public-keys = [ "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM=" ];
+  };
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    loader.timeout = 1;
+    kernelPackages = pkgs.linuxPackages_latest;
+  };
+  networking = {
+    hostName = "determinate-lab";
+    networkmanager.enable = true;
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        80
+        443
+      ];
+      allowedUDPPorts = [ 443 ];
+    };
+  };
   time.timeZone = "America/New_York";
   security.sudo.wheelNeedsPassword = false;
-  users.users.loganp = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "media"
-    ];
-    shell = pkgs.zsh;
-    # packages = with pkgs; [ ];
-  };
   environment.systemPackages = with pkgs; [
     gcc
+    gnumake
+    cargo
     git
     wget
     curl
@@ -35,52 +40,70 @@
     eza
     fd
     ripgrep
-    gnumake
     jq
     python313
     uv
     kitty.terminfo
+    neovim-unwrapped
+    tree-sitter
+    luajitPackages.jsregexp
+    shellcheck
+    shfmt
+    bash-language-server
+    pyright
+    ruff
+    perl5Packages.PLS
+    lua-language-server
+    nixd
+    nixfmt
   ];
-  programs.nh = {
-    enable = true;
-    clean.enable = true;
-    clean.extraArgs = "--keep 4";
-    clean.dates = "daily";
-    flake = "/etc/nixos";
-  };
-  programs.zsh.enable = true;
-  services.openssh = {
-    enable = true;
-    ports = [ 2222 ];
-    settings = {
-      PasswordAuthentication = false;
+  users = {
+    users.loganp = {
+      isNormalUser = true;
+      extraGroups = [
+        "wheel"
+        "media"
+      ];
+      shell = pkgs.zsh;
+      # packages = with pkgs; [ ];
+    };
+    groups.media = {
+      members = [
+        "jellyfin"
+      ];
     };
   };
-  services.fail2ban.enable = true;
-  networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-  ];
-  networking.firewall.allowedUDPPorts = [ 443 ];
-  services.caddy = {
-    enable = true;
-    virtualHosts."jellyfin.loganphinney.com".extraConfig = ''
-      reverse_proxy localhost:8096
-    '';
-    virtualHosts."immich.loganphinney.com".extraConfig = ''
-      reverse_proxy localhost:2283
-    '';
-    virtualHosts."grafana.loganphinney.com".extraConfig = ''
-      reverse_proxy localhost:3000
-    '';
-  };
-  users.groups.media = {
-    members = [
-      "jellyfin"
-    ];
+  programs = {
+    nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep 4";
+      clean.dates = "daily";
+      flake = "/etc/nixos";
+    };
+    zsh.enable = true;
   };
   services = {
+    openssh = {
+      enable = true;
+      ports = [ 2222 ];
+      settings = {
+        PasswordAuthentication = false;
+      };
+    };
+    caddy = {
+      enable = true;
+      virtualHosts."jellyfin.loganphinney.com".extraConfig = ''
+        reverse_proxy localhost:8096
+      '';
+      virtualHosts."immich.loganphinney.com".extraConfig = ''
+        reverse_proxy localhost:2283
+      '';
+      virtualHosts."grafana.loganphinney.com".extraConfig = ''
+        reverse_proxy localhost:3000
+      '';
+    };
+    fail2ban.enable = true;
     jellyfin = {
       enable = true;
       group = "media";

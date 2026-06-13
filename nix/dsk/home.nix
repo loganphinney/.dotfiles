@@ -28,8 +28,6 @@
         nv = "nvim";
         nvsu = "sudo -E nvim";
         lg = "lazygit";
-        lzd = "lazydocker";
-        dcdu = "docker compose down; docker compose up -d";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
         nixed = "nvim ~/.dotfiles/nix/dsk";

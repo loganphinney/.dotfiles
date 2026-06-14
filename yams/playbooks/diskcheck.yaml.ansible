@@ -1,6 +1,6 @@
 ---
 - name: Disk Usage Report
-  hosts: 192.168.8.4
+  hosts: lab
   gather_facts: false
 
   tasks:
@@ -26,4 +26,4 @@
           - ""
           - "Disk Space Used:"
           - "  nvme: {{ nvme[0] }} {{ nvme[2] }}"
-          - "  hdd: {{ hdd[0] }} {{ hdd[2] }}" 
+          - "  hdd: {{ hdd[0] }} {{ hdd[2] }}"

@@ -22,12 +22,14 @@
   };
   networking = {
     hostName = "nixos-desktop";
+    networkmanager.enable = true;
     firewall = {
       enable = true;
       allowedTCPPorts = [ 8096 ];
       allowedUDPPorts = [ 8096 ];
     };
   };
+  time.timeZone = "America/New_York";
   boot = {
     loader = {
       systemd-boot.enable = lib.mkForce false;
@@ -39,12 +41,10 @@
       pkiBundle = "/var/lib/sbctl";
     };
   };
-  hardware = {
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-      extraPackages = with pkgs; [ rocmPackages.rocm-smi ];
-    };
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [ rocmPackages.rocm-smi ];
   };
   services = {
     printing.enable = false;
@@ -56,21 +56,20 @@
       pulse.enable = true;
     };
     pcscd.enable = true;
-    fail2ban.enable = true;
     xserver.enable = true;
     xserver.xkb.layout = "us";
     xserver.xkb.variant = "";
     xserver.excludePackages = [ pkgs.xterm ];
-    openssh = {
-      enable = true;
-      ports = [ 2222 ];
-    };
     displayManager.autoLogin.enable = true;
     displayManager.autoLogin.user = "loganp";
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
     displayManager.defaultSession = "niri";
     power-profiles-daemon.enable = true;
+    openssh = {
+      enable = true;
+      ports = [ 2222 ];
+    };
     tailscale.enable = true;
     jellyfin = {
       enable = true;
@@ -93,8 +92,8 @@
       enableGlobalCompInit = false;
       promptInit = "";
     };
-    firefox.enable = true;
     niri.enable = true;
+    firefox.enable = true;
     steam.enable = true;
     steam.extraCompatPackages = with pkgs; [ proton-ge-bin ];
     dconf.profiles.user.databases = [
@@ -127,7 +126,6 @@
   environment = {
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
-      neovim-unwrapped
       nom
       xwayland-satellite
       sbctl
@@ -166,6 +164,7 @@
       ansible
       kubectl
       minikube
+      neovim-unwrapped
       tree-sitter
       luajitPackages.jsregexp
       bash-language-server
@@ -178,11 +177,12 @@
       pyright
       ruff
       vscode-json-languageserver
+      yaml-language-server
+      yamlfmt
       ansible-language-server
       ansible-lint
       terraform-ls
       typescript-language-server
-      #GNOME
       gnome-tweaks
       xdg-terminal-exec
       gnomeExtensions.open-bar
@@ -229,7 +229,6 @@
       ];
       shell = pkgs.zsh;
       packages = with pkgs; [
-        #apps
         yubioath-flutter
         libreoffice-fresh
         vlc
@@ -240,7 +239,6 @@
         prismlauncher
         vscodium
         the-powder-toy
-        #fun
         cava
         cbonsai
         cmatrix
@@ -262,17 +260,4 @@
     google-fonts
     inter
   ];
-  time.timeZone = "America/New_York";
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
 }

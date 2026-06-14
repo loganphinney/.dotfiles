@@ -1,11 +1,13 @@
 { pkgs, ... }:
 {
-  home.username = "loganp";
-  home.homeDirectory = "/home/loganp";
-  home.stateVersion = "25.11";
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
+  home = {
+    username = "loganp";
+    homeDirectory = "/home/loganp";
+    stateVersion = "25.11";
+    sessionVariables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
   };
   programs = {
     zsh = {
@@ -492,6 +494,7 @@
           center = [ "workspaces" ];
           end = [
             "weather"
+            "notifications"
             "clock"
             "control-center"
             "session"
@@ -572,6 +575,7 @@
         widget.sysmon.stat = "disk_pct";
         widget.temp.display = "text";
         widget.temp.stat = "gpu_usage";
+        widget.notifications.hide_when_no_unread = false;
         widget.weather.show_condition = false;
       };
     };

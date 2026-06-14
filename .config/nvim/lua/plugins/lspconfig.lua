@@ -13,6 +13,7 @@ vim.lsp.enable({
     'pyright',
     'ruff',
     'jsonls',
+    'yamlls',
     'ansiblels',
     'terraformls',
     'ts_ls',

@@ -2,26 +2,23 @@
 - name: System Update
   hosts: lab
   gather_facts: false
-  become: true
-  become_user: loganp
-
   tasks:
     - name: Update flake inputs
+      become: true
+      become_user: loganp
       command:
         cmd: nix flake update --flake /home/loganp/.dotfiles/nix/lab
       register: update_result
-
     - name: Update output
       debug:
         msg:
           stdout: "{{ update_result.stdout_lines }}"
           stderr: "{{ update_result.stderr_lines }}"
-
     - name: Rebuild and switch
+      become: true
       command:
         cmd: nixos-rebuild switch --flake /home/loganp/.dotfiles/nix/lab
       register: rebuild_result
-
     - name: Rebuild output
       debug:
         msg:

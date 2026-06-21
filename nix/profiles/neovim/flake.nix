@@ -38,6 +38,8 @@
               ruff
               perl5Packages.PLS
               lua-language-server
+              yaml-language-server
+              yamlfmt
               nixd
               nixfmt
               ansible-language-server

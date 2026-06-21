@@ -246,6 +246,32 @@
         gui.theme = {
           inactiveBorderColor = [ "#6e6a86" ];
         };
+        git = {
+          pagers = [
+            {
+              pager = builtins.replaceStrings [ "\n" ] [ " " ] ''
+                delta --dark --paging=never --line-numbers --hunk-header-style=omit
+                --minus-style="red normal" --minus-emph-style="red normal"
+                --plus-style="green normal" --plus-emph-style="syntax normal"
+                --line-numbers-minus-style="red" --line-numbers-plus-style="green"
+                --line-numbers-zero-style="#524f67" --zero-style="#524f67 normal"
+                --file-style="bold cyan" --file-decoration-style="magenta ul"
+                --line-numbers-right-style="#21202e" --syntax-theme=none
+              '';
+            }
+            {
+              pager = builtins.replaceStrings [ "\n" ] [ " " ] ''
+                delta --dark --paging=never --line-numbers --hunk-header-style=omit
+                --minus-style="red normal" --minus-emph-style="red normal"
+                --plus-style="syntax normal" --plus-emph-style="syntax normal"
+                --line-numbers-minus-style="red" --line-numbers-plus-style="green"
+                --line-numbers-zero-style="#524f67" --zero-style="#524f67 normal"
+                --file-style="bold cyan" --file-decoration-style="magenta ul"
+                --line-numbers-right-style="#21202e" --syntax-theme=rose-pine
+              '';
+            }
+          ];
+        };
       };
     };
     obsidian = {
@@ -302,7 +328,7 @@
         binds = {
           "Mod+Shift+Slash".action.show-hotkey-overlay = [ ];
           "Mod+Space".action.spawn-sh = "noctalia msg panel-toggle launcher";
-          "Mod+Ctrl+Q".action.spawn = "noctalia msg session lock";
+          "Mod+Ctrl+Q".action.spawn-sh = "noctalia msg session lock";
           "Mod+T".action.spawn = "kitty";
           "Mod+B".action.spawn = "firefox";
           "Mod+N".action.spawn-sh = "nautilus -w ~";

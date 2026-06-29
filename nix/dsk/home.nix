@@ -68,7 +68,7 @@
         remember_window_size = false;
         initial_window_width = "120c";
         initial_window_height = "40c";
-        window_padding_width = 1;
+        window_padding_width = 3;
         foreground = "#e0def4";
         background = "#191724";
         selection_foreground = "#e0def4";
@@ -83,6 +83,7 @@
         active_border_color = "#403d52";
         inactive_border_color = "#2a283e";
         wayland_titlebar_color = "#191724";
+        hide_window_decorations = "titlebar-only";
         color0 = "#26233a";
         color8 = "#6e6a86";
         color1 = "#eb6f92";
@@ -113,8 +114,8 @@
         set-option -g status-position top
         set -g renumber-windows on
         set -g pane-border-lines "single"
-        set -g pane-border-style "fg=#2a283e"
-        set -g pane-active-border-style "fg=#403d52"
+        set -g pane-border-style "fg=#1f1d2e"
+        set -g pane-active-border-style "fg=#1f1d2e"
         bind-key "|" split-window -h -c "#{pane_current_path}"
         bind-key "\\" split-window -fh -c "#{pane_current_path}"
         bind-key "-" split-window -v -c "#{pane_current_path}"
@@ -146,6 +147,7 @@
             set -g @rose_pine_variant 'main'
             set -g @rose_pine_disable_active_window_menu 'on'
             set -g @rose_pine_show_current_program 'on'
+            set -g @rose_pine_session_icon ''
             set -g @rose_pine_host 'on'
             set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_user 'on' 
@@ -252,7 +254,7 @@
               pager = builtins.replaceStrings [ "\n" ] [ " " ] ''
                 delta --dark --paging=never --line-numbers --hunk-header-style=omit
                 --minus-style="red normal" --minus-emph-style="red normal"
-                --plus-style="green normal" --plus-emph-style="syntax normal"
+                --plus-style="green normal" --plus-emph-style="green normal"
                 --line-numbers-minus-style="red" --line-numbers-plus-style="green"
                 --line-numbers-zero-style="#524f67" --zero-style="#524f67 normal"
                 --file-style="bold cyan" --file-decoration-style="magenta ul"
@@ -305,10 +307,10 @@
       settings = {
         hotkey-overlay.skip-at-startup = true;
         spawn-at-startup = [ { command = [ "noctalia" ]; } ];
-        outputs."ASUSTek COMPUTER INC VG27AQ5A T6LMQV003508".mode = {
+        outputs."DP-2".mode = {
           width = 2560;
           height = 1440;
-          refresh = 200.002;
+          refresh = 239.970;
         };
         layout = {
           gaps = 0;

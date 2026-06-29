@@ -11,17 +11,17 @@
     ];
     extra-substituters = [
       "https://install.determinate.systems"
-      "https://niri.cachix.org"
+      "https://niri-epireyn.cachix.org"
       "https://noctalia.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
-      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
+      "niri-epireyn.cachix.org-1:tlVyFN7CtsDT+ZcLPS+ekFWeT1X6X4OqvWqbBMyIzFA="
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
     ];
   };
   networking = {
-    hostName = "nixos-desktop";
+    hostName = "nix-dsk";
     networkmanager.enable = true;
     firewall = {
       enable = true;
@@ -147,6 +147,7 @@
       tmux
       wireguard-tools
       dnslookup
+      dig
       sysstat
       ffmpeg
       btop-cuda
@@ -234,10 +235,9 @@
         vlc
         proton-vpn
         qbittorrent
-        transmission_4
         darktable
         prismlauncher
-        vscodium
+        dolphin-emu
         the-powder-toy
         cava
         cbonsai

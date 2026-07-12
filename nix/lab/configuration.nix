@@ -14,7 +14,7 @@
     kernelPackages = pkgs.linuxPackages_latest;
   };
   networking = {
-    hostName = "determinate-lab";
+    hostName = "nix-lab";
     networkmanager.enable = true;
     firewall = {
       enable = true;
@@ -32,6 +32,7 @@
     gnumake
     cargo
     git
+    delta
     wget
     curl
     rsync
@@ -44,7 +45,6 @@
     python313
     uv
     kitty.terminfo
-    neovim-unwrapped
     tree-sitter
     luajitPackages.jsregexp
     shellcheck
@@ -81,7 +81,14 @@
       clean.dates = "daily";
       flake = "/etc/nixos";
     };
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+      enableBashCompletion = true;
+      enableCompletion = true;
+      enableGlobalCompInit = false;
+      promptInit = "";
+    };
+    neovim.enable = true;
   };
   services = {
     openssh = {
@@ -91,6 +98,7 @@
         PasswordAuthentication = false;
       };
     };
+    power-profiles-daemon.enable = true;
     caddy = {
       enable = true;
       virtualHosts."jellyfin.loganphinney.com".extraConfig = ''
@@ -118,6 +126,7 @@
       enable = true;
       openFirewall = true;
       settings.security.secret_key = "77764cbb7ee9e979b8bae4b843808566";
+      settings.analytics.reporting_enabled = false;
       settings.server = {
         http_addr = "0.0.0.0";
         http_port = 3000;
@@ -146,6 +155,7 @@
     };
     prometheus = {
       enable = true;
+      retentionTime = "45d";
       exporters = {
         node = {
           enable = true;

@@ -14,7 +14,7 @@
       ...
     }:
     {
-      nixosConfigurations.determinate-lab = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.nix-lab = nixpkgs.lib.nixosSystem {
         modules = [
           determinate.nixosModules.default
           ./configuration.nix

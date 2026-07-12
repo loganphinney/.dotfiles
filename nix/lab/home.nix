@@ -29,8 +29,8 @@
         nixed = "nvim ~/.dotfiles/nix/lab";
         nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/lab";
         nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/lab";
-        nhupdate = "nh os switch ~/.dotfiles/nix/lab --no-nom";
-        nhupgrade = "nh os switch -u ~/.dotfiles/nix/lab --no-nom";
+        nhupdate = "nh os switch ~/.dotfiles/nix/lab";
+        nhupgrade = "nh os switch -u ~/.dotfiles/nix/lab";
         nhclean = "nh clean all -k 4";
       };
       plugins = [
@@ -40,6 +40,12 @@
           file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
         }
       ];
+      history = {
+        share = true;
+        append = true;
+        ignoreDups = true;
+        ignoreAllDups = true;
+      };
     };
     direnv = {
       enable = true;
@@ -57,8 +63,8 @@
         set-option -g status-position top
         set -g renumber-windows on
         set -g pane-border-lines "single"
-        set -g pane-border-style "fg=#2a283e"
-        set -g pane-active-border-style "fg=#403d52"
+        set -g pane-border-style "fg=#1f1d2e"
+        set -g pane-active-border-style "fg=#1f1d2e"
         bind-key "|" split-window -h -c "#{pane_current_path}"
         bind-key "\\" split-window -fh -c "#{pane_current_path}"
         bind-key "-" split-window -v -c "#{pane_current_path}"
@@ -90,10 +96,11 @@
             set -g default-terminal "xterm-256color"
             set -as terminal-overrides ',xterm*:Tc'
             set -g @rose_pine_variant 'main'
+            set -g @rose_pine_session_icon ''
+            set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_disable_active_window_menu 'on'
             set -g @rose_pine_show_current_program 'on'
             set -g @rose_pine_host 'on'
-            set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_user 'on' 
             set -g @rose_pine_directory 'on'
             set -g @rose_pine_field_separator ' '
@@ -126,8 +133,15 @@
         })
       ];
       extraConfig = ''
+        set mouse=a
         syntax on
         set relativenumber
+        set termguicolors
+        set tabstop=4
+        set shiftwidth=4
+        set autoindent
+        set smartindent
+        set wildmenu
         let g:disable_bg = 1
         colorscheme rosepine
         highlight StatusLine guibg=NONE ctermbg=NONE
@@ -141,7 +155,7 @@
         "--style full"
         "--preview 'bat --color=always --theme=rose-pine --style=-numbers,-header,-grid,+changes {}'"
       ];
-      historyWidgetOptions = [ "--no-preview" ];
+      historyWidget.options = [ "--no-preview" ];
       colors = {
         fg = "#908caa";
         bg = "#191724";
@@ -191,6 +205,32 @@
         promptToReturnFromSubprocess = false;
         gui.theme = {
           inactiveBorderColor = [ "#6e6a86" ];
+        };
+        git = {
+          pagers = [
+            {
+              pager = builtins.replaceStrings [ "\n" ] [ " " ] ''
+                delta --dark --paging=never --line-numbers --hunk-header-style=omit
+                --minus-style="red normal" --minus-emph-style="red normal"
+                --plus-style="green normal" --plus-emph-style="green normal"
+                --line-numbers-minus-style="red" --line-numbers-plus-style="green"
+                --line-numbers-zero-style="#524f67" --zero-style="#524f67 normal"
+                --file-style="bold cyan" --file-decoration-style="magenta ul"
+                --line-numbers-right-style="#21202e" --syntax-theme=none
+              '';
+            }
+            {
+              pager = builtins.replaceStrings [ "\n" ] [ " " ] ''
+                delta --dark --paging=never --line-numbers --hunk-header-style=omit
+                --minus-style="red normal" --minus-emph-style="red normal"
+                --plus-style="syntax normal" --plus-emph-style="syntax normal"
+                --line-numbers-minus-style="red" --line-numbers-plus-style="green"
+                --line-numbers-zero-style="#524f67" --zero-style="#524f67 normal"
+                --file-style="bold cyan" --file-decoration-style="magenta ul"
+                --line-numbers-right-style="#21202e" --syntax-theme=rose-pine
+              '';
+            }
+          ];
         };
       };
     };

@@ -46,6 +46,12 @@
           file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
         }
       ];
+      history = {
+        share = true;
+        append = true;
+        ignoreDups = true;
+        ignoreAllDups = true;
+      };
     };
     direnv = {
       enable = true;
@@ -145,11 +151,11 @@
           );
           extraConfig = ''
             set -g @rose_pine_variant 'main'
+            set -g @rose_pine_session_icon ''
+            set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_disable_active_window_menu 'on'
             set -g @rose_pine_show_current_program 'on'
-            set -g @rose_pine_session_icon ''
             set -g @rose_pine_host 'on'
-            set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_user 'on' 
             set -g @rose_pine_directory 'on'
             set -g @rose_pine_field_separator ' '
@@ -182,8 +188,15 @@
         })
       ];
       extraConfig = ''
+        set mouse=a
         syntax on
         set relativenumber
+        set termguicolors
+        set tabstop=4
+        set shiftwidth=4
+        set autoindent
+        set smartindent
+        set wildmenu
         let g:disable_bg = 1
         colorscheme rosepine
         highlight StatusLine guibg=NONE ctermbg=NONE
@@ -197,7 +210,7 @@
         "--style full"
         "--preview 'bat --color=always --theme=rose-pine --style=-numbers,-header,-grid,+changes {}'"
       ];
-      historyWidgetOptions = [ "--no-preview" ];
+      historyWidget.options = [ "--no-preview" ];
       colors = {
         fg = "#908caa";
         bg = "#191724";

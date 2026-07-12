@@ -92,6 +92,7 @@
       enableGlobalCompInit = false;
       promptInit = "";
     };
+    neovim.enable = true;
     niri.enable = true;
     firefox.enable = true;
     steam.enable = true;
@@ -165,7 +166,6 @@
       ansible
       kubectl
       minikube
-      neovim-unwrapped
       tree-sitter
       luajitPackages.jsregexp
       bash-language-server
@@ -254,10 +254,7 @@
   };
   fonts.packages = with pkgs; [
     nerd-fonts.hack
-    corefonts
-    vista-fonts
-    wineWow64Packages.fonts
-    google-fonts
-    inter
+    nerd-fonts.noto
+    nerd-fonts.ubuntu
   ];
 }

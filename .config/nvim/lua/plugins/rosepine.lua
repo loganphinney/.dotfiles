@@ -7,6 +7,9 @@ require('rose-pine').setup({
     },
     styles = { transparency = true },
     highlight_groups = {
+        NoiceCmdlinePopupBorder = { fg = 'love' },
+        NoiceCmdlinePopupBorderSearch = { fg = 'iris' },
+        NoiceCmdlineIconSearch = { fg = 'foam' },
         jsonKeyword = { fg = 'foam' },
         jsonKeywordMatch = { fg = 'subtle' },
         jsonString = { fg = 'text' },
@@ -28,9 +31,6 @@ require('rose-pine').setup({
         yamlFlowIndicator = { fg = 'subtle' },
         yamlBlockCollectionItemStart = { fg = 'subtle' },
         yamlDocumentStart = { fg = 'subtle' },
-        NoiceCmdlinePopupBorder = { fg = 'love' },
-        NoiceCmdlinePopupBorderSearch = { fg = 'iris' },
-        NoiceCmdlineIconSearch = { fg = 'foam' },
     }
 })
 vim.cmd('colorscheme rose-pine')

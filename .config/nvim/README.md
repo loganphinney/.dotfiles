@@ -2,6 +2,7 @@
 
 |`<space>` +|command|
 |---|---|
+|`ww`|word wrap|
 |`tt`|auto fmt|
 |`xx`|err msgs|
 |`ff`|find files|

@@ -21,4 +21,5 @@ blink.setup({
         keymap = { preset = 'inherit' },
         completion = { menu = { auto_show = true } },
     },
+    enabled = function() return not vim.tbl_contains({ 'markdown' }, vim.bo.filetype) end
 })

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+ssh lab 'bash -s' <<'EOF'
+df -H | awk '
+NR==1 {
+    printf "%-18s %-6s %-6s %-6s %-5s\n", "Filesystem", "Size", "Used", "Avail", "Use%"
+    next
+}
+$1 ~ /nvme0n1p2|sda1/ {
+    printf "%-18s %-6s %-6s %-6s %-5s\n", $1, $2, $3, $4, $5
+}
+'
+EOF

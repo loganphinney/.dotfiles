@@ -55,8 +55,8 @@
     };
     direnv = {
       enable = true;
-      enableZshIntegration = true;
       nix-direnv.enable = true;
+      enableZshIntegration = true;
     };
     kitty = {
       enable = true;
@@ -338,6 +338,9 @@
           focus-ring.enable = false;
           default-column-width.proportion = 0.5;
           always-center-single-column = true;
+        };
+        overview = {
+          backdrop-color = "#191724";
         };
         cursor.theme = "BreezeX-RosePine-Linux";
         binds = {

@@ -1,0 +1,26 @@
+---
+- name: Fix Jellyfin media permissions
+  hosts: lab
+  become: true
+  vars:
+    media_roots:
+      - /srv/media
+      - /mnt/hdd1/media
+    owner: loganp
+    group: media
+  tasks:
+    - name: Fix ownership
+      ansible.builtin.command:
+        cmd: "chown -R {{ owner }}:{{ group }} {{ item }}"
+      loop: "{{ media_roots }}"
+      changed_when: true
+    - name: Fix directory permissions
+      ansible.builtin.command:
+        cmd: "find {{ item }} -type d -exec chmod 755 {} +"
+      loop: "{{ media_roots }}"
+      changed_when: true
+    - name: Fix file permissions
+      ansible.builtin.command:
+        cmd: "find {{ item }} -type f -exec chmod 644 {} +"
+      loop: "{{ media_roots }}"
+      changed_when: true

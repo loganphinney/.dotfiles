@@ -16,7 +16,7 @@
       changed_when: true
     - name: Fix directory permissions
       ansible.builtin.command:
-        cmd: "find {{ item }} -type d -exec chmod 755 {} +"
+        cmd: "find {{ item }} -type d -exec chmod 2775 {} +"
       loop: "{{ media_roots }}"
       changed_when: true
     - name: Fix file permissions

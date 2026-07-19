@@ -16,6 +16,7 @@
   networking = {
     hostName = "nix-lab";
     networkmanager.enable = true;
+    wireguard.enable = true;
     firewall = {
       enable = true;
       checkReversePath = false;
@@ -25,16 +26,17 @@
         443
       ];
       allowedUDPPorts = [ 443 ];
-      interfaces.wg0 = {
-        allowedTCPPorts = [ ];
-        allowedUDPPorts = [ ];
-      };
     };
-    wireguard.enable = true;
   };
   systemd.network = {
     enable = true;
     wait-online.enable = false;
+    config = {
+      routeTables = {
+        vpn = 1000;
+        killswitch = 2000;
+      };
+    };
     networks."42-wg0" = {
       matchConfig.Name = "wg0";
       address = [
@@ -45,23 +47,8 @@
         "10.2.0.1"
         "2a07:b944::2:1"
       ];
-      routingPolicyRules = [
-        {
-          Table = 1000;
-          User = "qbittorrent";
-          Priority = 30001;
-          Family = "both";
-        }
-        {
-          Table = "main";
-          User = "qbittorrent";
-          SuppressPrefixLength = 0;
-          Priority = 30000;
-          Family = "both";
-        }
-      ];
     };
-    netdevs."50-wg0" = {
+    netdevs."42-wg0" = {
       netdevConfig = {
         Kind = "wireguard";
         Name = "wg0";
@@ -80,6 +67,41 @@
           ];
           Endpoint = "79.127.184.31:51820";
           PersistentKeepalive = 25;
+        }
+      ];
+    };
+    netdevs."10-killswitch" = {
+      netdevConfig = {
+        Kind = "dummy";
+        Name = "killswitch";
+      };
+    };
+    networks."10-killswitch" = {
+      matchConfig.Name = "killswitch";
+      routes = [
+        {
+          Destination = "0.0.0.0/0";
+          Type = "unreachable";
+          Table = 2000;
+        }
+        {
+          Destination = "::/0";
+          Type = "unreachable";
+          Table = 2000;
+        }
+      ];
+      routingPolicyRules = [
+        {
+          Table = 1000;
+          User = "qbittorrent";
+          Priority = 30001;
+          Family = "both";
+        }
+        {
+          Table = 2000;
+          User = "qbittorrent";
+          Priority = 30002;
+          Family = "both";
         }
       ];
     };
@@ -160,6 +182,9 @@
       virtualHosts."jellyfin.loganphinney.com".extraConfig = ''
         reverse_proxy localhost:8096
       '';
+      virtualHosts."seerr.loganphinney.com".extraConfig = ''
+        reverse_proxy localhost:5055
+      '';
       virtualHosts."immich.loganphinney.com".extraConfig = ''
         reverse_proxy localhost:2283
       '';
@@ -203,7 +228,7 @@
     grafana = {
       enable = true;
       openFirewall = true;
-      settings.security.secret_key = "77764cbb7ee9e979b8bae4b843808566";
+      settings.security.secret_key = "/etc/grafana/grafana.key";
       settings.analytics.reporting_enabled = false;
       settings.server = {
         http_addr = "0.0.0.0";

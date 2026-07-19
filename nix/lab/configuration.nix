@@ -13,6 +13,67 @@
     loader.timeout = 1;
     kernelPackages = pkgs.linuxPackages_latest;
   };
+  time.timeZone = "America/New_York";
+  security.sudo.wheelNeedsPassword = false;
+  environment.systemPackages = with pkgs; [
+    gcc
+    gnumake
+    cargo
+    git
+    delta
+    wireguard-tools
+    wget
+    curl
+    rsync
+    btop
+    lazydocker
+    eza
+    fd
+    ripgrep
+    jq
+    python313
+    uv
+    kitty.terminfo
+    tree-sitter
+    luajitPackages.jsregexp
+    shellcheck
+    shfmt
+    bash-language-server
+    pyright
+    ruff
+    perl5Packages.PLS
+    lua-language-server
+    nixd
+    nixfmt
+  ];
+  users = {
+    users.loganp = {
+      isNormalUser = true;
+      extraGroups = [
+        "wheel"
+        "media"
+      ];
+      shell = pkgs.zsh;
+    };
+    groups.media = { };
+  };
+  programs = {
+    nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep 4";
+      clean.dates = "daily";
+      flake = "/etc/nixos";
+    };
+    zsh = {
+      enable = true;
+      enableBashCompletion = true;
+      enableCompletion = true;
+      enableGlobalCompInit = false;
+      promptInit = "";
+    };
+    neovim.enable = true;
+  };
   networking = {
     hostName = "nix-lab";
     networkmanager.enable = true;
@@ -105,67 +166,6 @@
         }
       ];
     };
-  };
-  time.timeZone = "America/New_York";
-  security.sudo.wheelNeedsPassword = false;
-  environment.systemPackages = with pkgs; [
-    gcc
-    gnumake
-    cargo
-    git
-    delta
-    wireguard-tools
-    wget
-    curl
-    rsync
-    btop
-    lazydocker
-    eza
-    fd
-    ripgrep
-    jq
-    python313
-    uv
-    kitty.terminfo
-    tree-sitter
-    luajitPackages.jsregexp
-    shellcheck
-    shfmt
-    bash-language-server
-    pyright
-    ruff
-    perl5Packages.PLS
-    lua-language-server
-    nixd
-    nixfmt
-  ];
-  users = {
-    users.loganp = {
-      isNormalUser = true;
-      extraGroups = [
-        "wheel"
-        "media"
-      ];
-      shell = pkgs.zsh;
-    };
-    groups.media = { };
-  };
-  programs = {
-    nh = {
-      enable = true;
-      clean.enable = true;
-      clean.extraArgs = "--keep 4";
-      clean.dates = "daily";
-      flake = "/etc/nixos";
-    };
-    zsh = {
-      enable = true;
-      enableBashCompletion = true;
-      enableCompletion = true;
-      enableGlobalCompInit = false;
-      promptInit = "";
-    };
-    neovim.enable = true;
   };
   services = {
     openssh = {

@@ -18,11 +18,70 @@
     networkmanager.enable = true;
     firewall = {
       enable = true;
+      checkReversePath = false;
+      allowPing = true;
       allowedTCPPorts = [
         80
         443
       ];
       allowedUDPPorts = [ 443 ];
+      interfaces.wg0 = {
+        allowedTCPPorts = [ ];
+        allowedUDPPorts = [ ];
+      };
+    };
+    wireguard.enable = true;
+  };
+  systemd.network = {
+    enable = true;
+    wait-online.enable = false;
+    networks."42-wg0" = {
+      matchConfig.Name = "wg0";
+      address = [
+        "2a07:b944::2:2/128"
+        "10.2.0.2/32"
+      ];
+      dns = [
+        "10.2.0.1"
+        "2a07:b944::2:1"
+      ];
+      routingPolicyRules = [
+        {
+          Table = 1000;
+          User = "qbittorrent";
+          Priority = 30001;
+          Family = "both";
+        }
+        {
+          Table = "main";
+          User = "qbittorrent";
+          SuppressPrefixLength = 0;
+          Priority = 30000;
+          Family = "both";
+        }
+      ];
+    };
+    netdevs."50-wg0" = {
+      netdevConfig = {
+        Kind = "wireguard";
+        Name = "wg0";
+      };
+      wireguardConfig = {
+        PrivateKeyFile = /etc/wireguard/proton.key;
+        RouteTable = 1000;
+        FirewallMark = 42;
+      };
+      wireguardPeers = [
+        {
+          PublicKey = "qu/0mYdJ/EpPfshOEB1oUTvOa1ro/HNaICI3vbq0k2k=";
+          AllowedIPs = [
+            "::/0"
+            "0.0.0.0/0"
+          ];
+          Endpoint = "79.127.184.31:51820";
+          PersistentKeepalive = 25;
+        }
+      ];
     };
   };
   time.timeZone = "America/New_York";
@@ -33,6 +92,7 @@
     cargo
     git
     delta
+    wireguard-tools
     wget
     curl
     rsync
@@ -65,13 +125,8 @@
         "media"
       ];
       shell = pkgs.zsh;
-      # packages = with pkgs; [ ];
     };
-    groups.media = {
-      members = [
-        "jellyfin"
-      ];
-    };
+    groups.media = { };
   };
   programs = {
     nh = {
@@ -98,6 +153,7 @@
         PasswordAuthentication = false;
       };
     };
+    fail2ban.enable = true;
     power-profiles-daemon.enable = true;
     caddy = {
       enable = true;
@@ -111,11 +167,33 @@
         reverse_proxy localhost:3000
       '';
     };
-    fail2ban.enable = true;
     jellyfin = {
       enable = true;
       group = "media";
       openFirewall = true;
+    };
+    seerr = {
+      enable = true;
+      openFirewall = true;
+    };
+    prowlarr = {
+      enable = true;
+      openFirewall = true;
+    };
+    sonarr = {
+      enable = true;
+      openFirewall = true;
+      group = "media";
+    };
+    radarr = {
+      enable = true;
+      openFirewall = true;
+      group = "media";
+    };
+    qbittorrent = {
+      enable = true;
+      openFirewall = true;
+      group = "media";
     };
     immich = {
       enable = true;

@@ -171,9 +171,7 @@
     openssh = {
       enable = true;
       ports = [ 2222 ];
-      settings = {
-        PasswordAuthentication = false;
-      };
+      settings.PasswordAuthentication = false;
     };
     fail2ban.enable = true;
     power-profiles-daemon.enable = true;
@@ -298,9 +296,7 @@
       enable = true;
       configuration = {
         auth_enabled = false;
-        server = {
-          http_listen_port = 3100;
-        };
+        server.http_listen_port = 3100;
         common = {
           ring = {
             instance_addr = "127.0.0.1";
@@ -321,9 +317,7 @@
             };
           }
         ];
-        storage_config.filesystem = {
-          directory = "/tmp/loki/chunks";
-        };
+        storage_config.filesystem.directory = "/tmp/loki/chunks";
       };
     };
     fluent-bit = {

@@ -203,6 +203,26 @@
         highlight StatusLineNC guibg=NONE ctermbg=NONE
       '';
     };
+    helix = {
+      enable = true;
+      themes.rose-pine = fromTOML (
+        builtins.replaceStrings [ "#31748f" ] [ "#3e8fb0" ] (
+          builtins.readFile (
+            pkgs.fetchurl {
+              url = "https://raw.githubusercontent.com/rose-pine/helix/2e8b94d54d48980ac9bbdfa6aae40b02227b71c3/rose_pine.toml";
+              hash = "sha256-/Hf37vOO0JATRdGh9dbbblJUgOZaR41fL/V2Kg+sCes=";
+            }
+          )
+        )
+      );
+      settings = {
+        theme = "rose-pine";
+        editor = {
+          line-number = "relative";
+          cursor-shape.insert = "bar";
+        };
+      };
+    };
     fzf = {
       enable = true;
       enableZshIntegration = true;

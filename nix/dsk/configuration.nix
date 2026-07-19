@@ -31,14 +31,14 @@
   };
   time.timeZone = "America/New_York";
   boot = {
-    loader = {
-      systemd-boot.enable = lib.mkForce false;
-      systemd-boot.consoleMode = "max";
-      timeout = 2;
-    };
+    loader.systemd-boot.enable = lib.mkForce false;
     lanzaboote = {
       enable = true;
       pkiBundle = "/var/lib/sbctl";
+      settings = {
+        timeout = "menu-force";
+        console-mode = "max";
+      };
     };
   };
   hardware.graphics = {
@@ -81,7 +81,7 @@
     nh = {
       enable = true;
       clean.enable = true;
-      clean.extraArgs = "--keep 4";
+      clean.extraArgs = "--keep 3";
       clean.dates = "daily";
       flake = "/etc/nixos";
     };

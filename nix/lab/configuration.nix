@@ -215,6 +215,10 @@
       openFirewall = true;
       group = "media";
     };
+    flaresolverr = {
+      enable = true;
+      openFirewall = true;
+    };
     qbittorrent = {
       enable = true;
       openFirewall = true;

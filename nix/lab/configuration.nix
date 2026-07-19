@@ -347,6 +347,31 @@
             }
             {
               name = "systemd";
+              tag = "services.seerr";
+              systemd_filter = "_SYSTEMD_UNIT=seerr.service";
+            }
+            {
+              name = "systemd";
+              tag = "services.prowlarr";
+              systemd_filter = "_SYSTEMD_UNIT=prowlarr.service";
+            }
+            {
+              name = "systemd";
+              tag = "services.sonarr";
+              systemd_filter = "_SYSTEMD_UNIT=sonarr.service";
+            }
+            {
+              name = "systemd";
+              tag = "services.radarr";
+              systemd_filter = "_SYSTEMD_UNIT=radarr.service";
+            }
+            {
+              name = "systemd";
+              tag = "services.qbittorrent";
+              systemd_filter = "_SYSTEMD_UNIT=qbittorrent.service";
+            }
+            {
+              name = "systemd";
               tag = "services.immich";
               systemd_filter = "_SYSTEMD_UNIT=immich-server.service";
             }

@@ -139,6 +139,7 @@
       gcc
       nmap
       dnslookup
+      dig
       ipmitool
       python314
       uv

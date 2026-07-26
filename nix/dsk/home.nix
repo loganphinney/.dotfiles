@@ -587,20 +587,50 @@
         desktop_widgets = {
           enabled = false;
           schema_version = 2;
-          grid.cell_size = 16;
-          grid.major_interval = 4;
-          grid.visible = true;
+          widget_order = [ ];
+          grid = {
+            cell_size = 16;
+            major_interval = 4;
+            visible = true;
+          };
+          widget = { };
         };
         dock.auto_hide = true;
-        idle.pre_action_fade_seconds = 0;
+        idle = {
+          behavior_order = [
+            "lock"
+            "screen-off"
+            "lock-and-suspend"
+          ];
+          pre_action_fade_seconds = 0;
+          behavior = {
+            lock = {
+              action = "lock";
+              enabled = false;
+              timeout = 1800.0;
+            };
+            lock-and-suspend = {
+              action = "lock_and_suspend";
+              enabled = false;
+              timeout = 900.0;
+            };
+            screen-off = {
+              action = "screen_off";
+              enabled = true;
+              timeout = 300.0;
+            };
+          };
+        };
         location.address = "Charlotte, NC";
         lockscreen_widgets = {
           enabled = false;
           schema_version = 2;
           widget_order = [ "lockscreen-login-box@DP-2" ];
-          grid.cell_size = 16;
-          grid.major_interval = 4;
-          grid.visible = true;
+          grid = {
+            cell_size = 16;
+            major_interval = 4;
+            visible = true;
+          };
           widget."lockscreen-login-box@DP-2" = {
             box_height = 0.0;
             box_width = 0.0;
@@ -613,34 +643,59 @@
         };
         notification.position = "bottom_left";
         shell = {
+          avatar_path = "/home/loganp/Pictures/ribeye-pixel-art/rib3y3_rose-pine.png";
           time_format = "{:%H:%M:%S}";
-          panel.launcher_categories = false;
-          panel.launcher_compact = true;
-          panel.launcher_placement = "attached";
-          panel.open_near_click_session = true;
+          launcher.categories = false;
+          panel = {
+            launcher_categories = false;
+            launcher_compact = true;
+            launcher_placement = "attached";
+            open_near_click_session = true;
+          };
           screenshot.directory = "/home/loganp/Pictures/Screenshots";
         };
         theme = {
           builtin = "Rosé Pine";
-          templates.enable_builtin_templates = false;
-          templates.enable_community_templates = false;
+          community_palette = "Rose Pine Moon";
+          mode = "dark";
+          source = "builtin";
+          wallpaper_scheme = "m3-content";
+          templates = {
+            enable_builtin_templates = false;
+            enable_community_templates = false;
+          };
         };
-        wallpaper.default.path = "/home/loganp/Pictures/rose-pine/felix-bacher--jEEnRx38wo.jpg";
+        wallpaper = {
+          directory = "/home/loganp/Pictures/rose-pine";
+          default.path = "/home/loganp/Pictures/rose-pine/felix-bacher--jEEnRx38wo.jpg";
+          monitors.DP-2.path = "/home/loganp/Pictures/rose-pine/felix-bacher--jEEnRx38wo.jpg";
+        };
         weather.unit = "imperial";
-        widget.clock.format = "{:%H:%M:%S}";
-        widget.cpu.display = "text";
-        widget.cpu.stat = "cpu_temp";
-        widget.launcher.glyph = "terminal-2";
-        widget.network_rx.display = "text";
-        widget.ram.display = "text";
-        widget.ram.stat = "ram_pct";
-        widget.session.glyph = "";
-        widget.sysmon.display = "text";
-        widget.sysmon.stat = "disk_pct";
-        widget.temp.display = "text";
-        widget.temp.stat = "gpu_usage";
-        widget.notifications.hide_when_no_unread = false;
-        widget.weather.show_condition = false;
+        widget = {
+          clock.format = "{:%H:%M:%S}";
+          control-center.glyph = "layout-grid";
+          cpu = {
+            display = "text";
+            stat = "cpu_temp";
+          };
+          launcher.glyph = "terminal-2";
+          network_rx.display = "text";
+          notifications.hide_when_no_unread = true;
+          ram = {
+            display = "text";
+            stat = "ram_pct";
+          };
+          session.glyph = "";
+          sysmon = {
+            display = "text";
+            stat = "disk_pct";
+          };
+          temp = {
+            display = "text";
+            stat = "gpu_usage";
+          };
+          weather.show_condition = false;
+        };
       };
     };
   };

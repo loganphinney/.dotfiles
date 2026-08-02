@@ -673,7 +673,7 @@
         weather.unit = "imperial";
         widget = {
           clock.format = "{:%H:%M:%S}";
-          control-center.glyph = "layout-grid";
+          control-center.glyph = "layout-dashboard";
           cpu = {
             display = "text";
             stat = "cpu_temp";
@@ -685,7 +685,7 @@
             display = "text";
             stat = "ram_pct";
           };
-          session.glyph = "";
+          session.glyph = "power";
           sysmon = {
             display = "text";
             stat = "disk_pct";

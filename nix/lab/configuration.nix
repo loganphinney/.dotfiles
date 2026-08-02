@@ -24,6 +24,8 @@
     wireguard-tools
     wget
     curl
+    dig
+    dnslookup
     rsync
     btop
     lazydocker
@@ -31,7 +33,7 @@
     fd
     ripgrep
     jq
-    python313
+    python314
     uv
     kitty.terminfo
     tree-sitter
@@ -45,6 +47,7 @@
     lua-language-server
     nixd
     nixfmt
+    fastfetch
   ];
   users = {
     users.loganp = {
@@ -73,6 +76,14 @@
       promptInit = "";
     };
     neovim.enable = true;
+    rust-motd = {
+      enable = true;
+      enableMotdInSSHD = true;
+      settings.banner = {
+        color = "white";
+        command = "${pkgs.fastfetch}/bin/fastfetch --pipe false --structure-disabled title:shell:terminal:packages:display:colors:locale --logo-color-1 yellow --logo-color-2 green --logo-color-3 blue --logo-color-4 magenta --logo-color-5 red --logo-color-6 cyan";
+      };
+    };
   };
   networking = {
     hostName = "nix-lab";
@@ -131,12 +142,6 @@
         }
       ];
     };
-    netdevs."10-killswitch" = {
-      netdevConfig = {
-        Kind = "dummy";
-        Name = "killswitch";
-      };
-    };
     networks."10-killswitch" = {
       matchConfig.Name = "killswitch";
       routes = [
@@ -166,12 +171,21 @@
         }
       ];
     };
+    netdevs."10-killswitch" = {
+      netdevConfig = {
+        Kind = "dummy";
+        Name = "killswitch";
+      };
+    };
   };
   services = {
     openssh = {
       enable = true;
       ports = [ 2222 ];
-      settings.PasswordAuthentication = false;
+      settings = {
+        PasswordAuthentication = false;
+        PrintLastLog = false;
+      };
     };
     fail2ban.enable = true;
     power-profiles-daemon.enable = true;
@@ -230,11 +244,11 @@
     grafana = {
       enable = true;
       openFirewall = true;
-      settings.security.secret_key = "/etc/grafana/grafana.key";
-      settings.analytics.reporting_enabled = false;
-      settings.server = {
-        http_addr = "0.0.0.0";
-        http_port = 3000;
+      settings = {
+        security.secret_key = "/etc/grafana/grafana.key";
+        analytics.reporting_enabled = false;
+        server.http_addr = "0.0.0.0";
+        server.http_port = 3000;
       };
       provision = {
         enable = true;
@@ -251,9 +265,7 @@
             type = "prometheus";
             access = "proxy";
             url = "http://127.0.0.1:9090";
-            jsonData = {
-              timeInterval = "30s";
-            };
+            jsonData.timeInterval = "30s";
           }
         ];
       };

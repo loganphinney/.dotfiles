@@ -19,7 +19,7 @@
         cl = "clear";
         ls = "eza";
         la = "eza -a";
-        ll = "eza -l";
+        ll = "eza -lg";
         l1 = "eza -1";
         lt = "eza -T";
         nv = "nvim";

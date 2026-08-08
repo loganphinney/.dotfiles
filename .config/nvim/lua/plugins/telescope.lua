@@ -7,9 +7,8 @@ vim.system({ 'make' }, { cwd = vim.fn.stdpath('data') .. '/site/pack/core/opt/te
 local telescope = require('telescope')
 telescope.setup({
     defaults = {
-        mappings = {
-            i = { ['<C-h>'] = 'which_key' }
-        }
+        mappings = { i = { ['<C-h>'] = 'which_key' } },
+        layout_config = { horizontal = { preview_width = 0.65 } },
     }
 })
 pcall(function() telescope.load_extension('fzf') end)

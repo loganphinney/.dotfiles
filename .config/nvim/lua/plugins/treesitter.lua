@@ -10,14 +10,19 @@ require('nvim-treesitter').setup {
     }
 }
 require('nvim-treesitter').install {
-    'json',
-    'yaml',
-    'ini',
-    'regex',
-    'html',
     'bash',
     'perl',
     'python',
+    --
+    'json',
+    'yaml',
+    'toml',
+    'ini',
+    --
+    'awk',
+    'regex',
+    'html',
+    --
     'nix',
     'typescript'
 }

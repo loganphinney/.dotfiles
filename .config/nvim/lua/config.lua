@@ -5,6 +5,7 @@ for _, file in ipairs(vim.fn.readdir(dir)) do
         require('plugins.' .. file:gsub('%.lua$', ''))
     end
 end
+-- PackUpdate
 vim.api.nvim_create_user_command('PackUpdate', function()
     vim.pack.update()
 end, {})
@@ -35,6 +36,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
             })
         end
     end,
+})
+-- RESTORE CURSOR STYLE ON EXIT
+vim.api.nvim_create_autocmd({ 'VimEnter', 'VimResume' }, {
+    pattern = '*',
+    command = [[set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50]]
+        .. [[\,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor]]
+        .. [[\,sm:block-blinkwait175-blinkoff150-blinkon175]],
+})
+vim.api.nvim_create_autocmd({ 'VimLeave', 'VimSuspend' }, {
+    pattern = '*',
+    command = 'set guicursor=a:block-blinkon0',
 })
 -- KEYBINDS
 vim.keymap.set('n', '<leader>-', '<CMD>Oil<CR>')

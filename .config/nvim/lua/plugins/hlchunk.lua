@@ -3,5 +3,6 @@ local indent = require('hlchunk.mods.indent')
 indent({
     enable = true,
     style = '#524f67',
-    chars = { ' ', '․', '⁚', '⁖', '⁘', '⁙' }
-}):enable() -- don't forget call enable method
+    chars = { ' ', '․', '⁚', '⁖', '⁘', '⁙' },
+    exclude_filetypes = { markdown = true }
+}):enable()

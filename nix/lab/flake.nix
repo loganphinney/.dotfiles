@@ -1,6 +1,6 @@
 {
   inputs = {
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/=3.21.9";
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";

@@ -234,6 +234,7 @@
     qbittorrent = {
       enable = true;
       openFirewall = true;
+      extraArgs = [ "--confirm-legal-notice" ];
       group = "media";
     };
     immich = {

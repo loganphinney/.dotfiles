@@ -7,12 +7,19 @@
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
+      PAGER = "bat --paging=always";
     };
   };
   programs = {
     zsh = {
       enable = true;
       initContent = "PROMPT='%F{8}[%1~]%#%f '";
+      enableCompletion = true;
+      completionInit = ''
+        fpath=(/run/current-system/sw/share/zsh/site-functions /run/current-system/sw/share/zsh/$ZSH_VERSION/functions $fpath)
+        autoload -Uz compinit bashcompinit
+        compinit -C; bashcompinit
+      '';
       shellAliases = {
         ".." = "cd ../";
         "~" = "cd ~/";
@@ -25,7 +32,6 @@
         nv = "nvim";
         nvsu = "sudo -E nvim";
         lg = "lazygit";
-        lzd = "lazydocker";
         nixed = "nvim ~/.dotfiles/nix/lab";
         nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/lab";
         nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/lab";
@@ -60,7 +66,10 @@
       clock24 = true;
       shortcut = "s";
       extraConfig = ''
+        set -s extended-keys on
+        set -g set-clipboard external
         set-option -g status-position top
+        set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[5 q'
         set -g renumber-windows on
         set -g pane-border-lines "single"
         set -g pane-border-style "fg=#1f1d2e"
@@ -75,14 +84,14 @@
           plugin = (
             mkTmuxPlugin {
               pluginName = "rose-pine-tmux";
-              version = "1-unstable-2025-11-09";
+              version = "1-unstable-2026-07-23";
               src = pkgs.runCommand "rose-pine-tmux-patched" { } ''
                 cp -r ${
                   pkgs.fetchFromGitHub {
                     owner = "rose-pine";
                     repo = "tmux";
-                    rev = "b6138c51573425ccdc33c91464597323baec3b7e";
-                    hash = "sha256-HDmCCRhTCPfu7gL9VPHVGCiG5IcnkpQ4EaXN4IsQ0YE=";
+                    rev = "43d03507427ac3ad92cadfdf0d1307b8b0ff5128";
+                    hash = "sha256-niFXeZRyJ26ukNxEgQjzGbNPPQPtpoe5/7cF/9VGOTk=";
                   }
                 } $out
                 chmod -R u+w $out
@@ -116,14 +125,14 @@
       plugins = [
         (pkgs.vimUtils.buildVimPlugin {
           pname = "rose-pine-vim";
-          version = "2025-11-09";
+          version = "2026-06-05";
           src = pkgs.runCommand "rose-pine-vim-patched" { } ''
             cp -r ${
               pkgs.fetchFromGitHub {
                 owner = "rose-pine";
                 repo = "vim";
-                rev = "ea0ad226b851b3aa132e2e234cc74ceecf9f4c7c";
-                sha256 = "sha256-QAZKLTliWwZR6Zm0qyGpJiY2lFvBypBqBxpA0BlVcDc=";
+                rev = "d7bc0ccbbd71d632f5737a1a880a0ed32d1be6bf";
+                sha256 = "1qia0hbcjfba4w4s6ax4l99f0hnnc1vqjkkhvgpicpk7jzq51r6h";
               }
             } $out
             chmod -R u+w $out
@@ -147,6 +156,26 @@
         highlight StatusLine guibg=NONE ctermbg=NONE
         highlight StatusLineNC guibg=NONE ctermbg=NONE
       '';
+    };
+    helix = {
+      enable = true;
+      themes.rose-pine = fromTOML (
+        builtins.replaceStrings [ "#31748f" ] [ "#3e8fb0" ] (
+          builtins.readFile (
+            pkgs.fetchurl {
+              url = "https://raw.githubusercontent.com/rose-pine/helix/2e8b94d54d48980ac9bbdfa6aae40b02227b71c3/rose_pine.toml";
+              hash = "sha256-/Hf37vOO0JATRdGh9dbbblJUgOZaR41fL/V2Kg+sCes=";
+            }
+          )
+        )
+      );
+      settings = {
+        theme = "rose-pine";
+        editor = {
+          line-number = "relative";
+          cursor-shape.insert = "bar";
+        };
+      };
     };
     fzf = {
       enable = true;
@@ -186,8 +215,8 @@
             src = pkgs.fetchFromGitHub {
               owner = "rose-pine";
               repo = "tm-theme";
-              rev = "417d201beb5f0964faded5448147c252ff12c4ae";
-              sha256 = "sha256-aNDOqY81FLFQ6bvsTiYgPyS5lJrqZnFMpvpTCSNyY0Y=";
+              rev = "6d556734541ccb04172e81fd58de4a35fff72d19";
+              sha256 = "0sk4aq8ia5rh6p4vgmxc6449ypmn8lzr6czv7vfvc1wvabdwdrz7";
             };
           in
           pkgs.runCommand "rose-pine-patched" { } ''
@@ -199,6 +228,19 @@
         file = "dist/rose-pine.tmTheme";
       };
     };
+    jq = {
+      enable = true;
+      colors = {
+        null = "0;90";
+        false = "0;39";
+        true = "0;39";
+        numbers = "0;39";
+        strings = "0;37";
+        arrays = "1;90";
+        objects = "1;90";
+        objectKeys = "0;34";
+      };
+    };
     lazygit = {
       enable = true;
       settings = {
@@ -207,10 +249,10 @@
           inactiveBorderColor = [ "#6e6a86" ];
         };
         git = {
-          pagers = [
+          diffRenderers = [
             {
-              pager = builtins.replaceStrings [ "\n" ] [ " " ] ''
-                delta --dark --paging=never --line-numbers --hunk-header-style=omit
+              command = builtins.replaceStrings [ "\n" ] [ " " ] ''
+                delta --dark --paging=never --hunk-header-style=omit
                 --minus-style="red normal" --minus-emph-style="red normal"
                 --plus-style="green normal" --plus-emph-style="green normal"
                 --line-numbers-minus-style="red" --line-numbers-plus-style="green"
@@ -220,8 +262,8 @@
               '';
             }
             {
-              pager = builtins.replaceStrings [ "\n" ] [ " " ] ''
-                delta --dark --paging=never --line-numbers --hunk-header-style=omit
+              command = builtins.replaceStrings [ "\n" ] [ " " ] ''
+                delta --dark --paging=never --hunk-header-style=omit
                 --minus-style="red normal" --minus-emph-style="red normal"
                 --plus-style="syntax normal" --plus-emph-style="syntax normal"
                 --line-numbers-minus-style="red" --line-numbers-plus-style="green"

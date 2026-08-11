@@ -38,7 +38,7 @@
         nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/dsk";
         nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/dsk";
         nhupdate = "nh os switch ~/.dotfiles/nix/dsk --no-nom";
-        nhupgrade = "nh os switch -u ~/.dotfiles/nix/dsk --no-nom";
+        nhupgrade = "nh os switch -u ~/.dotfiles/nix/dsk";
         nhclean = "nh clean all -k 4";
       };
       plugins = [

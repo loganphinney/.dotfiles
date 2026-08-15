@@ -6,6 +6,7 @@ require('rose-pine').setup({
         NoiceCmdlinePopupBorder = { fg = 'love' },
         NoiceCmdlinePopupBorderSearch = { fg = 'iris' },
         NoiceCmdlineIconSearch = { fg = 'foam' },
+        ['@keyword.directive'] = { fg = 'subtle' },
         ['@property.json'] = { fg = 'pine' },
         ['@string.json'] = { fg = 'text' },
         ['@number.json'] = { fg = 'text' },

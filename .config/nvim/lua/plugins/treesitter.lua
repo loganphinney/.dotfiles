@@ -17,6 +17,8 @@ require('nvim-treesitter').install {
     'regex',
     'html',
     --
+    'markdown',
+    --
     'nix',
     'typescript'
 }

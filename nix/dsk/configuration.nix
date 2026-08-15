@@ -70,7 +70,6 @@
       enable = true;
       ports = [ 2222 ];
     };
-    tailscale.enable = true;
     jellyfin = {
       enable = true;
       openFirewall = true;
@@ -247,11 +246,7 @@
         pokeget-rs
       ];
     };
-    groups.media = {
-      members = [
-        "jellyfin"
-      ];
-    };
+    groups.media.members = [ "jellyfin" ];
   };
   fonts.packages = with pkgs; [
     nerd-fonts.hack

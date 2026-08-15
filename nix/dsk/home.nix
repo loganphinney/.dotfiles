@@ -121,17 +121,16 @@
       extraConfig = ''
         set -s extended-keys on
         set -g set-clipboard external
-        set-option -g status-position top
-        set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
         set -g renumber-windows on
+        set -g status-position top
         set -g pane-border-lines "single"
         set -g pane-border-style "fg=#1f1d2e"
         set -g pane-active-border-style "fg=#1f1d2e"
-        bind-key "|" split-window -h -c "#{pane_current_path}"
-        bind-key "\\" split-window -fh -c "#{pane_current_path}"
-        bind-key "-" split-window -v -c "#{pane_current_path}"
-        bind-key "_" split-window -fv -c "#{pane_current_path}"
-
+        set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
+        bind "|" split-window -h -c "#{pane_current_path}"
+        bind "\\" split-window -fh -c "#{pane_current_path}"
+        bind "-" split-window -v -c "#{pane_current_path}"
+        bind "_" split-window -fv -c "#{pane_current_path}"
       '';
       plugins = with pkgs.tmuxPlugins; [
         {
@@ -208,26 +207,6 @@
         highlight StatusLine guibg=NONE ctermbg=NONE
         highlight StatusLineNC guibg=NONE ctermbg=NONE
       '';
-    };
-    helix = {
-      enable = true;
-      themes.rose-pine = fromTOML (
-        builtins.replaceStrings [ "#31748f" ] [ "#3e8fb0" ] (
-          builtins.readFile (
-            pkgs.fetchurl {
-              url = "https://raw.githubusercontent.com/rose-pine/helix/2e8b94d54d48980ac9bbdfa6aae40b02227b71c3/rose_pine.toml";
-              hash = "sha256-/Hf37vOO0JATRdGh9dbbblJUgOZaR41fL/V2Kg+sCes=";
-            }
-          )
-        )
-      );
-      settings = {
-        theme = "rose-pine";
-        editor = {
-          line-number = "relative";
-          cursor-shape.insert = "bar";
-        };
-      };
     };
     fzf = {
       enable = true;
@@ -377,6 +356,10 @@
           focus-ring.enable = false;
           default-column-width.proportion = 0.5;
           always-center-single-column = true;
+        };
+        overview = {
+          backdrop-color = "#191724";
+          zoom = 0.666;
         };
         cursor.theme = "BreezeX-RosePine-Linux";
         binds = {
@@ -573,6 +556,7 @@
         bar.widgets = {
           center = [ "workspaces" ];
           end = [
+            "caffeine"
             "weather"
             "notifications"
             "clock"
@@ -593,6 +577,31 @@
           ];
           thickness = 28;
           widget_spacing = 9;
+        };
+        widget = {
+          launcher.glyph = "terminal-2";
+          cpu = {
+            visualization = "none";
+            stat = "cpu_temp";
+          };
+          ram = {
+            visualization = "none";
+            stat = "ram_pct";
+          };
+          sysmon = {
+            visualization = "none";
+            stat = "disk_used";
+          };
+          temp = {
+            visualization = "none";
+            stat = "gpu_usage";
+          };
+          network_rx.visualization = "none";
+          weather.show_condition = false;
+          notifications.hide_when_no_unread = true;
+          clock.format = "{:%H:%M:%S}";
+          control-center.glyph = "layout-dashboard";
+          session.glyph = "power";
         };
         control_center.shortcuts = [
           { type = "wifi"; }
@@ -663,8 +672,6 @@
           time_format = "{:%H:%M:%S}";
           launcher.categories = false;
           panel = {
-            launcher_categories = false;
-            launcher_compact = true;
             launcher_placement = "attached";
             open_near_click_session = true;
           };
@@ -687,31 +694,6 @@
           monitors.DP-2.path = "/home/loganp/Pictures/rose-pine/felix-bacher--jEEnRx38wo.jpg";
         };
         weather.unit = "imperial";
-        widget = {
-          clock.format = "{:%H:%M:%S}";
-          control-center.glyph = "layout-dashboard";
-          cpu = {
-            display = "text";
-            stat = "cpu_temp";
-          };
-          launcher.glyph = "terminal-2";
-          network_rx.display = "text";
-          notifications.hide_when_no_unread = true;
-          ram = {
-            display = "text";
-            stat = "ram_pct";
-          };
-          session.glyph = "power";
-          sysmon = {
-            display = "text";
-            stat = "disk_pct";
-          };
-          temp = {
-            display = "text";
-            stat = "gpu_usage";
-          };
-          weather.show_condition = false;
-        };
       };
     };
   };

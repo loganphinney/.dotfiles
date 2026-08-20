@@ -8,25 +8,40 @@
       EDITOR = "nvim";
       VISUAL = "nvim";
       PAGER = "bat --paging=always";
+      NH_FLAKE = "$HOME/.dotfiles/nix/dsk";
     };
   };
   programs = {
     zsh = {
       enable = true;
-      initContent = "PROMPT='%B%F{2}[%1~]%f%b%F{8}%#%f '";
       enableCompletion = true;
+      initContent = "PROMPT='%B%F{2}[%1~]%f%b%F{8}%#%f '";
       completionInit = ''
         fpath=(/run/current-system/sw/share/zsh/site-functions /run/current-system/sw/share/zsh/$ZSH_VERSION/functions $fpath)
         autoload -Uz compinit bashcompinit
         compinit -C; bashcompinit
       '';
+      history = {
+        share = true;
+        append = true;
+        ignoreDups = true;
+        ignoreAllDups = true;
+      };
+      plugins = [
+        {
+          name = "fast-syntax-highlighting";
+          src = pkgs.zsh-fast-syntax-highlighting;
+          file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
+        }
+      ];
       shellAliases = {
         ".." = "cd ../";
         "~" = "cd ~/";
         cl = "clear";
         ls = "eza";
         la = "eza -a";
-        ll = "eza -lg";
+        l = "eza -glo";
+        ll = "eza -aglo";
         l1 = "eza -1";
         lt = "eza -T";
         nv = "nvim";
@@ -37,22 +52,9 @@
         nixed = "nvim ~/.dotfiles/nix/dsk";
         nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/dsk";
         nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/dsk";
-        nhupdate = "nh os switch ~/.dotfiles/nix/dsk --no-nom";
-        nhupgrade = "nh os switch -u ~/.dotfiles/nix/dsk";
+        nhupdate = "nh os switch --no-nom";
+        nhupgrade = "nh os switch -u";
         nhclean = "nh clean all -k 4";
-      };
-      plugins = [
-        {
-          name = "fast-syntax-highlighting";
-          src = pkgs.zsh-fast-syntax-highlighting;
-          file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
-        }
-      ];
-      history = {
-        share = true;
-        append = true;
-        ignoreDups = true;
-        ignoreAllDups = true;
       };
     };
     direnv = {
@@ -138,18 +140,14 @@
             mkTmuxPlugin {
               pluginName = "rose-pine-tmux";
               version = "1-unstable-2026-07-23";
-              src = pkgs.runCommand "rose-pine-tmux-patched" { } ''
-                cp -r ${
-                  pkgs.fetchFromGitHub {
-                    owner = "rose-pine";
-                    repo = "tmux";
-                    rev = "43d03507427ac3ad92cadfdf0d1307b8b0ff5128";
-                    hash = "sha256-niFXeZRyJ26ukNxEgQjzGbNPPQPtpoe5/7cF/9VGOTk=";
-                  }
-                } $out
-                chmod -R u+w $out
-                substituteInPlace $out/rose-pine.tmux \
-                  --replace "#31748f" "#3e8fb0"
+              src = pkgs.fetchFromGitHub {
+                owner = "rose-pine";
+                repo = "tmux";
+                rev = "43d03507427ac3ad92cadfdf0d1307b8b0ff5128";
+                hash = "sha256-niFXeZRyJ26ukNxEgQjzGbNPPQPtpoe5/7cF/9VGOTk=";
+              };
+              postInstall = ''
+                substituteInPlace $target/rose-pine.tmux --replace "#31748f" "#3e8fb0"
               '';
               rtpFilePath = "rose-pine.tmux";
             }
@@ -177,18 +175,14 @@
         (pkgs.vimUtils.buildVimPlugin {
           pname = "rose-pine-vim";
           version = "2026-06-05";
-          src = pkgs.runCommand "rose-pine-vim-patched" { } ''
-            cp -r ${
-              pkgs.fetchFromGitHub {
-                owner = "rose-pine";
-                repo = "vim";
-                rev = "d7bc0ccbbd71d632f5737a1a880a0ed32d1be6bf";
-                sha256 = "1qia0hbcjfba4w4s6ax4l99f0hnnc1vqjkkhvgpicpk7jzq51r6h";
-              }
-            } $out
-            chmod -R u+w $out
-            substituteInPlace $out/colors/rosepine.vim \
-              --replace "#31748f" "#3e8fb0"
+          src = pkgs.fetchFromGitHub {
+            owner = "rose-pine";
+            repo = "vim";
+            rev = "d7bc0ccbbd71d632f5737a1a880a0ed32d1be6bf";
+            sha256 = "1qia0hbcjfba4w4s6ax4l99f0hnnc1vqjkkhvgpicpk7jzq51r6h";
+          };
+          postInstall = ''
+            substituteInPlace $out/colors/rosepine.vim --replace "#31748f" "#3e8fb0"
           '';
         })
       ];
@@ -241,21 +235,17 @@
         style = "-numbers,-header,-grid,-changes";
       };
       themes.rose-pine = {
-        src =
-          let
-            src = pkgs.fetchFromGitHub {
-              owner = "rose-pine";
-              repo = "tm-theme";
-              rev = "6d556734541ccb04172e81fd58de4a35fff72d19";
-              sha256 = "0sk4aq8ia5rh6p4vgmxc6449ypmn8lzr6czv7vfvc1wvabdwdrz7";
-            };
-          in
-          pkgs.runCommand "rose-pine-patched" { } ''
-            cp -r ${src} $out
-            chmod -R u+w $out
-            substituteInPlace $out/dist/rose-pine.tmTheme --replace "#31748f" "#3e8fb0"
-            file = "dist/rose-pine.tmTheme";
+        src = pkgs.applyPatches {
+          src = pkgs.fetchFromGitHub {
+            owner = "rose-pine";
+            repo = "tm-theme";
+            rev = "6d556734541ccb04172e81fd58de4a35fff72d19";
+            sha256 = "0sk4aq8ia5rh6p4vgmxc6449ypmn8lzr6czv7vfvc1wvabdwdrz7";
+          };
+          postPatch = ''
+            substituteInPlace dist/rose-pine.tmTheme --replace "#31748f" "#3e8fb0"
           '';
+        };
         file = "dist/rose-pine.tmTheme";
       };
     };

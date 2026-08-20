@@ -26,7 +26,6 @@
     firewall = {
       enable = true;
       allowedTCPPorts = [ 8096 ];
-      allowedUDPPorts = [ 8096 ];
     };
   };
   time.timeZone = "America/New_York";
@@ -46,6 +45,10 @@
     enable32Bit = true;
     extraPackages = with pkgs; [ rocmPackages.rocm-smi ];
   };
+  security = {
+    rtkit.enable = true;
+    sudo.wheelNeedsPassword = false;
+  };
   services = {
     printing.enable = false;
     pulseaudio.enable = false;
@@ -56,16 +59,19 @@
       pulse.enable = true;
     };
     pcscd.enable = true;
-    xserver.enable = true;
-    xserver.xkb.layout = "us";
-    xserver.xkb.variant = "";
-    xserver.excludePackages = [ pkgs.xterm ];
-    displayManager.autoLogin.enable = true;
-    displayManager.autoLogin.user = "loganp";
-    displayManager.gdm.enable = true;
+    xserver = {
+      enable = true;
+      xkb.layout = "us";
+      xkb.variant = "";
+      excludePackages = [ pkgs.xterm ];
+    };
     desktopManager.gnome.enable = true;
-    displayManager.defaultSession = "niri";
-    power-profiles-daemon.enable = true;
+    displayManager = {
+      autoLogin.enable = true;
+      autoLogin.user = "loganp";
+      gdm.enable = true;
+      defaultSession = "niri";
+    };
     openssh = {
       enable = true;
       ports = [ 2222 ];
@@ -75,6 +81,7 @@
       openFirewall = true;
       group = "media";
     };
+    power-profiles-daemon.enable = true;
   };
   programs = {
     nh = {
@@ -82,7 +89,6 @@
       clean.enable = true;
       clean.extraArgs = "--keep 3";
       clean.dates = "daily";
-      flake = "/etc/nixos";
     };
     zsh = {
       enable = true;
@@ -118,10 +124,6 @@
         };
       }
     ];
-  };
-  security = {
-    rtkit.enable = true;
-    sudo.wheelNeedsPassword = false;
   };
   environment = {
     pathsToLink = [ "/share/zsh" ];

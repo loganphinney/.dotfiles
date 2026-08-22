@@ -7,7 +7,7 @@
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
-      PAGER = "bat --paging=always";
+      NH_FLAKE = "$HOME/.dotfiles/nix/lab";
     };
   };
   programs = {
@@ -20,24 +20,11 @@
         autoload -Uz compinit bashcompinit
         compinit -C; bashcompinit
       '';
-      shellAliases = {
-        ".." = "cd ../";
-        "~" = "cd ~/";
-        cl = "clear";
-        ls = "eza";
-        la = "eza -a";
-        ll = "eza -lg";
-        l1 = "eza -1";
-        lt = "eza -T";
-        nv = "nvim";
-        nvsu = "sudo -E nvim";
-        lg = "lazygit";
-        nixed = "nvim ~/.dotfiles/nix/lab";
-        nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/lab";
-        nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/lab";
-        nhupdate = "nh os switch ~/.dotfiles/nix/lab";
-        nhupgrade = "nh os switch -u ~/.dotfiles/nix/lab";
-        nhclean = "nh clean all -k 4";
+      history = {
+        share = true;
+        append = true;
+        ignoreDups = true;
+        ignoreAllDups = true;
       };
       plugins = [
         {
@@ -46,11 +33,25 @@
           file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
         }
       ];
-      history = {
-        share = true;
-        append = true;
-        ignoreDups = true;
-        ignoreAllDups = true;
+      shellAliases = {
+        ".." = "cd ../";
+        "~" = "cd ~/";
+        cl = "clear";
+        ls = "eza";
+        la = "eza -a";
+        l = "eza -glo";
+        ll = "eza -aglo";
+        l1 = "eza -1";
+        lt = "eza -T";
+        nv = "nvim";
+        nvsu = "sudo -E nvim";
+        lg = "lazygit";
+        nixed = "nvim ~/.dotfiles/nix/lab";
+        nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/lab";
+        nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/lab";
+        nhupdate = "nh os switch --no-nom";
+        nhupgrade = "nh os switch -u";
+        nhclean = "nh clean all -k 4";
       };
     };
     direnv = {
@@ -68,16 +69,16 @@
       extraConfig = ''
         set -s extended-keys on
         set -g set-clipboard external
-        set-option -g status-position top
-        set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[5 q'
         set -g renumber-windows on
+        set -g status-position top
         set -g pane-border-lines "single"
         set -g pane-border-style "fg=#1f1d2e"
         set -g pane-active-border-style "fg=#1f1d2e"
-        bind-key "|" split-window -h -c "#{pane_current_path}"
-        bind-key "\\" split-window -fh -c "#{pane_current_path}"
-        bind-key "-" split-window -v -c "#{pane_current_path}"
-        bind-key "_" split-window -fv -c "#{pane_current_path}"
+        set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[5 q'
+        bind "|" split-window -h -c "#{pane_current_path}"
+        bind "\\" split-window -fh -c "#{pane_current_path}"
+        bind "-" split-window -v -c "#{pane_current_path}"
+        bind "_" split-window -fv -c "#{pane_current_path}"
       '';
       plugins = with pkgs.tmuxPlugins; [
         {
@@ -85,18 +86,14 @@
             mkTmuxPlugin {
               pluginName = "rose-pine-tmux";
               version = "1-unstable-2026-07-23";
-              src = pkgs.runCommand "rose-pine-tmux-patched" { } ''
-                cp -r ${
-                  pkgs.fetchFromGitHub {
-                    owner = "rose-pine";
-                    repo = "tmux";
-                    rev = "43d03507427ac3ad92cadfdf0d1307b8b0ff5128";
-                    hash = "sha256-niFXeZRyJ26ukNxEgQjzGbNPPQPtpoe5/7cF/9VGOTk=";
-                  }
-                } $out
-                chmod -R u+w $out
-                substituteInPlace $out/rose-pine.tmux \
-                  --replace "#31748f" "#3e8fb0"
+              src = pkgs.fetchFromGitHub {
+                owner = "rose-pine";
+                repo = "tmux";
+                rev = "43d03507427ac3ad92cadfdf0d1307b8b0ff5128";
+                hash = "sha256-niFXeZRyJ26ukNxEgQjzGbNPPQPtpoe5/7cF/9VGOTk=";
+              };
+              postInstall = ''
+                substituteInPlace $target/rose-pine.tmux --replace "#31748f" "#3e8fb0"
               '';
               rtpFilePath = "rose-pine.tmux";
             }
@@ -126,18 +123,14 @@
         (pkgs.vimUtils.buildVimPlugin {
           pname = "rose-pine-vim";
           version = "2026-06-05";
-          src = pkgs.runCommand "rose-pine-vim-patched" { } ''
-            cp -r ${
-              pkgs.fetchFromGitHub {
-                owner = "rose-pine";
-                repo = "vim";
-                rev = "d7bc0ccbbd71d632f5737a1a880a0ed32d1be6bf";
-                sha256 = "1qia0hbcjfba4w4s6ax4l99f0hnnc1vqjkkhvgpicpk7jzq51r6h";
-              }
-            } $out
-            chmod -R u+w $out
-            substituteInPlace $out/colors/rosepine.vim \
-              --replace "#31748f" "#3e8fb0"
+          src = pkgs.fetchFromGitHub {
+            owner = "rose-pine";
+            repo = "vim";
+            rev = "d7bc0ccbbd71d632f5737a1a880a0ed32d1be6bf";
+            sha256 = "1qia0hbcjfba4w4s6ax4l99f0hnnc1vqjkkhvgpicpk7jzq51r6h";
+          };
+          postInstall = ''
+            substituteInPlace $out/colors/rosepine.vim --replace "#31748f" "#3e8fb0"
           '';
         })
       ];
@@ -156,26 +149,6 @@
         highlight StatusLine guibg=NONE ctermbg=NONE
         highlight StatusLineNC guibg=NONE ctermbg=NONE
       '';
-    };
-    helix = {
-      enable = true;
-      themes.rose-pine = fromTOML (
-        builtins.replaceStrings [ "#31748f" ] [ "#3e8fb0" ] (
-          builtins.readFile (
-            pkgs.fetchurl {
-              url = "https://raw.githubusercontent.com/rose-pine/helix/2e8b94d54d48980ac9bbdfa6aae40b02227b71c3/rose_pine.toml";
-              hash = "sha256-/Hf37vOO0JATRdGh9dbbblJUgOZaR41fL/V2Kg+sCes=";
-            }
-          )
-        )
-      );
-      settings = {
-        theme = "rose-pine";
-        editor = {
-          line-number = "relative";
-          cursor-shape.insert = "bar";
-        };
-      };
     };
     fzf = {
       enable = true;
@@ -207,24 +180,20 @@
       config = {
         color = "always";
         theme = "rose-pine";
-        style = "-numbers,-header,-grid,+changes";
+        style = "-numbers,-header,-grid,-changes";
       };
       themes.rose-pine = {
-        src =
-          let
-            src = pkgs.fetchFromGitHub {
-              owner = "rose-pine";
-              repo = "tm-theme";
-              rev = "6d556734541ccb04172e81fd58de4a35fff72d19";
-              sha256 = "0sk4aq8ia5rh6p4vgmxc6449ypmn8lzr6czv7vfvc1wvabdwdrz7";
-            };
-          in
-          pkgs.runCommand "rose-pine-patched" { } ''
-            cp -r ${src} $out
-            chmod -R u+w $out
-            substituteInPlace $out/dist/rose-pine.tmTheme --replace "#31748f" "#3e8fb0"
-            file = "dist/rose-pine.tmTheme";
+        src = pkgs.applyPatches {
+          src = pkgs.fetchFromGitHub {
+            owner = "rose-pine";
+            repo = "tm-theme";
+            rev = "6d556734541ccb04172e81fd58de4a35fff72d19";
+            sha256 = "0sk4aq8ia5rh6p4vgmxc6449ypmn8lzr6czv7vfvc1wvabdwdrz7";
+          };
+          postPatch = ''
+            substituteInPlace dist/rose-pine.tmTheme --replace "#31748f" "#3e8fb0"
           '';
+        };
         file = "dist/rose-pine.tmTheme";
       };
     };

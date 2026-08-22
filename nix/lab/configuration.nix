@@ -36,6 +36,7 @@
     python314
     uv
     kitty.terminfo
+    fastfetch
     tree-sitter
     luajitPackages.jsregexp
     shellcheck
@@ -47,7 +48,9 @@
     lua-language-server
     nixd
     nixfmt
-    fastfetch
+    vscode-json-languageserver
+    yaml-language-server
+    yamlfmt
   ];
   users = {
     users.loganp = {

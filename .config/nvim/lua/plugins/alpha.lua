@@ -14,8 +14,9 @@ theta.header.val = {
     '⣼⣿⣿⣿⡏⠀⠀⢸⣿⣿⣿⣿⡇⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠈⠻⢿⣿⣿⣿⣿⣿⡿⠟⠋⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⡟⠀⢸⣿⣿⣿⣿⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⠀⠀⠀',
     '', '', '', '', '', '', '', '', '', '',
 }
+theta.section_mru.val[1].opts.hl = '@function.builtin'
 theta.buttons.val = {
-    { type = 'text',    val = 'Quick links', opts = { hl = 'SpecialComment', position = 'center' } },
+    { type = 'text',    val = 'Shortcuts', opts = { hl = '@function.builtin', position = 'center' } },
     { type = 'padding', val = 1 },
     dashboard.button('e', '  New file', '<cmd>ene<CR>'),
     dashboard.button('c', '  Configuration', '<cmd>exe \'cd\' stdpath (\'config\')<CR>'),

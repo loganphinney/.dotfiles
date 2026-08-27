@@ -1,8 +1,10 @@
 vim.pack.add({ 'https://github.com/rose-pine/neovim' })
 require('rose-pine').setup({
     palette = { main = { pine = '#3e8fb0' } },
-    styles = { transparency = true, bold = false, italic = true },
+    styles = { transparency = true },
     highlight_groups = {
+        Cursor = { fg = 'base', bg = 'text' },
+        CursorIM = { fg = 'base', bg = 'text' },
         NoiceCmdlinePopupBorder = { fg = 'love' },
         NoiceCmdlinePopupBorderSearch = { fg = 'iris' },
         NoiceCmdlineIconSearch = { fg = 'foam' },

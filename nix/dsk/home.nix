@@ -7,7 +7,6 @@
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
-      PAGER = "bat --paging=always";
       NH_FLAKE = "$HOME/.dotfiles/nix/dsk";
     };
   };
@@ -22,6 +21,7 @@
         compinit -C; bashcompinit
       '';
       history = {
+        size = 50000;
         share = true;
         append = true;
         ignoreDups = true;

@@ -67,9 +67,9 @@
     };
     desktopManager.gnome.enable = true;
     displayManager = {
+      gdm.enable = true;
       autoLogin.enable = true;
       autoLogin.user = "loganp";
-      gdm.enable = true;
       defaultSession = "niri";
     };
     openssh = {
@@ -233,7 +233,7 @@
       shell = pkgs.zsh;
       packages = with pkgs; [
         yubioath-flutter
-        libreoffice-fresh
+        libreoffice-stable
         vlc
         proton-vpn
         qbittorrent

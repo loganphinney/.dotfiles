@@ -11,14 +11,22 @@ vim.api.nvim_create_user_command('PackUpdate', function()
 end, {})
 --DIAGNOSTIC MESSAGES
 vim.diagnostic.config({
-    virtual_text = {
-        prefix = '',
-        spacing = 2
-    },
     signs = true,
     underline = true,
     update_in_insert = false,
-    severity_sort = true
+    severity_sort = true,
+    virtual_text = {
+        spacing = 2,
+        prefix = function(diagnostic)
+            local icons = {
+                [vim.diagnostic.severity.ERROR] = '',
+                [vim.diagnostic.severity.WARN]  = '',
+                [vim.diagnostic.severity.INFO]  = '',
+                [vim.diagnostic.severity.HINT]  = '',
+            }
+            return icons[diagnostic.severity] or '󰝥'
+        end,
+    },
 })
 -- VIM.LSP.BUF.FORMAT
 vim.keymap.set('n', '<space>tt', function() vim.lsp.buf.format() end)

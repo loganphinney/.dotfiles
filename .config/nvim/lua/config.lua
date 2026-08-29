@@ -24,7 +24,7 @@ vim.diagnostic.config({
                 [vim.diagnostic.severity.INFO]  = '',
                 [vim.diagnostic.severity.HINT]  = '',
             }
-            return icons[diagnostic.severity] or '󰝥'
+            return icons[diagnostic.severity] or '•'
         end,
     },
 })

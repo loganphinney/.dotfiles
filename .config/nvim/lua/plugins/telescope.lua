@@ -8,7 +8,7 @@ local telescope = require('telescope')
 telescope.setup({
     defaults = {
         mappings = { i = { ['<C-h>'] = 'which_key' } },
-        layout_config = { horizontal = { preview_width = 0.65 } },
+        layout_config = { horizontal = { preview_width = 0.66 } },
     }
 })
 pcall(function() telescope.load_extension('fzf') end)

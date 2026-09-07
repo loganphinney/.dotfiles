@@ -6,15 +6,14 @@ vim.api.nvim_create_autocmd('FileType', { callback = function() pcall(vim.treesi
 require('nvim-treesitter').install {
     'bash',
     'python',
-    'nix',
     'perl',
     'lua',
+    'nix',
     --
     'json',
     'yaml',
     'toml',
     'ini',
-    'xml',
     --
     'awk',
     'regex',
@@ -23,7 +22,7 @@ require('nvim-treesitter').install {
     'typescript',
     --
     'markdown',
-    'markdown_inline',
+    'xml',
     --
     'git_config',
     'git_rebase',
@@ -31,4 +30,5 @@ require('nvim-treesitter').install {
     'gitignore',
     'gitattributes',
     'ssh_config',
+    'comment',
 }

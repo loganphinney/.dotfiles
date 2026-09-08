@@ -1,5 +1,11 @@
-{ pkgs, ... }:
 {
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+{
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
   home = {
     username = "loganp";
     homeDirectory = "/home/loganp";
@@ -14,7 +20,6 @@
     zsh = {
       enable = true;
       enableCompletion = true;
-      initContent = "PROMPT='%B%F{2}[%1~]%f%b%F{8}%#%f '";
       completionInit = ''
         fpath=(/run/current-system/sw/share/zsh/site-functions /run/current-system/sw/share/zsh/$ZSH_VERSION/functions $fpath)
         autoload -Uz compinit bashcompinit
@@ -29,11 +34,19 @@
       };
       plugins = [
         {
-          name = "fast-syntax-highlighting";
-          src = pkgs.zsh-fast-syntax-highlighting;
-          file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
+          name = "zsh-patina";
+          src = pkgs.zsh-patina.src;
         }
       ];
+      initContent =
+        let
+          prompt = lib.mkOrder 500 ''
+            PROMPT="%B%F{2}[%1~]%f%b%F{8}%#%f "
+          '';
+        in
+        lib.mkMerge [
+          prompt
+        ];
       shellAliases = {
         ".." = "cd ../";
         "~" = "cd ~/";
@@ -49,12 +62,12 @@
         lg = "lazygit";
         lava = "lavat -c black -k magenta -s 3";
         cmatrix = "cmatrix -C magenta";
-        nixed = "nvim ~/.dotfiles/nix/dsk";
-        nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/dsk";
-        nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/dsk";
+        nixed = "nvim -c 'cd $NH_FLAKE' $NH_FLAKE";
+        nixupdate = "sudo nixos-rebuild switch --flake $NH_FLAKE";
+        nixupgrade = "sudo nix flake update --flake $NH_FLAKE";
         nhupdate = "nh os switch --no-nom";
         nhupgrade = "nh os switch -u";
-        nhclean = "nh clean all -k 4";
+        nhclean = "nh clean all -k 3";
       };
     };
     direnv = {
@@ -68,7 +81,7 @@
       font.size = 11;
       shellIntegration.mode = "no-rc no-title";
       settings = {
-        sync_to_monitor = false;
+        sync_to_monitor = true;
         cursor_shape = "beam";
         cursor_trail = 1;
         cursor_trail_decay = "0.1 0.3";
@@ -90,8 +103,8 @@
         active_tab_background = "#26233a";
         inactive_tab_foreground = "#6e6a86";
         inactive_tab_background = "#191724";
-        active_border_color = "#403d52";
-        inactive_border_color = "#2a283e";
+        active_border_color = "#21202e";
+        inactive_border_color = "#21202e";
         wayland_titlebar_color = "#191724";
         hide_window_decorations = "titlebar-only";
         color0 = "#26233a";
@@ -119,6 +132,8 @@
       mouse = true;
       focusEvents = true;
       clock24 = true;
+      escapeTime = 0;
+      historyLimit = 50000;
       shortcut = "s";
       extraConfig = ''
         set -s extended-keys on
@@ -126,9 +141,12 @@
         set -g renumber-windows on
         set -g status-position top
         set -g pane-border-lines "single"
-        set -g pane-border-style "fg=#1f1d2e"
-        set -g pane-active-border-style "fg=#1f1d2e"
+        set -g pane-border-style "fg=#21202e"
+        set -g pane-active-border-style "fg=#21202e"
         set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
+        set -g mode-keys vi
+        bind -T copy-mode-vi v send -X begin-selection
+        bind -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"
         bind "|" split-window -h -c "#{pane_current_path}"
         bind "\\" split-window -fh -c "#{pane_current_path}"
         bind "-" split-window -v -c "#{pane_current_path}"
@@ -143,8 +161,8 @@
               src = pkgs.fetchFromGitHub {
                 owner = "rose-pine";
                 repo = "tmux";
-                rev = "43d03507427ac3ad92cadfdf0d1307b8b0ff5128";
-                hash = "sha256-niFXeZRyJ26ukNxEgQjzGbNPPQPtpoe5/7cF/9VGOTk=";
+                rev = "6222fc73a9ce0bf36ffd3a8ca7d2f3e516f5c9ef";
+                hash = "sha256-AiU3+RSw7Hj3SQ6q0ETV/7yaNl+ba2ykp3OomDL+4kw=";
               };
               postInstall = ''
                 substituteInPlace $target/rose-pine.tmux --replace "#31748f" "#3e8fb0"
@@ -154,7 +172,7 @@
           );
           extraConfig = ''
             set -g @rose_pine_variant 'main'
-            set -g @rose_pine_session_icon ''
+            set -g @rose_pine_session_icon '•'
             set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_disable_active_window_menu 'on'
             set -g @rose_pine_show_current_program 'on'
@@ -561,6 +579,7 @@
           start = [
             "launcher"
             "cpu"
+            "temp"
             "ram"
             "network_rx"
             "sysmon"
@@ -574,6 +593,10 @@
             visualization = "none";
             stat = "cpu_temp";
           };
+          temp = {
+            visualization = "none";
+            stat = "gpu_temp";
+          };
           ram = {
             visualization = "none";
             stat = "ram_pct";
@@ -581,10 +604,6 @@
           sysmon = {
             visualization = "none";
             stat = "disk_used";
-          };
-          temp = {
-            visualization = "none";
-            stat = "gpu_usage";
           };
           network_rx.visualization = "none";
           weather.show_condition = false;
@@ -669,22 +688,134 @@
         };
         theme = {
           builtin = "Rosé Pine";
-          community_palette = "Rose Pine Moon";
+          community_palette = "Rose Pine Alt";
+          custom_palette = "rose-pine";
+          source = "custom";
           mode = "dark";
-          source = "builtin";
-          wallpaper_scheme = "m3-content";
           templates = {
             enable_builtin_templates = false;
             enable_community_templates = false;
           };
         };
         wallpaper = {
-          directory = "/home/loganp/Pictures/rose-pine";
-          default.path = "/home/loganp/Pictures/rose-pine/felix-bacher--jEEnRx38wo.jpg";
-          monitors.DP-2.path = "/home/loganp/Pictures/rose-pine/felix-bacher--jEEnRx38wo.jpg";
+          directory = "/home/loganp/Pictures/backgrounds-rose-pine";
+          default.path = "/home/loganp/Pictures/backgrounds-rose-pine/felix-bacher--jEEnRx38wo.jpg";
+          monitors.DP-2.path = "/home/loganp/Pictures/backgrounds-rose-pine/felix-bacher--jEEnRx38wo.jpg";
         };
         weather.unit = "imperial";
       };
     };
+  };
+  home.file = {
+    ".config/noctalia/palettes/rose-pine.json".text = ''
+      {
+          "dark": {
+              "mPrimary": "#ebbcba",
+              "mOnPrimary": "#191724",
+              "mSecondary": "#9ccfd8",
+              "mOnSecondary": "#191724",
+              "mTertiary": "#3e8fb0",
+              "mOnTertiary": "#e0def4",
+              "mError": "#eb6f92",
+              "mOnError": "#191724",
+              "mSurface": "#191724",
+              "mOnSurface": "#e0def4",
+              "mSurfaceVariant": "#26233a",
+              "mOnSurfaceVariant": "#908caa",
+              "mOutline": "#403d52",
+              "mShadow": "#191724",
+              "mHover": "#524f67",
+              "mOnHover": "#e0def4",
+              "terminal": {
+                  "foreground": "#e0def4",
+                  "background": "#191724",
+                  "normal": {
+                      "black": "#26233a",
+                      "red": "#eb6f92",
+                      "green": "#3e8fb0",
+                      "yellow": "#f6c177",
+                      "blue": "#9ccfd8",
+                      "magenta": "#c4a7e7",
+                      "cyan": "#ebbcba",
+                      "white": "#e0def4"
+                  },
+                  "bright": {
+                      "black": "#6e6a86",
+                      "red": "#eb6f92",
+                      "green": "#3e8fb0",
+                      "yellow": "#f6c177",
+                      "blue": "#9ccfd8",
+                      "magenta": "#c4a7e7",
+                      "cyan": "#ebbcba",
+                      "white": "#e0def4"
+                  },
+                  "cursor": "#e0def4",
+                  "cursorText": "#191724",
+                  "selectionFg": "#e0def4",
+                  "selectionBg": "#403d52"
+              }
+          },
+          "light": {
+              "mPrimary": "#d7827e",
+              "mOnPrimary": "#faf4ed",
+              "mSecondary": "#56949F",
+              "mOnSecondary": "#faf4ed",
+              "mTertiary": "#286983",
+              "mOnTertiary": "#faf4ed",
+              "mError": "#b4637a",
+              "mOnError": "#faf4ed",
+              "mSurface": "#fffaf3",
+              "mOnSurface": "#575279",
+              "mSurfaceVariant": "#f2e9e1",
+              "mOnSurfaceVariant": "#797593",
+              "mOutline": "#dfdad9",
+              "mShadow": "#faf4ed",
+              "mHover": "#cecacd",
+              "mOnHover": "#575279",
+              "terminal": {
+                  "foreground": "#575279",
+                  "background": "#faf4ed",
+                  "normal": {
+                      "black": "#f2e9e1",
+                      "red": "#b4637a",
+                      "green": "#286983",
+                      "yellow": "#ea9d34",
+                      "blue": "#56949F",
+                      "magenta": "#907aa9",
+                      "cyan": "#d7827e",
+                      "white": "#575279"
+                  },
+                  "bright": {
+                      "black": "#9893a5",
+                      "red": "#b4637a",
+                      "green": "#286983",
+                      "yellow": "#ea9d34",
+                      "blue": "#56949F",
+                      "magenta": "#907aa9",
+                      "cyan": "#d7827e",
+                      "white": "#575279"
+                  },
+                  "cursor": "#575279",
+                  "cursorText": "#faf4ed",
+                  "selectionFg": "#575279",
+                  "selectionBg": "#dfdad9"
+              }
+          }
+      }
+    '';
+    ".config/zsh-patina/config.toml".text = ''
+      [highlighting]
+      theme = "file:$HOME/.config/zsh-patina/rose-pine.toml"
+    '';
+    ".config/zsh-patina/rose-pine.toml".text = ''
+      "comment" = "#6e6a86"
+      "string" = "blue"
+      "keyword" = { foreground = "#6e6a86", bold = true }
+      "variable.parameter" = "blue"
+      "dynamic.callable" = "green"
+      "dynamic.path" = { foreground = "magenta", underline = false }
+      [metadata]
+      extends = "patina"
+    '';
   };
 }

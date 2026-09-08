@@ -95,7 +95,9 @@
       enableBashCompletion = true;
       enableCompletion = true;
       enableGlobalCompInit = false;
-      promptInit = "";
+      promptInit = ''
+        PROMPT="%B%F{1}[%1~]%f%b%F{8}%#%f "
+      '';
     };
     neovim.enable = true;
     niri.enable = true;
@@ -196,6 +198,7 @@
       gnomeExtensions.color-picker
       gnomeExtensions.executor
       rose-pine-cursor
+      zsh-patina
     ];
     gnome.excludePackages = with pkgs; [
       snapshot
@@ -222,6 +225,9 @@
     ];
   };
   users = {
+    users.root = {
+      shell = pkgs.zsh;
+    };
     users.loganp = {
       isNormalUser = true;
       description = "Logan";

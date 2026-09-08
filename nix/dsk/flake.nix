@@ -1,14 +1,14 @@
 {
   inputs = {
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/=3.21.9";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     lanzaboote.url = "github:nix-community/lanzaboote/v1.1.0";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "https://flakehub.com/f/nix-community/home-manager/0.1";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     niri.url = "github:epireyn/niri-flake";
     niri.inputs.nixpkgs.follows = "nixpkgs";
-    noctalia.url = "github:noctalia-dev/noctalia/cachix";
+    noctalia.url = "github:noctalia-dev/noctalia/v5.0.1";
   };
   outputs =
     inputs@{
@@ -32,6 +32,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = ".bak";
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.loganp.imports = [
               ./home.nix
               niri.homeModules.niri

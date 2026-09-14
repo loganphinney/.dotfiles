@@ -7,52 +7,77 @@
     extra-substituters = [ "https://install.determinate.systems" ];
     extra-trusted-public-keys = [ "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM=" ];
   };
+  nixpkgs.config.permittedInsecurePackages = [ "intel-media-sdk-23.2.2" ];
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     loader.timeout = 1;
     kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [ "i915.enable_guc=2" ];
   };
   time.timeZone = "America/New_York";
   security.sudo.wheelNeedsPassword = false;
-  environment.systemPackages = with pkgs; [
-    gcc
-    gnumake
-    cargo
-    git
-    delta
-    wireguard-tools
-    wget
-    curl
-    dig
-    dnslookup
-    rsync
-    btop
-    lazydocker
-    eza
-    fd
-    ripgrep
-    jq
-    python314
-    uv
-    kitty.terminfo
-    fastfetch
-    tree-sitter
-    luajitPackages.jsregexp
-    shellcheck
-    shfmt
-    bash-language-server
-    pyright
-    ruff
-    perl5Packages.PLS
-    lua-language-server
-    nixd
-    nixfmt
-    vscode-json-languageserver
-    yaml-language-server
-    yamlfmt
-  ];
+  hardware = {
+    enableRedistributableFirmware = true;
+    graphics = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        intel-media-sdk
+        intel-vaapi-driver
+      ];
+    };
+  };
+  services.xserver.videoDrivers = [ "modesetting" ];
+  environment = {
+    sessionVariables = {
+      LIBVA_DRIVER_NAME = "iHD";
+    };
+    systemPackages = with pkgs; [
+      gcc
+      gnumake
+      cargo
+      git
+      delta
+      wireguard-tools
+      wget
+      curl
+      dig
+      dnslookup
+      rsync
+      btop
+      lazydocker
+      eza
+      fd
+      ripgrep
+      jq
+      python314
+      uv
+      kitty.terminfo
+      ffmpeg-full
+      intel-gpu-tools
+      zsh-patina
+      fastfetch
+      tree-sitter
+      luajitPackages.jsregexp
+      shellcheck
+      shfmt
+      bash-language-server
+      pyright
+      ruff
+      perl5Packages.PLS
+      lua-language-server
+      nixd
+      nixfmt
+      vscode-json-languageserver
+      yaml-language-server
+      yamlfmt
+    ];
+  };
   users = {
+    users.root = {
+      shell = pkgs.zsh;
+    };
     users.loganp = {
       isNormalUser = true;
       extraGroups = [
@@ -69,14 +94,16 @@
       clean.enable = true;
       clean.extraArgs = "--keep 4";
       clean.dates = "daily";
-      flake = "/etc/nixos";
+      flake = "/home/loganp/.dotfiles/nix/lab/";
     };
     zsh = {
       enable = true;
       enableBashCompletion = true;
       enableCompletion = true;
       enableGlobalCompInit = false;
-      promptInit = "";
+      promptInit = ''
+        PROMPT="%B%F{1}[%1~]%f%b%F{8}%#%f "
+      '';
     };
     neovim.enable = true;
     rust-motd = {

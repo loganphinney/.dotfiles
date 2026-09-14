@@ -1,5 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
   home = {
     username = "loganp";
     homeDirectory = "/home/loganp";
@@ -7,7 +8,6 @@
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
-      NH_FLAKE = "$HOME/.dotfiles/nix/lab";
     };
   };
   programs = {
@@ -28,9 +28,8 @@
       };
       plugins = [
         {
-          name = "fast-syntax-highlighting";
-          src = pkgs.zsh-fast-syntax-highlighting;
-          file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
+          name = "zsh-patina";
+          src = pkgs.zsh-patina.src;
         }
       ];
       shellAliases = {
@@ -46,9 +45,9 @@
         nv = "nvim";
         nvsu = "sudo -E nvim";
         lg = "lazygit";
-        nixed = "nvim ~/.dotfiles/nix/lab";
-        nixupdate = "sudo nixos-rebuild switch --flake ~/.dotfiles/nix/lab";
-        nixupgrade = "sudo nix flake update --flake ~/.dotfiles/nix/lab";
+        nixed = "nvim -c 'cd $NH_FLAKE' $NH_FLAKE";
+        nixupdate = "sudo nixos-rebuild switch --flake $NH_FLAKE";
+        nixupgrade = "sudo nix flake update --flake $NH_FLAKE";
         nhupdate = "nh os switch --no-nom";
         nhupgrade = "nh os switch -u";
         nhclean = "nh clean all -k 4";
@@ -67,6 +66,8 @@
       clock24 = true;
       shortcut = "s";
       extraConfig = ''
+        set -g default-terminal "xterm-256color"
+        set -as terminal-overrides ',xterm*:Tc'
         set -s extended-keys on
         set -g set-clipboard external
         set -g renumber-windows on
@@ -89,8 +90,8 @@
               src = pkgs.fetchFromGitHub {
                 owner = "rose-pine";
                 repo = "tmux";
-                rev = "43d03507427ac3ad92cadfdf0d1307b8b0ff5128";
-                hash = "sha256-niFXeZRyJ26ukNxEgQjzGbNPPQPtpoe5/7cF/9VGOTk=";
+                rev = "6222fc73a9ce0bf36ffd3a8ca7d2f3e516f5c9ef";
+                hash = "sha256-AiU3+RSw7Hj3SQ6q0ETV/7yaNl+ba2ykp3OomDL+4kw=";
               };
               postInstall = ''
                 substituteInPlace $target/rose-pine.tmux --replace "#31748f" "#3e8fb0"
@@ -99,8 +100,6 @@
             }
           );
           extraConfig = ''
-            set -g default-terminal "xterm-256color"
-            set -as terminal-overrides ',xterm*:Tc'
             set -g @rose_pine_variant 'main'
             set -g @rose_pine_session_icon ''
             set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
@@ -245,5 +244,21 @@
         };
       };
     };
+  };
+  home.file = {
+    ".config/zsh-patina/config.toml".text = ''
+      [highlighting]
+      theme = "file:$HOME/.config/zsh-patina/rose-pine.toml"
+    '';
+    ".config/zsh-patina/rose-pine.toml".text = ''
+      "comment" = "#6e6a86"
+      "string" = "blue"
+      "keyword" = { foreground = "#6e6a86", bold = true }
+      "variable.parameter" = "blue"
+      "dynamic.callable" = "green"
+      "dynamic.path" = { foreground = "magenta", underline = false }
+      [metadata]
+      extends = "patina"
+    '';
   };
 }

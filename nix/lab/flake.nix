@@ -1,8 +1,8 @@
 {
   inputs = {
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/=3.21.9";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "https://flakehub.com/f/nix-community/home-manager/0.1";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs =
@@ -22,6 +22,8 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = ".bak";
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.loganp = import ./home.nix;
           }
         ];

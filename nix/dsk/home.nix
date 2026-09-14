@@ -13,7 +13,6 @@
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
-      NH_FLAKE = "$HOME/.dotfiles/nix/dsk";
     };
   };
   programs = {

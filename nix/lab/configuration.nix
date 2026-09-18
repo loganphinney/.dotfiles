@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   imports = [ ./hardware-configuration.nix ];
   system.stateVersion = "26.05";
@@ -111,7 +111,7 @@
       enableMotdInSSHD = true;
       settings.banner = {
         color = "white";
-        command = "${pkgs.fastfetch}/bin/fastfetch --pipe false --structure-disabled title:shell:terminal:packages:display:colors:locale --logo-color-1 yellow --logo-color-2 green --logo-color-3 blue --logo-color-4 magenta --logo-color-5 red --logo-color-6 cyan";
+        command = "${pkgs.fastfetch}/bin/fastfetch --pipe false --structure-disabled title:shell:terminal:packages:display:locale --logo-color-1 yellow --logo-color-2 green --logo-color-3 blue --logo-color-4 magenta --logo-color-5 red --logo-color-6 cyan";
       };
     };
   };
@@ -374,88 +374,60 @@
           storage_inherit = true;
           storage_sync = "normal";
         };
-        pipeline = {
-          inputs = [
-            {
+        pipeline =
+          let
+            services = {
+              caddy = "caddy";
+              jellyfin = "jellyfin";
+              seerr = "seerr";
+              prowlarr = "prowlarr";
+              sonarr = "sonarr";
+              radarr = "radarr";
+              qbittorrent = "qbittorrent";
+              immich = "immich-server";
+              grafana = "grafana";
+            };
+          in
+          {
+            inputs = lib.mapAttrsToList (name: unit: {
               name = "systemd";
-              tag = "services.caddy";
-              systemd_filter = "_SYSTEMD_UNIT=caddy.service";
-            }
-            {
-              name = "systemd";
-              tag = "services.jellyfin";
-              systemd_filter = "_SYSTEMD_UNIT=jellyfin.service";
-            }
-            {
-              name = "systemd";
-              tag = "services.seerr";
-              systemd_filter = "_SYSTEMD_UNIT=seerr.service";
-            }
-            {
-              name = "systemd";
-              tag = "services.prowlarr";
-              systemd_filter = "_SYSTEMD_UNIT=prowlarr.service";
-            }
-            {
-              name = "systemd";
-              tag = "services.sonarr";
-              systemd_filter = "_SYSTEMD_UNIT=sonarr.service";
-            }
-            {
-              name = "systemd";
-              tag = "services.radarr";
-              systemd_filter = "_SYSTEMD_UNIT=radarr.service";
-            }
-            {
-              name = "systemd";
-              tag = "services.qbittorrent";
-              systemd_filter = "_SYSTEMD_UNIT=qbittorrent.service";
-            }
-            {
-              name = "systemd";
-              tag = "services.immich";
-              systemd_filter = "_SYSTEMD_UNIT=immich-server.service";
-            }
-            {
-              name = "systemd";
-              tag = "services.grafana";
-              systemd_filter = "_SYSTEMD_UNIT=grafana.service";
-            }
-          ];
-          filters = [
-            {
-              name = "record_modifier";
-              match = "*";
-              remove_key = [
-                "SYSLOG_FACILITY"
-                "PRIORITY"
-                "_BOOT_ID"
-                "_MACHINE_ID"
-                "_HOSTNAME"
-                "_RUNTIME_SCOPE"
-                "_TRANSPORT"
-                "_CAP_EFFECTIVE"
-                "_SYSTEMD_SLICE"
-                "_STREAM_ID"
-                "SYSLOG_IDENTIFIER"
-                "_EXE"
-                "_SYSTEMD_CGROUP"
-                "_SYSTEMD_INVOCATION_ID"
-                "_CMDLINE"
-              ];
-            }
-          ];
-          outputs = [
-            {
-              name = "loki";
-              match = "*";
-              host = "127.0.0.1";
-              port = 3100;
-              labels = "unit=$_SYSTEMD_UNIT";
-              line_format = "json";
-            }
-          ];
-        };
+              tag = "${name}";
+              systemd_filter = "_SYSTEMD_UNIT=${unit}.service";
+            }) services;
+            filters = [
+              {
+                name = "record_modifier";
+                match = "*";
+                remove_key = [
+                  "SYSLOG_FACILITY"
+                  "PRIORITY"
+                  "_BOOT_ID"
+                  "_MACHINE_ID"
+                  "_HOSTNAME"
+                  "_RUNTIME_SCOPE"
+                  "_TRANSPORT"
+                  "_CAP_EFFECTIVE"
+                  "_SYSTEMD_SLICE"
+                  "_STREAM_ID"
+                  "SYSLOG_IDENTIFIER"
+                  "_EXE"
+                  "_SYSTEMD_CGROUP"
+                  "_SYSTEMD_INVOCATION_ID"
+                  "_CMDLINE"
+                ];
+              }
+            ];
+            outputs = [
+              {
+                name = "loki";
+                match = "*";
+                host = "127.0.0.1";
+                port = 3100;
+                labels = "unit=$_SYSTEMD_UNIT";
+                line_format = "json";
+              }
+            ];
+          };
       };
     };
   };

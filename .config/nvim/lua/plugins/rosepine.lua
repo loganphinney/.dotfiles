@@ -5,6 +5,7 @@ require('rose-pine').setup({
     highlight_groups = {
         Cursor = { fg = 'base', bg = 'text' },
         CursorIM = { fg = 'base', bg = 'text' },
+        LineNr = { fg = 'highlight_med' },
         NoiceCmdlinePopupBorder = { fg = 'love' },
         NoiceCmdlinePopupBorderSearch = { fg = 'iris' },
         NoiceCmdlineIconSearch = { fg = 'foam' },

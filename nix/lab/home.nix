@@ -253,7 +253,7 @@
     ".config/zsh-patina/rose-pine.toml".text = ''
       "comment" = "#6e6a86"
       "string" = "blue"
-      "keyword" = { foreground = "#6e6a86", bold = true }
+      "keyword" = "#6e6a86"
       "variable.parameter" = "blue"
       "dynamic.callable" = "green"
       "dynamic.path" = { foreground = "magenta", underline = false }

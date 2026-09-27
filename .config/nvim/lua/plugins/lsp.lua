@@ -16,7 +16,6 @@ vim.lsp.enable({
     'yamlls',
     'ansiblels',
     'terraformls',
-    'ts_ls',
 })
 vim.lsp.config('*', { capabilities = capabilities })
 vim.lsp.config('lua_ls', {

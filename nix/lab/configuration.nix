@@ -12,7 +12,6 @@
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     loader.timeout = 1;
-    kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [ "i915.enable_guc=2" ];
   };
   time.timeZone = "America/New_York";
@@ -55,7 +54,6 @@
       uv
       kitty.terminfo
       ffmpeg-full
-      intel-gpu-tools
       zsh-patina
       fastfetch
       tree-sitter
@@ -208,6 +206,11 @@
       };
     };
   };
+  systemd.services.jellyfin = {
+    serviceConfig.ExecStartPost = [
+      "${pkgs.gnused}/bin/sed -i 's#<EnableMetrics>false</EnableMetrics>#<EnableMetrics>true</EnableMetrics>#' /var/lib/jellyfin/config/system.xml"
+    ];
+  };
   services = {
     openssh = {
       enable = true;
@@ -221,7 +224,14 @@
     power-profiles-daemon.enable = true;
     caddy = {
       enable = true;
+      globalConfig = ''
+        metrics {
+          per_host
+        }
+      '';
       virtualHosts."jellyfin.loganphinney.com".extraConfig = ''
+        @metrics path /metrics
+        respond @metrics 403
         reverse_proxy localhost:8096
       '';
       virtualHosts."seerr.loganphinney.com".extraConfig = ''
@@ -323,6 +333,20 @@
             }
           ];
         };
+        blackbox = {
+          enable = true;
+          configFile = pkgs.writeText "blackbox.yml" ''
+            modules:
+              http_2xx:
+                prober: http
+                timeout: 10s
+                http:
+                  valid_status_codes: [200]
+                  method: GET
+                  preferred_ip_protocol: ip4
+                  follow_redirects: true
+          '';
+        };
       };
       scrapeConfigs = [
         {
@@ -332,6 +356,45 @@
         {
           job_name = "process-exporter";
           static_configs = [ { targets = [ "127.0.0.1:9256" ]; } ];
+        }
+        {
+          job_name = "caddy";
+          static_configs = [ { targets = [ "127.0.0.1:2019" ]; } ];
+        }
+        {
+          job_name = "jellyfin";
+          static_configs = [ { targets = [ "127.0.0.1:8096" ]; } ];
+        }
+        {
+          job_name = "blackbox-http";
+          metrics_path = "/probe";
+          params = {
+            module = [ "http_2xx" ];
+          };
+          static_configs = [
+            {
+              targets = [
+                "https://jellyfin.loganphinney.com"
+                "https://seerr.loganphinney.com"
+                "https://grafana.loganphinney.com"
+                "https://immich.loganphinney.com"
+              ];
+            }
+          ];
+          relabel_configs = [
+            {
+              source_labels = [ "__address__" ];
+              target_label = "__param_target";
+            }
+            {
+              source_labels = [ "__param_target" ];
+              target_label = "instance";
+            }
+            {
+              target_label = "__address__";
+              replacement = "127.0.0.1:9115";
+            }
+          ];
         }
       ];
     };
@@ -346,7 +409,7 @@
             kvstore.store = "inmemory";
           };
           replication_factor = 1;
-          path_prefix = "/tmp/loki";
+          path_prefix = "/var/log/loki";
         };
         schema_config.configs = [
           {
@@ -360,7 +423,7 @@
             };
           }
         ];
-        storage_config.filesystem.directory = "/tmp/loki/chunks";
+        storage_config.filesystem.directory = "/var/log/loki/chunks";
       };
     };
     fluent-bit = {

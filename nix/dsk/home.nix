@@ -66,13 +66,15 @@
         nixupgrade = "sudo nix flake update --flake $NH_FLAKE";
         nhupdate = "nh os switch --no-nom";
         nhupgrade = "nh os switch -u";
-        nhclean = "nh clean all -k 3";
+        nhclean = "nh clean all -k 3 --no-gcroots";
       };
     };
     direnv = {
       enable = true;
       nix-direnv.enable = true;
       enableZshIntegration = true;
+      config.global.warn_timeout = "60s";
+      config.global.hide_env_diff = true;
     };
     kitty = {
       enable = true;
@@ -92,7 +94,7 @@
         initial_window_height = "40c";
         window_padding_width = 3;
         foreground = "#e0def4";
-        background = "#191724";
+        background = "#000000"; # 191724
         selection_foreground = "#e0def4";
         selection_background = "#403d52";
         cursor = "#e0def4";
@@ -171,6 +173,8 @@
           );
           extraConfig = ''
             set -g @rose_pine_variant 'main'
+            set -g @rose_pine_bar_bg_disable 'on'
+            set -g @rose_pine_bar_bg_disabled_color_option 'default'
             set -g @rose_pine_session_icon '•'
             set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_disable_active_window_menu 'on'
@@ -324,8 +328,8 @@
               pkg = pkgs.fetchFromGitHub {
                 owner = "rose-pine";
                 repo = "obsidian";
-                rev = "e2b47ad4ff24626b597d0b2a36250e22073760e7";
-                hash = "sha256-HSGFmmQcH2WlJBpPv2yek16iiz92leQbIspCN6oB1AA=";
+                rev = "08a7e5d35eb7c502a228f6a5ecfa4b3426dd9f7e";
+                hash = "sha256-CCpuikEQ0XjG9+buYe4dupIOM0j44EQ0fxnSPWRc+b4=";
               };
               enable = true;
             }
@@ -809,7 +813,7 @@
     ".config/zsh-patina/rose-pine.toml".text = ''
       "comment" = "#6e6a86"
       "string" = "blue"
-      "keyword" = { foreground = "#6e6a86", bold = true }
+      "keyword" = "#6e6a86"
       "variable.parameter" = "blue"
       "dynamic.callable" = "green"
       "dynamic.path" = { foreground = "magenta", underline = false }

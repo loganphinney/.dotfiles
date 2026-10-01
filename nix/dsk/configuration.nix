@@ -31,6 +31,7 @@
   time.timeZone = "America/New_York";
   boot = {
     loader.systemd-boot.enable = lib.mkForce false;
+    kernelPackages = pkgs.linuxPackages_latest;
     lanzaboote = {
       enable = true;
       pkiBundle = "/var/lib/sbctl";
@@ -188,7 +189,6 @@
       ansible-language-server
       ansible-lint
       terraform-ls
-      typescript-language-server
       gnome-tweaks
       xdg-terminal-exec
       gnomeExtensions.open-bar
@@ -200,6 +200,8 @@
       gnomeExtensions.executor
       rose-pine-cursor
       zsh-patina
+      libreoffice-stable
+      vlc
     ];
     gnome.excludePackages = with pkgs; [
       snapshot
@@ -240,8 +242,6 @@
       shell = pkgs.zsh;
       packages = with pkgs; [
         yubioath-flutter
-        libreoffice-stable
-        vlc
         proton-vpn
         qbittorrent
         darktable

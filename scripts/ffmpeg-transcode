@@ -1,62 +1,129 @@
-#!/usr/bin/env perl
-use strict;
-use warnings;
-use File::Basename;
-use File::Spec;
+#!/usr/bin/env bash
 
-$SIG{INT} = sub {
-    print "\nInterrupted by user (Ctrl+C). Aborting.\n";
-    exit 130;
-};
+set -u
 
-my $input_path = $ARGV[0];
-unless ($input_path) { die "Usage: $0 <input_file.mkv>\n"; }
+# Colors
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+RESET='\033[0m'
 
-print "Enter quality profile value (default=20): ";
-chomp( my $qp = <STDIN> );
-$qp = 20 unless $qp =~ /^\d+$/;
+trap 'echo; echo -e "${YELLOW}Interrupted by user (Ctrl+C). Aborting.${RESET}"; exit 130' INT
 
-my @input_files;
-if ( -d $input_path ) {
-    opendir( my $dh, $input_path )
-      or die "Cannot open directory $input_path: $!";
+input_path="${1:-}"
 
-    @input_files = map { File::Spec->catfile( $input_path, $_ ) }
-      grep { /\.mkv$/i && -f File::Spec->catfile( $input_path, $_ ) }
-      readdir($dh);
-    closedir($dh);
+if [[ -z "$input_path" ]]; then
+    echo -e "${RED}ERROR:${RESET} Usage: $0 <input_file.mkv|directory>"
+    exit 1
+fi
+
+if [[ ! -e "$input_path" ]]; then
+    echo -e "${RED}ERROR:${RESET} Invalid input: $input_path does not exist."
+    exit 1
+fi
+
+read -r -p "Enter quality profile value (default=20): " qp
+
+if [[ ! "$qp" =~ ^[0-9]+$ ]]; then
+    echo -e "${YELLOW}WARNING:${RESET} Invalid quality value. Using default QP=20."
+    qp=20
+fi
+
+mkdir -p "$HOME/Videos"
+
+process_file() {
+    local file="$1"
+    local output_file="$2"
+
+    echo -e "${CYAN}Processing: ${RESET}$file"
+    echo -e "${CYAN}Output:     ${RESET}$output_file"
+
+    if [[ -f "$output_file" ]]; then
+        echo -e "${YELLOW}WARNING:${RESET} Output already exists. Skipping."
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$output_file")"
+
+    local cmd=(
+        ffmpeg
+        -vaapi_device /dev/dri/renderD128
+        -i "$file"
+        -vf "format=nv12,hwupload"
+        -c:v h264_vaapi
+        -qp "$qp"
+        -map 0
+        -c:a copy
+        -c:s copy
+        "$output_file"
+    )
+
+    printf '%bRunning:%b' "$CYAN" "$RESET"
+    printf ' %q' "${cmd[@]}"
+    printf '\n'
+
+    "${cmd[@]}" </dev/null
+    local ret=$?
+
+    if ((ret != 0)); then
+        if ((ret > 128)); then
+            echo -e "${RED}ERROR:${RESET} ffmpeg died with signal $((ret - 128))"
+        else
+            echo -e "${RED}ERROR:${RESET} ffmpeg exited with status $ret"
+        fi
+
+        return "$ret"
+    fi
+
+    echo -e "${GREEN}SUCCESS:${RESET} $output_file"
 }
 
-elsif ( -f $input_path ) { push @input_files, $input_path; }
-else { die "Invalid input: $input_path is not a file or directory.\n"; }
+if [[ -d "$input_path" ]]; then
 
-( my $output_base = basename($input_path) ) =~ s/\.mkv$//;
-my $home = $ENV{'HOME'};
+    input_root="$(cd "$input_path" && pwd)"
 
-foreach my $file (@input_files) {
-    print "Processing: $file\n";
+    echo -e "${CYAN}Scanning recursively:${RESET} $input_root"
+    echo -e "${CYAN}Output directory:${RESET}     $HOME/Videos"
+    echo -e "${CYAN}Quality (QP):${RESET}          $qp"
 
-    ( my $output_base = basename($file) ) =~ s/\.mkv$//;
-    my $output_file = "$home/Videos/${output_base}-transcoded.mkv";
+    found=0
+    failed=0
+    skipped=0
 
-    my $cmd =
-        "ffmpeg -vaapi_device /dev/dri/renderD128 "
-      . "-i \"$file\" "
-      . "-vf 'format=nv12,hwupload' "
-      . "-c:v h264_vaapi -qp $qp "
-      . "-map 0 -c:a aac -c:s copy "
-      . "\"$output_file\"";
+    while IFS= read -r -d '' file; do
+        found=1
 
-    print "Running: $cmd\n";
-    my $ret = system($cmd);
-    if ( $ret == -1 ) {
-        die "Failed to execute ffmpeg: $!\n";
-    }
-    elsif ( $ret & 127 ) {
-        die sprintf( "ffmpeg died with signal %d\n", ( $ret & 127 ) );
-    }
-    elsif ( $ret != 0 ) {
-        die sprintf( "ffmpeg exited with non-zero status %d\n", ( $ret >> 8 ) );
-    }
-    print "Output: $output_file\n";
-}
+        relative_path="${file#"$input_root"/}"
+        relative_output="${relative_path%.mkv}-transcoded.mkv"
+        output_file="$HOME/Videos/$relative_output"
+
+        if [[ -f "$output_file" ]]; then
+            echo -e "${YELLOW}WARN:${RESET} Already exists, skipping: $output_file"
+            ((skipped++))
+            continue
+        fi
+
+        if ! process_file "$file" "$output_file"; then
+            ((failed++))
+        fi
+
+    done < <(find "$input_root" -type f -iname '*.mkv' -print0)
+
+    if ((found == 0)); then
+        echo -e "${YELLOW}WARNING:${RESET} No .mkv files found."
+        exit 0
+    fi
+
+    echo -e "${CYAN}Batch complete${RESET}"
+    echo -e "  Skipped: ${YELLOW}${skipped}${RESET}"
+    echo -e "  Failed:  ${RED}${failed}${RESET}"
+
+else
+    filename="$(basename "$input_path")"
+    output_base="${filename%.mkv}"
+    output_file="$HOME/Videos/${output_base}-transcoded.mkv"
+
+    process_file "$input_path" "$output_file"
+    exit $?
+fi

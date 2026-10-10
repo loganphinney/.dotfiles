@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+import csv
+import os
+import sys
+from collections import defaultdict
+
+
+def read_csv(filename):
+    with open(filename, "r", newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def date_key(date):
+    return date[6:10] + "-" + date[0:2] + "-" + date[3:5]
+
+
+def add_monthly_totals(rows):
+    monthly_totals = defaultdict(float)
+    for row in rows:
+        month = row["DATE"][6:10] + "-" + row["DATE"][0:2]
+        monthly_totals[month] += float(row["AMOUNT"])
+    for row in rows:
+        month = row["DATE"][6:10] + "-" + row["DATE"][0:2]
+        row["MONTHLY TOTAL"] = f"{monthly_totals[month]:.2f}"
+
+
+if len(sys.argv) == 3:
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+    rows = read_csv(input_file)
+    for row in rows:
+        row["FROM"] = os.path.basename(input_file)
+
+elif len(sys.argv) == 4:
+    checking_file = sys.argv[1]
+    savings_file = sys.argv[2]
+    output_file = sys.argv[3]
+    checking_rows = read_csv(checking_file)
+    savings_rows = read_csv(savings_file)
+    for row in checking_rows:
+        row["FROM"] = os.path.basename(checking_file)
+    for row in savings_rows:
+        row["FROM"] = os.path.basename(savings_file)
+    rows = checking_rows + savings_rows
+
+else:
+    print("Usage:")
+    print(f"  {sys.argv[0]} INPUT.csv OUTPUT.csv")
+    print(f"  {sys.argv[0]} CHECKING.csv SAVINGS.csv OUTPUT.csv")
+    sys.exit(1)
+
+rows.sort(key=lambda row: date_key(row["DATE"]), reverse=True)
+add_monthly_totals(rows)
+fieldnames = list(rows[0])
+fieldnames.remove("FROM")
+fieldnames.remove("MONTHLY TOTAL")
+fieldnames.extend(["FROM", "MONTHLY TOTAL"])
+
+with open(output_file, "w", newline="", encoding="utf-8") as f:
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(rows)
+
+print(f"Created: {output_file}")

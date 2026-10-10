@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+ssh lab "bash <<'EOF'
+    df -H /dev/nvme0n1p2 |
+        awk '{printf \"%s\\t%s\\t%s\\t%s\\n\", \$1, \$3, \$4, \$5}'
+    df -H /dev/sda1 |
+        awk 'NR > 1 {printf \"%s\\t%s\\t%s\\t%s\\n\", \$1, \$3, \$4, \$5}'
+EOF"

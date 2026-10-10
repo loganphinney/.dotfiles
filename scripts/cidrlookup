@@ -1,0 +1,219 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import ipaddress
+import os
+import re
+import shutil
+import subprocess
+import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class LookupResult:
+    address: ipaddress.IPv4Address
+    hostname: str
+
+
+NAME_PATTERNS = (
+    re.compile(r"^\s*Name:\s*(\S+)\s*$", re.IGNORECASE),
+    re.compile(r"\bname\s*=\s*(\S+)", re.IGNORECASE),
+)
+
+
+def positive_int(value: str) -> int:
+    try:
+        result = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("must be an integer") from exc
+    if result < 1:
+        raise argparse.ArgumentTypeError("must be greater than zero")
+    return result
+
+
+def positive_float(value: str) -> float:
+    try:
+        result = float(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("must be a number") from exc
+    if result <= 0:
+        raise argparse.ArgumentTypeError("must be greater than zero")
+    return result
+
+
+def parse_cidr(value: str) -> ipaddress.IPv4Network:
+    try:
+        network = ipaddress.ip_network(value, strict=False)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+    if not isinstance(network, ipaddress.IPv4Network):
+        raise argparse.ArgumentTypeError(f"{value!r} is not an IPv4 network")
+    return network
+
+
+def build_parser() -> argparse.ArgumentParser:
+    kwargs = {
+        "prog": "cidrlookup",
+        "description": (
+            "Perform parallel reverse-DNS lookups for IPv4 "
+            "addresses in one or more CIDR ranges."
+        ),
+        "formatter_class": argparse.ArgumentDefaultsHelpFormatter,
+    }
+    try:
+        parser = argparse.ArgumentParser(**kwargs, color=True)
+    except TypeError:
+        parser = argparse.ArgumentParser(**kwargs)
+    parser.add_argument(
+        "cidrs",
+        metavar="CIDR",
+        nargs="+",
+        help="IPv4 network to scan, e.g. 192.168.8.0/24",
+    )
+    parser.add_argument(
+        "-c",
+        "--concurrency",
+        metavar="N",
+        type=positive_int,
+        default=32,
+        help="maximum number of simultaneous lookups",
+    )
+    parser.add_argument(
+        "-t",
+        "--timeout",
+        metavar="SECONDS",
+        type=positive_float,
+        default=1.0,
+        help="DNS timeout for each lookup",
+    )
+    parser.add_argument(
+        "--no-color",
+        action="store_true",
+        help="disable colored output",
+    )
+    return parser
+
+
+def reverse_lookup(
+    address: ipaddress.IPv4Address,
+    timeout: float,
+) -> LookupResult | None:
+    dns_timeout = max(1, int(timeout + 0.999))
+    try:
+        completed = subprocess.run(
+            [
+                "nslookup",
+                f"-timeout={dns_timeout}",
+                str(address),
+            ],
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            timeout=dns_timeout + 1.0,
+            check=False,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        return None
+    output = completed.stdout
+    for line in output.splitlines():
+        for pattern in NAME_PATTERNS:
+            match = pattern.search(line)
+            if match:
+                hostname = match.group(1).rstrip(".")
+                if hostname:
+                    return LookupResult(
+                        address=address,
+                        hostname=hostname,
+                    )
+    return None
+
+
+def colors_enabled(no_color: bool) -> bool:
+    if no_color:
+        return False
+    if "NO_COLOR" in os.environ:
+        return False
+    return sys.stdout.isatty()
+
+
+def print_result(
+    result: LookupResult,
+    use_color: bool,
+) -> None:
+    address = str(result.address)
+    if use_color:
+        cyan = "\033[1;36m"
+        blue = "\033[0;34m"
+        reset = "\033[0m"
+        print(f"{cyan}{address:<15}{reset} {blue}{result.hostname}{reset}")
+    else:
+        print(f"{address:<15} {result.hostname}")
+
+
+def lookup_network(
+    network: ipaddress.IPv4Network,
+    concurrency: int,
+    timeout: float,
+    use_color: bool,
+) -> None:
+    print(f"{network.network_address} - {network.broadcast_address}")
+    addresses = list(network)
+    results: list[LookupResult] = []
+    with ThreadPoolExecutor(
+        max_workers=concurrency,
+        thread_name_prefix="dns",
+    ) as executor:
+        futures = {
+            executor.submit(
+                reverse_lookup,
+                address,
+                timeout,
+            ): address
+            for address in addresses
+        }
+        try:
+            for future in as_completed(futures):
+                result = future.result()
+                if result is not None:
+                    results.append(result)
+        except KeyboardInterrupt:
+            for future in futures:
+                future.cancel()
+            raise
+    results.sort(key=lambda result: int(result.address))
+    for result in results:
+        print_result(result, use_color)
+
+
+def main() -> int:
+    parser = build_parser()
+    args = parser.parse_args()
+    if shutil.which("nslookup") is None:
+        parser.error("nslookup was not found in PATH")
+    try:
+        networks = [parse_cidr(cidr) for cidr in args.cidrs]
+    except argparse.ArgumentTypeError as exc:
+        parser.error(str(exc))
+    use_color = colors_enabled(args.no_color)
+    try:
+        for index, network in enumerate(networks):
+            if index:
+                print()
+            lookup_network(
+                network=network,
+                concurrency=args.concurrency,
+                timeout=args.timeout,
+                use_color=use_color,
+            )
+    except KeyboardInterrupt:
+        print("\nInterrupted.", file=sys.stderr)
+        return 130
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

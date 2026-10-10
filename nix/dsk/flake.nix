@@ -2,13 +2,12 @@
   inputs = {
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
-    lanzaboote.url = "https://flakehub.com/f/nix-community/lanzaboote/1.1.0";
+    lanzaboote.url = "https://flakehub.com/f/nix-community/lanzaboote/1.2.0";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "https://flakehub.com/f/nix-community/home-manager/0.1";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     niri.url = "github:epireyn/niri-flake";
     niri.inputs.nixpkgs.follows = "nixpkgs";
-    noctalia.url = "github:noctalia-dev/noctalia/v5.1.0";
   };
   outputs =
     inputs@{
@@ -18,7 +17,6 @@
       lanzaboote,
       home-manager,
       niri,
-      noctalia,
       ...
     }:
     {
@@ -36,7 +34,6 @@
             home-manager.users.loganp.imports = [
               ./home.nix
               niri.homeModules.niri
-              noctalia.homeModules.default
             ];
           }
         ];

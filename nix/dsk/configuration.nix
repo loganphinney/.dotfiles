@@ -68,10 +68,35 @@
     };
     desktopManager.gnome.enable = true;
     displayManager = {
-      gdm.enable = true;
       autoLogin.enable = true;
       autoLogin.user = "loganp";
       defaultSession = "niri";
+      gdm.enable = false;
+      noctalia-greeter = {
+        enable = true;
+        passwordlessSyncUsers = [ "loganp" ];
+        settings = {
+          user.default = "loganp";
+          keyboard.layout = "us";
+          appearance.hide_logo = true;
+          clock = {
+            enabled = true;
+            position = "above-panel";
+            time_format = "{:%H:%M}";
+            date_format = "%A, %x";
+          };
+          output = {
+            name = "DP-2";
+            width = 2560;
+            height = 1440;
+            refresh_rate = 239.970;
+          };
+        };
+        cursorTheme = {
+          package = pkgs.rose-pine-cursor;
+          name = "BreezeX-RosePine-Linux";
+        };
+      };
     };
     openssh = {
       enable = true;
@@ -88,7 +113,7 @@
     nh = {
       enable = true;
       clean.enable = true;
-      clean.extraArgs = "--keep 3";
+      clean.extraArgs = "--keep 3 --no-gcroots";
       clean.dates = "daily";
       flake = "/home/loganp/.dotfiles/nix/dsk/";
     };
@@ -202,6 +227,7 @@
       zsh-patina
       libreoffice-stable
       vlc
+      easyeffects
     ];
     gnome.excludePackages = with pkgs; [
       snapshot

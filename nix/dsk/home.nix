@@ -65,7 +65,7 @@
         nixupdate = "sudo nixos-rebuild switch --flake $NH_FLAKE";
         nixupgrade = "sudo nix flake update --flake $NH_FLAKE";
         nhupdate = "nh os switch --no-nom";
-        nhupgrade = "nh os switch -u";
+        nhupgrade = "nh os switch -u --no-nom";
         nhclean = "nh clean all -k 3 --no-gcroots";
       };
     };
@@ -94,7 +94,7 @@
         initial_window_height = "40c";
         window_padding_width = 3;
         foreground = "#e0def4";
-        background = "#000000"; # 191724
+        background = "#191724";
         selection_foreground = "#e0def4";
         selection_background = "#403d52";
         cursor = "#e0def4";
@@ -563,6 +563,7 @@
     };
     noctalia = {
       enable = true;
+      checkConfig = true;
       settings = {
         bar.widgets = {
           center = [ "workspaces" ];
@@ -606,7 +607,7 @@
           };
           sysmon = {
             visualization = "none";
-            stat = "disk_used";
+            stat = "disk_free";
           };
           network_rx.visualization = "none";
           weather.show_condition = false;

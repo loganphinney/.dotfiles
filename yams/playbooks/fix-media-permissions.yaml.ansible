@@ -11,19 +11,19 @@
     group: media
 
   tasks:
-    - name: Fix ownership
+    - name: chown -R
       ansible.builtin.command:
         cmd: "chown -R {{ owner }}:{{ group }} {{ item }}"
       loop: "{{ media_roots }}"
       changed_when: true
 
-    - name: Fix directory permissions
+    - name: chmod 2775
       ansible.builtin.command:
         cmd: "find {{ item }} -type d -exec chmod 2775 {} +"
       loop: "{{ media_roots }}"
       changed_when: true
 
-    - name: Fix file permissions
+    - name: chmod 644
       ansible.builtin.command:
         cmd: "find {{ item }} -type f -exec chmod 644 {} +"
       loop: "{{ media_roots }}"

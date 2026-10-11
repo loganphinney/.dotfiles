@@ -49,7 +49,7 @@
         nixupdate = "sudo nixos-rebuild switch --flake $NH_FLAKE";
         nixupgrade = "sudo nix flake update --flake $NH_FLAKE";
         nhupdate = "nh os switch --no-nom";
-        nhupgrade = "nh os switch -u";
+        nhupgrade = "nh os switch -u --no-nom";
         nhclean = "nh clean all -k 4";
       };
     };
@@ -101,6 +101,8 @@
           );
           extraConfig = ''
             set -g @rose_pine_variant 'main'
+            set -g @rose_pine_bar_bg_disable 'on'
+            set -g @rose_pine_bar_bg_disabled_color_option 'default'
             set -g @rose_pine_session_icon ''
             set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_disable_active_window_menu 'on'

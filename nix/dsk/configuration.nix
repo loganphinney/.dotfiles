@@ -12,13 +12,12 @@
     extra-substituters = [
       "https://install.determinate.systems"
       "https://niri-epireyn.cachix.org"
-      "https://noctalia.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
       "niri-epireyn.cachix.org-1:tlVyFN7CtsDT+ZcLPS+ekFWeT1X6X4OqvWqbBMyIzFA="
-      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
     ];
+    experimental-features = [ "baked-derivations" ];
   };
   networking = {
     hostName = "nix-dsk";
@@ -108,6 +107,22 @@
       group = "media";
     };
     power-profiles-daemon.enable = true;
+    /*
+      llama-cpp = {
+        enable = true;
+        package = pkgs.llama-cpp-rocm;
+        settings = {
+          port = 9999;
+          hf-repo = "unsloth/gpt-oss-20b-GGUF:UD-Q4_K_XL";
+          jinja = true;
+          flash-attn = "on";
+          temp = 1.0;
+          "top-p" = 1.0;
+          "top-k" = 0;
+          "n-gpu-layers" = 99;
+        };
+      };
+    */
   };
   programs = {
     nh = {
@@ -157,100 +172,100 @@
   environment = {
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
-      nom
-      xwayland-satellite
-      sbctl
-      openssh
-      git
-      delta
-      wget
-      curl
-      rsync
-      gcc
-      nmap
-      dnslookup
-      dig
-      ipmitool
-      python314
-      uv
-      nodejs_24
-      jq
-      stow
-      tmux
-      wireguard-tools
-      dnslookup
-      dig
-      sysstat
-      ffmpeg
-      btop-cuda
-      wl-clipboard
-      bat
-      eza
-      ripgrep
-      fd
-      fzf
-      nodejs_24
-      jre
-      cargo
-      gnumake
-      fastfetch
       ansible
-      kubectl
-      minikube
-      tree-sitter
-      luajitPackages.jsregexp
-      bash-language-server
-      shellcheck
-      shfmt
-      lua-language-server
-      perl5Packages.PLS
-      nixd
-      nixfmt
-      pyright
-      ruff
-      vscode-json-languageserver
-      yaml-language-server
-      yamlfmt
       ansible-language-server
       ansible-lint
-      terraform-ls
+      bash-language-server
+      bat
+      btop-cuda
+      cargo
+      claude-code
+      curl
+      delta
+      dig
+      dnslookup
+      easyeffects
+      eza
+      fastfetch
+      fd
+      ffmpeg
+      fzf
+      gcc
+      git
       gnome-tweaks
-      xdg-terminal-exec
-      gnomeExtensions.open-bar
+      gnomeExtensions.color-picker
+      gnomeExtensions.executor
       gnomeExtensions.hide-top-bar
+      gnomeExtensions.open-bar
       gnomeExtensions.user-themes
       gnomeExtensions.vitals
       gnomeExtensions.wallpaper-slideshow
-      gnomeExtensions.color-picker
-      gnomeExtensions.executor
-      rose-pine-cursor
-      zsh-patina
+      gnumake
+      ipmitool
+      jq
+      jre
+      kiro-cli
+      kubectl
       libreoffice-stable
+      linux-wallpaperengine
+      lua-language-server
+      luajitPackages.jsregexp
+      minikube
+      nixd
+      nixfmt
+      nmap
+      nodejs_24
+      nom
+      openssh
+      perl5Packages.PLS
+      pyright
+      python314
+      ripgrep
+      rose-pine-cursor
+      rsync
+      ruff
+      sbctl
+      shellcheck
+      shfmt
+      stow
+      sysstat
+      terraform-ls
+      tmux
+      tree-sitter
+      uv
       vlc
-      easyeffects
+      vscode-json-languageserver
+      wget
+      wireguard-tools
+      wl-clipboard
+      xdg-terminal-exec
+      xwayland-satellite
+      yaml-language-server
+      yamlfmt
+      zsh-patina
     ];
     gnome.excludePackages = with pkgs; [
-      snapshot
       decibels
       epiphany
-      simple-scan
-      showtime
-      yelp
       geary
-      seahorse
       gnome-calculator
       gnome-calendar
       gnome-characters
       gnome-clocks
+      gnome-connections
       gnome-contacts
       gnome-font-viewer
       gnome-maps
       gnome-music
       gnome-system-monitor
-      gnome-weather
-      gnome-connections
-      gnome-tour
       gnome-text-editor
+      gnome-tour
+      gnome-weather
+      seahorse
+      showtime
+      simple-scan
+      snapshot
+      yelp
     ];
   };
   users = {
@@ -267,18 +282,18 @@
       ];
       shell = pkgs.zsh;
       packages = with pkgs; [
-        yubioath-flutter
-        proton-vpn
-        qbittorrent
-        darktable
-        prismlauncher
-        dolphin-emu
-        the-powder-toy
         cava
         cbonsai
         cmatrix
+        darktable
+        dolphin-emu
         lavat
         pokeget-rs
+        prismlauncher
+        proton-vpn
+        qbittorrent
+        the-powder-toy
+        yubioath-flutter
       ];
     };
     groups.media.members = [ "jellyfin" ];

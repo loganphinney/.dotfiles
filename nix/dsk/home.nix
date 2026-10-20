@@ -166,7 +166,7 @@
                 hash = "sha256-AiU3+RSw7Hj3SQ6q0ETV/7yaNl+ba2ykp3OomDL+4kw=";
               };
               postInstall = ''
-                substituteInPlace $target/rose-pine.tmux --replace "#31748f" "#3e8fb0"
+                substituteInPlace $target/rose-pine.tmux --replace-fail "#31748f" "#3e8fb0"
               '';
               rtpFilePath = "rose-pine.tmux";
             }
@@ -203,7 +203,7 @@
             sha256 = "1qia0hbcjfba4w4s6ax4l99f0hnnc1vqjkkhvgpicpk7jzq51r6h";
           };
           postInstall = ''
-            substituteInPlace $out/colors/rosepine.vim --replace "#31748f" "#3e8fb0"
+            substituteInPlace $out/colors/rosepine.vim --replace-fail "#31748f" "#3e8fb0"
           '';
         })
       ];
@@ -264,7 +264,7 @@
             sha256 = "0sk4aq8ia5rh6p4vgmxc6449ypmn8lzr6czv7vfvc1wvabdwdrz7";
           };
           postPatch = ''
-            substituteInPlace dist/rose-pine.tmTheme --replace "#31748f" "#3e8fb0"
+            substituteInPlace dist/rose-pine.tmTheme --replace-fail "#31748f" "#3e8fb0"
           '';
         };
         file = "dist/rose-pine.tmTheme";
@@ -564,22 +564,26 @@
     noctalia = {
       enable = true;
       checkConfig = true;
+      package =
+        let
+          fivetwoone = fetchTarball {
+            url = "https://github.com/NixOS/nixpkgs/archive/f4549c33dbad23b36d165bbcc037ab6dbdbf4e5f.tar.gz";
+            sha256 = "sha256-oI4dM3zj+U3y1cLf90CxcROSwo4HvVO8hAMJuiINNkc=";
+          };
+          pinnedPkgs = import fivetwoone { system = pkgs.system; };
+        in
+        pinnedPkgs.noctalia;
       settings = {
         bar.widgets = {
-          center = [ "workspaces" ];
-          end = [
-            "caffeine"
-            "weather"
-            "notifications"
-            "clock"
-            "control-center"
-            "session"
-          ];
+          auto_hide = true;
+          reserve_space = false;
           margin_edge = 0;
           margin_ends = 0;
           padding = 9;
           radius = 0;
           shadow = false;
+          thickness = 28;
+          widget_spacing = 9;
           start = [
             "launcher"
             "cpu"
@@ -588,9 +592,18 @@
             "network_rx"
             "sysmon"
           ];
-          thickness = 28;
-          widget_spacing = 9;
+          center = [ "workspaces" ];
+          end = [
+            "caffeine"
+            "weather"
+            "notifications"
+            "clock"
+            "w-engine-widget"
+            "control-center"
+            "session"
+          ];
         };
+        plugins.enabled = [ "tadomika_ari/w-engine" ];
         widget = {
           launcher.glyph = "terminal-2";
           cpu = {
@@ -615,6 +628,7 @@
           clock.format = "{:%H:%M:%S}";
           control-center.glyph = "layout-dashboard";
           session.glyph = "power";
+          w-engine-widget.type = "tadomika_ari/w-engine:w-engine-widget";
         };
         control_center.shortcuts = [
           { type = "wifi"; }

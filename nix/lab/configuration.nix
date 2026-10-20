@@ -409,7 +409,7 @@
             kvstore.store = "inmemory";
           };
           replication_factor = 1;
-          path_prefix = "/var/log/loki";
+          path_prefix = "/tmp/loki";
         };
         schema_config.configs = [
           {
@@ -423,7 +423,7 @@
             };
           }
         ];
-        storage_config.filesystem.directory = "/var/log/loki/chunks";
+        storage_config.filesystem.directory = "/tmp/loki/chunks";
       };
     };
     fluent-bit = {

@@ -16,6 +16,10 @@ vim.lsp.enable({
     'yamlls',
     'ansiblels',
     'terraformls',
+    'tflint',
+    'ts_ls',
+    'html',
+    'cssls',
 })
 vim.lsp.config('*', { capabilities = capabilities })
 vim.lsp.config('lua_ls', {
@@ -25,6 +29,20 @@ vim.lsp.config('lua_ls', {
             workspace = { library = { vim.env.VIMRUNTIME } }
         }
     }
+})
+vim.lsp.config('pyright', {
+    handlers = {
+        ['$/progress'] = function(err, result, ctx)
+            if result.token == (vim.g.basedpyright_progress_token or result.token) then
+                vim.g.basedpyright_progress_token = result.token
+                vim.lsp.handlers['$/progress'](err, result, ctx)
+            end
+        end,
+    },
+})
+vim.lsp.config('terraformls', {
+    capabilities = capabilities,
+    on_attach = function(client) client.server_capabilities.semanticTokensProvider = nil end,
 })
 vim.filetype.add({
     extension = {

@@ -10,14 +10,15 @@ require('rose-pine').setup({
         NoiceCmdlinePopupBorderSearch = { fg = 'iris' },
         NoiceCmdlineIconSearch = { fg = 'foam' },
         ['@keyword.directive'] = { fg = 'subtle' },
-        ['@property.json'] = { fg = 'foam' },
+        ['@property.json'] = { fg = 'pine' },
         ['@string.json'] = { fg = 'text' },
         ['@number.json'] = { fg = 'text' },
         ['@boolean.json'] = { fg = 'rose' },
-        ['@property.yaml'] = { fg = 'foam' },
+        ['@property.yaml'] = { fg = 'pine' },
         ['@string.yaml'] = { fg = 'text' },
         ['@number.yaml'] = { fg = 'text' },
         ['@boolean.yaml'] = { fg = 'rose' },
+        ['@variable.builtin.terraform'] = { fg = 'iris' },
     }
 })
 vim.cmd('colorscheme rose-pine')

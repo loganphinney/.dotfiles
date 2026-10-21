@@ -5,8 +5,11 @@ vim.pack.add({
 vim.api.nvim_create_autocmd('FileType', { callback = function() pcall(vim.treesitter.start) end, })
 require('nvim-treesitter').install {
     'bash',
+    'zsh',
     'python',
     'perl',
+    'go',
+    'java',
     'lua',
     'nix',
     --
@@ -14,15 +17,24 @@ require('nvim-treesitter').install {
     'yaml',
     'toml',
     'ini',
-    --
-    'awk',
-    'regex',
-    --
-    'html',
-    'typescript',
-    --
     'markdown',
     'xml',
+    --
+    'sql',
+    'awk',
+    'regex',
+    'jinja',
+    --
+    'make',
+    'nginx',
+    'dockerfile',
+    'helm',
+    'terraform',
+    'hcl',
+    --
+    'html',
+    'css',
+    'typescript',
     --
     'git_config',
     'git_rebase',
@@ -31,4 +43,9 @@ require('nvim-treesitter').install {
     'gitattributes',
     'ssh_config',
     'comment',
+    'vimdoc',
 }
+require('treesitter-context').setup({
+    max_lines = 4,
+    trim_scope = 'outer',
+})

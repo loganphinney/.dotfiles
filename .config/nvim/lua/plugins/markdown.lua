@@ -5,5 +5,5 @@ vim.pack.add({
 require('render-markdown').setup({
     latex = { enabled = false },
     heading = { icons = {} },
-    code = { disable_background = true }
+    code = { disable_background = true, highlight_border = false },
 })

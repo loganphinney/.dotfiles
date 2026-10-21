@@ -4,3 +4,4 @@ require('conform').setup({
         yaml = { 'yamlfmt' }
     }
 })
+vim.o.formatexpr = 'v:lua.require\'conform\'.formatexpr()'

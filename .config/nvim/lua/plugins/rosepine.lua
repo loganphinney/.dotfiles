@@ -6,6 +6,7 @@ require('rose-pine').setup({
         Cursor = { fg = 'base', bg = 'text' },
         CursorIM = { fg = 'base', bg = 'text' },
         LineNr = { fg = 'highlight_med' },
+        Folded = { fg = 'highlight_high' },
         NoiceCmdlinePopupBorder = { fg = 'love' },
         NoiceCmdlinePopupBorderSearch = { fg = 'iris' },
         NoiceCmdlineIconSearch = { fg = 'foam' },

@@ -25,7 +25,7 @@
         compinit -C; bashcompinit
       '';
       history = {
-        size = 50000;
+        size = 250000;
         share = true;
         append = true;
         ignoreDups = true;
@@ -43,12 +43,10 @@
             PROMPT="%B%F{2}[%1~]%f%b%F{8}%#%f "
           '';
         in
-        lib.mkMerge [
-          prompt
-        ];
+        lib.mkMerge [ prompt ];
       shellAliases = {
         ".." = "cd ../";
-        "~" = "cd ~/";
+        "~" = "cd $HOME";
         cl = "clear";
         ls = "eza";
         la = "eza -a";
@@ -66,15 +64,17 @@
         nixupgrade = "sudo nix flake update --flake $NH_FLAKE";
         nhupdate = "nh os switch --no-nom";
         nhupgrade = "nh os switch -u --no-nom";
-        nhclean = "nh clean all -k 3 --no-gcroots";
       };
     };
     direnv = {
       enable = true;
       nix-direnv.enable = true;
       enableZshIntegration = true;
-      config.global.warn_timeout = "60s";
-      config.global.hide_env_diff = true;
+      config.global = {
+        warn_timeout = "60s";
+        hide_env_diff = true;
+        log_format = "-";
+      };
     };
     kitty = {
       enable = true;
@@ -208,29 +208,48 @@
         })
       ];
       extraConfig = ''
+        set termguicolors
         set mouse=a
         syntax on
+        set number
         set relativenumber
-        set termguicolors
         set tabstop=4
+        set softtabstop=4
         set shiftwidth=4
+        set expandtab
+        set smarttab
         set autoindent
         set smartindent
         set wildmenu
+        set ignorecase
+        set nohlsearch
+        set nowrap
+        set signcolumn=yes
         let g:disable_bg = 1
         colorscheme rosepine
         highlight StatusLine guibg=NONE ctermbg=NONE
         highlight StatusLineNC guibg=NONE ctermbg=NONE
+        let &t_SI = "\e[5 q" 
+        let &t_SR = "\e[3 q"
+        let &t_EI = "\e[2 q"
+        let &t_ti = "\e[2 q"
+        let &t_te = "\e[0 q"
       '';
+    };
+    eza = {
+      enable = true;
+      extraOptions = [ "--short-nix" ];
     };
     fzf = {
       enable = true;
       enableZshIntegration = true;
       defaultOptions = [
-        "--style full"
+        "--layout=reverse --popup=center,90%"
         "--preview 'bat --color=always --theme=rose-pine --style=-numbers,-header,-grid,+changes {}'"
       ];
-      historyWidget.options = [ "--no-preview" ];
+      historyWidget.options = [ "--popup=center,66% --no-preview" ];
+      changeDirWidget.options = [ "--popup=center,66% --no-preview" ];
+      fileWidget.options = [ "--preview-window=right:66%" ];
       colors = {
         fg = "#908caa";
         bg = "#191724";
@@ -834,6 +853,14 @@
       "dynamic.path" = { foreground = "magenta", underline = false }
       [metadata]
       extends = "patina"
+    '';
+    ".config/nvimpager/init.lua".text = ''
+      local nvim_site = vim.fn.expand('$HOME/.local/share/nvim/site')
+      vim.opt.runtimepath:prepend(nvim_site)
+      vim.opt.runtimepath:prepend(nvim_site .. '/pack/core/opt/nvim-treesitter')
+      vim.opt.runtimepath:prepend(nvim_site .. '/pack/core/opt/neovim')
+      dofile(vim.fn.expand('$HOME/.config/nvim/lua/plugins/rosepine.lua'))
+      dofile(vim.fn.expand('$HOME/.config/nvim/lua/plugins/treesitter.lua'))
     '';
   };
 }

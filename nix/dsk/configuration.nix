@@ -52,13 +52,13 @@
   services = {
     printing.enable = false;
     pulseaudio.enable = false;
+    pcscd.enable = true;
     pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
     };
-    pcscd.enable = true;
     xserver = {
       enable = true;
       xkb.layout = "us";
@@ -185,7 +185,6 @@
       dig
       dnslookup
       easyeffects
-      eza
       fastfetch
       fd
       ffmpeg
@@ -216,6 +215,7 @@
       nmap
       nodejs_24
       nom
+      nvimpager
       openssh
       perl5Packages.PLS
       pyright

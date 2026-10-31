@@ -45,6 +45,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end
     end,
 })
+-- WRAP LINES IN MARKDOWN
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'markdown',
+    callback = function()
+        vim.opt_local.wrap = true
+        vim.opt_local.linebreak = true
+        vim.opt_local.breakindent = true
+    end
+})
 -- RESTORE CURSOR STYLE ON EXIT
 vim.api.nvim_create_autocmd({ 'VimEnter', 'VimResume' }, {
     pattern = '*',

@@ -7,6 +7,7 @@ vim.api.nvim_create_autocmd('FileType', {
         if pcall(vim.treesitter.start) then
             vim.wo.foldmethod = 'expr'
             vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+            vim.opt.fillchars:append({ fold = '─' })
             vim.o.foldtext = ''
             vim.o.foldlevelstart = 99
             vim.o.foldlevel = 99

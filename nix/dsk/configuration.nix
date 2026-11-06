@@ -12,10 +12,12 @@
     extra-substituters = [
       "https://install.determinate.systems"
       "https://niri-epireyn.cachix.org"
+      "https://umbriel.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
       "niri-epireyn.cachix.org-1:tlVyFN7CtsDT+ZcLPS+ekFWeT1X6X4OqvWqbBMyIzFA="
+      "umbriel.cachix.org-1:JfNq/2yg2S6D6z4Z2dVSZrZlDPQTKtexB6GAVLD98nw="
     ];
     experimental-features = [ "baked-derivations" ];
   };
@@ -143,6 +145,7 @@
     };
     neovim.enable = true;
     niri.enable = true;
+    umbriel.enable = true;
     firefox.enable = true;
     steam.enable = true;
     steam.extraCompatPackages = with pkgs; [ proton-ge-bin ];

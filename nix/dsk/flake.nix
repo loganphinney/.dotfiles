@@ -8,6 +8,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     niri.url = "github:epireyn/niri-flake";
     niri.inputs.nixpkgs.follows = "nixpkgs";
+    umbriel.url = "github:noctalia-dev/umbriel/cachix";
   };
   outputs =
     inputs@{
@@ -34,6 +35,7 @@
             home-manager.users.loganp.imports = [
               ./home.nix
               niri.homeModules.niri
+              inputs.umbriel.homeModules.default
             ];
           }
         ];

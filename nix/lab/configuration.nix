@@ -214,6 +214,42 @@
           Priority = 30002;
           Family = "both";
         }
+        {
+          Table = 1000;
+          User = "sonarr";
+          Priority = 30003;
+          Family = "both";
+        }
+        {
+          Table = 2000;
+          User = "sonarr";
+          Priority = 30004;
+          Family = "both";
+        }
+        {
+          Table = 1000;
+          User = "radarr";
+          Priority = 30005;
+          Family = "both";
+        }
+        {
+          Table = 2000;
+          User = "radarr";
+          Priority = 30006;
+          Family = "both";
+        }
+        {
+          Table = 1000;
+          User = "prowlarr";
+          Priority = 30007;
+          Family = "both";
+        }
+        {
+          Table = 2000;
+          User = "prowlarr";
+          Priority = 30008;
+          Family = "both";
+        }
       ];
     };
     netdevs."10-killswitch" = {

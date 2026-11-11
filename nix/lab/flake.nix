@@ -1,9 +1,10 @@
 {
   inputs = {
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     home-manager.url = "https://flakehub.com/f/nix-community/home-manager/0.1";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    agenix.url = "github:ryantm/agenix";
   };
   outputs =
     inputs@{
@@ -11,13 +12,15 @@
       nixpkgs,
       determinate,
       home-manager,
+      agenix,
       ...
     }:
     {
       nixosConfigurations.nix-lab = nixpkgs.lib.nixosSystem {
         modules = [
-          determinate.nixosModules.default
           ./configuration.nix
+          determinate.nixosModules.default
+          agenix.nixosModules.default
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;

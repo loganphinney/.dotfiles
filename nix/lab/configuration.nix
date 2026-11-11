@@ -9,6 +9,7 @@
   };
   nixpkgs.config.permittedInsecurePackages = [ "intel-media-sdk-23.2.2" ];
   boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     loader.timeout = 1;
@@ -86,6 +87,22 @@
     };
     groups.media = { };
   };
+  age.secrets = {
+    proton-key = {
+      file = ./secrets/proton.key.age;
+      path = "/run/secrets/proton.key";
+      mode = "0400";
+      owner = "systemd-network";
+      group = "root";
+    };
+    grafana-key = {
+      file = ./secrets/grafana.key.age;
+      path = "/run/secrets/grafana.key";
+      mode = "0400";
+      owner = "grafana";
+      group = "root";
+    };
+  };
   programs = {
     nh = {
       enable = true;
@@ -154,7 +171,7 @@
         Name = "wg0";
       };
       wireguardConfig = {
-        PrivateKeyFile = /etc/wireguard/proton.key;
+        PrivateKeyFile = "/run/secrets/proton.key";
         RouteTable = 1000;
         FirewallMark = 42;
       };
@@ -455,6 +472,7 @@
             inputs = lib.mapAttrsToList (name: unit: {
               name = "systemd";
               tag = "${name}";
+              read_from_tail = true;
               systemd_filter = "_SYSTEMD_UNIT=${unit}.service";
             }) services;
             filters = [

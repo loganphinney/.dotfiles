@@ -34,7 +34,7 @@
       ];
       shellAliases = {
         ".." = "cd ../";
-        "~" = "cd ~/";
+        "~" = "cd $HOME";
         cl = "clear";
         ls = "eza";
         la = "eza -a";
@@ -57,6 +57,11 @@
       enable = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
+      config.global = {
+        warn_timeout = "60s";
+        hide_env_diff = true;
+        log_format = "-";
+      };
     };
     tmux = {
       enable = true;
@@ -87,6 +92,7 @@
             mkTmuxPlugin {
               pluginName = "rose-pine-tmux";
               version = "1-unstable-2026-07-23";
+              rtpFilePath = "rose-pine.tmux";
               src = pkgs.fetchFromGitHub {
                 owner = "rose-pine";
                 repo = "tmux";
@@ -94,9 +100,8 @@
                 hash = "sha256-AiU3+RSw7Hj3SQ6q0ETV/7yaNl+ba2ykp3OomDL+4kw=";
               };
               postInstall = ''
-                substituteInPlace $target/rose-pine.tmux --replace "#31748f" "#3e8fb0"
+                substituteInPlace $target/rose-pine.tmux --replace-fail "#31748f" "#3e8fb0"
               '';
-              rtpFilePath = "rose-pine.tmux";
             }
           );
           extraConfig = ''
@@ -131,34 +136,53 @@
             sha256 = "1qia0hbcjfba4w4s6ax4l99f0hnnc1vqjkkhvgpicpk7jzq51r6h";
           };
           postInstall = ''
-            substituteInPlace $out/colors/rosepine.vim --replace "#31748f" "#3e8fb0"
+            substituteInPlace $out/colors/rosepine.vim --replace-fail "#31748f" "#3e8fb0"
           '';
         })
       ];
       extraConfig = ''
+        set termguicolors
         set mouse=a
         syntax on
+        set number
         set relativenumber
-        set termguicolors
         set tabstop=4
+        set softtabstop=4
         set shiftwidth=4
+        set expandtab
+        set smarttab
         set autoindent
         set smartindent
         set wildmenu
+        set ignorecase
+        set nohlsearch
+        set nowrap
+        set signcolumn=yes
         let g:disable_bg = 1
         colorscheme rosepine
         highlight StatusLine guibg=NONE ctermbg=NONE
         highlight StatusLineNC guibg=NONE ctermbg=NONE
+        let &t_SI = "\e[5 q" 
+        let &t_SR = "\e[3 q"
+        let &t_EI = "\e[2 q"
+        let &t_ti = "\e[2 q"
+        let &t_te = "\e[0 q"
       '';
+    };
+    eza = {
+      enable = true;
+      extraOptions = [ "--short-nix" ];
     };
     fzf = {
       enable = true;
       enableZshIntegration = true;
       defaultOptions = [
-        "--style full"
+        "--layout=reverse --popup=center,90%"
         "--preview 'bat --color=always --theme=rose-pine --style=-numbers,-header,-grid,+changes {}'"
       ];
-      historyWidget.options = [ "--no-preview" ];
+      historyWidget.options = [ "--popup=center,66% --no-preview" ];
+      changeDirWidget.options = [ "--popup=center,66% --no-preview" ];
+      fileWidget.options = [ "--preview-window=right:66%" ];
       colors = {
         fg = "#908caa";
         bg = "#191724";
@@ -192,7 +216,7 @@
             sha256 = "0sk4aq8ia5rh6p4vgmxc6449ypmn8lzr6czv7vfvc1wvabdwdrz7";
           };
           postPatch = ''
-            substituteInPlace dist/rose-pine.tmTheme --replace "#31748f" "#3e8fb0"
+            substituteInPlace dist/rose-pine.tmTheme --replace-fail "#31748f" "#3e8fb0"
           '';
         };
         file = "dist/rose-pine.tmTheme";

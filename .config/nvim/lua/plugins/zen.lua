@@ -6,7 +6,6 @@ require('zen-mode').setup({
         height = 0.90
     },
     plugins = {
-        tmux = { enabled = true },
         gitsigns = { enabled = true }
     }
 })

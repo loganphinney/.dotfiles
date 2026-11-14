@@ -22,6 +22,7 @@ vim.lsp.enable({
     'cssls',
 })
 vim.lsp.config('*', { capabilities = capabilities })
+vim.lsp.config('nixd', { settings = { nixd = { formatting = { command = { 'nixfmt', '-s' } } } } })
 vim.lsp.config('lua_ls', {
     settings = {
         Lua = {

@@ -1,5 +1,4 @@
-{ pkgs, lib, ... }:
-{
+{ pkgs, lib, ... }: {
   imports = [ ./hardware-configuration.nix ];
   system.stateVersion = "24.11";
   nixpkgs.config.allowUnfree = true;
@@ -129,9 +128,11 @@
   programs = {
     nh = {
       enable = true;
-      clean.enable = true;
-      clean.extraArgs = "--keep 3 --no-gcroots";
-      clean.dates = "daily";
+      /*
+        clean.enable = true;
+        clean.extraArgs = "--keep 3 --no-gcroots";
+        clean.dates = "daily";
+      */
       flake = "/home/loganp/.dotfiles/nix/dsk/";
     };
     zsh = {
@@ -193,6 +194,7 @@
       ffmpeg
       fzf
       gcc
+      gh
       git
       gnome-tweaks
       gnomeExtensions.color-picker
@@ -204,17 +206,19 @@
       gnomeExtensions.wallpaper-slideshow
       gnumake
       ipmitool
+      jellyfin-desktop
       jq
       jre
-      kiro-cli
       kubectl
       libreoffice-stable
       linux-wallpaperengine
       lua-language-server
       luajitPackages.jsregexp
+      mcp-nixos
       minikube
       nixd
       nixfmt
+      nixpkgs-review
       nmap
       nodejs_24
       nom

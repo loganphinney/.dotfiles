@@ -18,6 +18,7 @@
       lanzaboote,
       home-manager,
       niri,
+      umbriel,
       ...
     }:
     {
@@ -35,7 +36,7 @@
             home-manager.users.loganp.imports = [
               ./home.nix
               niri.homeModules.niri
-              inputs.umbriel.homeModules.default
+              umbriel.homeModules.default
             ];
           }
         ];

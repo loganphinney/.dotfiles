@@ -45,8 +45,11 @@
         in
         lib.mkMerge [ prompt ];
       shellAliases = {
-        ".." = "cd ../";
         "~" = "cd $HOME";
+        "-" = "cd -";
+        ".." = "cd ..";
+        "..." = "cd ../..";
+        "...." = "cd ../../..";
         cl = "clear";
         ls = "eza";
         la = "eza -a";
@@ -158,12 +161,12 @@
           plugin = (
             mkTmuxPlugin {
               pluginName = "rose-pine-tmux";
-              version = "1-unstable-2026-07-23";
+              version = "1-unstable-2026-11-03";
               src = pkgs.fetchFromGitHub {
                 owner = "rose-pine";
                 repo = "tmux";
-                rev = "6222fc73a9ce0bf36ffd3a8ca7d2f3e516f5c9ef";
-                hash = "sha256-AiU3+RSw7Hj3SQ6q0ETV/7yaNl+ba2ykp3OomDL+4kw=";
+                rev = "39e39e76f6710b40a4b66222c6688ece1da8d3a4";
+                hash = "sha256-Uv+j4sV+EO1RuQW73637S2DaZtNKJEpI3DNuOxmPDc4=";
               };
               postInstall = ''
                 substituteInPlace $target/rose-pine.tmux --replace-fail "#31748f" "#3e8fb0"
@@ -244,7 +247,7 @@
       enable = true;
       enableZshIntegration = true;
       defaultOptions = [
-        "--layout=reverse --popup=center,90%"
+        "--style=full --layout=reverse --popup=center,90%"
         "--preview 'bat --color=always --theme=rose-pine --style=-numbers,-header,-grid,+changes {}'"
       ];
       historyWidget.options = [ "--popup=center,66% --no-preview" ];
@@ -618,7 +621,7 @@
           always-center-single-column = true;
         };
         overview = {
-          backdrop-color = "#191724";
+          backdrop-color = "#000000"; # "#191724";
           zoom = 0.666;
         };
         cursor.theme = "BreezeX-RosePine-Linux";
@@ -815,11 +818,11 @@
       checkConfig = true;
       package =
         let
-          fivetwoone = fetchTarball {
-            url = "https://github.com/NixOS/nixpkgs/archive/f4549c33dbad23b36d165bbcc037ab6dbdbf4e5f.tar.gz";
-            sha256 = "sha256-oI4dM3zj+U3y1cLf90CxcROSwo4HvVO8hAMJuiINNkc=";
+          fivefivezero = fetchTarball {
+            url = "https://github.com/NixOS/nixpkgs/archive/0367aa25ca64493e91afc95ccde0548e219c6ab0.tar.gz";
+            sha256 = "sha256-AoRrJjINnO9AmfBuIN8a+hqMURH2wieIhWEpumiA0Zg=";
           };
-          pinnedPkgs = import fivetwoone { system = pkgs.system; };
+          pinnedPkgs = import fivefivezero { system = pkgs.system; };
         in
         pinnedPkgs.noctalia;
       settings = {

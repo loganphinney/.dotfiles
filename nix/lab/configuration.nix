@@ -1,5 +1,4 @@
-{ pkgs, lib, ... }:
-{
+{ pkgs, lib, ... }: {
   imports = [ ./hardware-configuration.nix ];
   system.stateVersion = "26.05";
   nix.settings = {

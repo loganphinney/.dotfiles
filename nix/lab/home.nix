@@ -1,5 +1,4 @@
-{ pkgs, inputs, ... }:
-{
+{ pkgs, inputs, ... }: {
   nix.registry.nixpkgs.flake = inputs.nixpkgs;
   home = {
     username = "loganp";
@@ -21,6 +20,7 @@
         compinit -C; bashcompinit
       '';
       history = {
+        size = 250000;
         share = true;
         append = true;
         ignoreDups = true;
@@ -33,8 +33,11 @@
         }
       ];
       shellAliases = {
-        ".." = "cd ../";
         "~" = "cd $HOME";
+        "-" = "cd -";
+        ".." = "cd ..";
+        "..." = "cd ../..";
+        "...." = "cd ../../..";
         cl = "clear";
         ls = "eza";
         la = "eza -a";
@@ -50,7 +53,7 @@
         nixupgrade = "sudo nix flake update --flake $NH_FLAKE";
         nhupdate = "nh os switch --no-nom";
         nhupgrade = "nh os switch -u --no-nom";
-        nhclean = "nh clean all -k 4";
+        nhclean = "nh clean all -k 3";
       };
     };
     direnv = {
@@ -69,6 +72,8 @@
       mouse = true;
       focusEvents = true;
       clock24 = true;
+      escapeTime = 0;
+      historyLimit = 50000;
       shortcut = "s";
       extraConfig = ''
         set -g default-terminal "xterm-256color"
@@ -78,9 +83,10 @@
         set -g renumber-windows on
         set -g status-position top
         set -g pane-border-lines "single"
-        set -g pane-border-style "fg=#1f1d2e"
-        set -g pane-active-border-style "fg=#1f1d2e"
+        set -g pane-border-style "fg=#21202e"
+        set -g pane-active-border-style "fg=#21202e"
         set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[5 q'
+        set -g mode-keys vi
         bind "|" split-window -h -c "#{pane_current_path}"
         bind "\\" split-window -fh -c "#{pane_current_path}"
         bind "-" split-window -v -c "#{pane_current_path}"
@@ -91,24 +97,24 @@
           plugin = (
             mkTmuxPlugin {
               pluginName = "rose-pine-tmux";
-              version = "1-unstable-2026-07-23";
-              rtpFilePath = "rose-pine.tmux";
+              version = "1-unstable-2026-11-03";
               src = pkgs.fetchFromGitHub {
                 owner = "rose-pine";
                 repo = "tmux";
-                rev = "6222fc73a9ce0bf36ffd3a8ca7d2f3e516f5c9ef";
-                hash = "sha256-AiU3+RSw7Hj3SQ6q0ETV/7yaNl+ba2ykp3OomDL+4kw=";
+                rev = "39e39e76f6710b40a4b66222c6688ece1da8d3a4";
+                hash = "sha256-Uv+j4sV+EO1RuQW73637S2DaZtNKJEpI3DNuOxmPDc4=";
               };
               postInstall = ''
                 substituteInPlace $target/rose-pine.tmux --replace-fail "#31748f" "#3e8fb0"
               '';
+              rtpFilePath = "rose-pine.tmux";
             }
           );
           extraConfig = ''
             set -g @rose_pine_variant 'main'
             set -g @rose_pine_bar_bg_disable 'on'
             set -g @rose_pine_bar_bg_disabled_color_option 'default'
-            set -g @rose_pine_session_icon ''
+            set -g @rose_pine_session_icon '•'
             set -g @rose_pine_date_time '%b-%d-%Y %H:%M:%S'
             set -g @rose_pine_disable_active_window_menu 'on'
             set -g @rose_pine_show_current_program 'on'
@@ -177,7 +183,7 @@
       enable = true;
       enableZshIntegration = true;
       defaultOptions = [
-        "--layout=reverse --popup=center,90%"
+        "--style=full --layout=reverse --popup=center,90%"
         "--preview 'bat --color=always --theme=rose-pine --style=-numbers,-header,-grid,+changes {}'"
       ];
       historyWidget.options = [ "--popup=center,66% --no-preview" ];

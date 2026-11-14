@@ -149,8 +149,6 @@
         set -g pane-active-border-style "fg=#21202e"
         set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
         set -g mode-keys vi
-        bind -T copy-mode-vi v send -X begin-selection
-        bind -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"
         bind "|" split-window -h -c "#{pane_current_path}"
         bind "\\" split-window -fh -c "#{pane_current_path}"
         bind "-" split-window -v -c "#{pane_current_path}"
@@ -1086,14 +1084,6 @@
       "dynamic.path" = { foreground = "magenta", underline = false }
       [metadata]
       extends = "patina"
-    '';
-    ".config/nvimpager/init.lua".text = ''
-      local nvim_site = vim.fn.expand('$HOME/.local/share/nvim/site')
-      vim.opt.runtimepath:prepend(nvim_site)
-      vim.opt.runtimepath:prepend(nvim_site .. '/pack/core/opt/nvim-treesitter')
-      vim.opt.runtimepath:prepend(nvim_site .. '/pack/core/opt/neovim')
-      dofile(vim.fn.expand('$HOME/.config/nvim/lua/plugins/rosepine.lua'))
-      dofile(vim.fn.expand('$HOME/.config/nvim/lua/plugins/treesitter.lua'))
     '';
   };
 }

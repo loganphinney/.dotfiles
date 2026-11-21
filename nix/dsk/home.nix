@@ -65,8 +65,8 @@
         nixed = "nvim -c 'cd $NH_FLAKE' $NH_FLAKE";
         nixupdate = "sudo nixos-rebuild switch --flake $NH_FLAKE";
         nixupgrade = "sudo nix flake update --flake $NH_FLAKE";
-        nhupdate = "nh os switch --no-nom";
-        nhupgrade = "nh os switch -u --no-nom";
+        nhupdate = "nh os switch --no-rom";
+        nhupgrade = "nh os switch -u --no-rom";
       };
     };
     direnv = {

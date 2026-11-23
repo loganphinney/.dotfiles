@@ -56,6 +56,21 @@ let
           promptInit = ''
             PROMPT="%B%F{1}[%1~]%f%b%F{8}%#%f "
           '';
+          shellAliases = {
+            "~" = "cd $HOME";
+            "-" = "cd -";
+            ".." = "cd ..";
+            "..." = "cd ../..";
+            "...." = "cd ../../..";
+            cl = "clear";
+            ls = "eza";
+            la = "eza -a";
+            l = "eza -glo";
+            ll = "eza -aglo";
+            l1 = "eza -1";
+            lt = "eza -T";
+            nv = "nvim";
+          };
         };
         neovim.enable = true;
         rust-motd = {

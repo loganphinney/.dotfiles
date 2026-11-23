@@ -51,8 +51,8 @@
         nixed = "nvim -c 'cd $NH_FLAKE' $NH_FLAKE";
         nixupdate = "sudo nixos-rebuild switch --flake $NH_FLAKE";
         nixupgrade = "sudo nix flake update --flake $NH_FLAKE";
-        nhupdate = "nh os switch --no-nom";
-        nhupgrade = "nh os switch -u --no-nom";
+        nhupdate = "nh os switch -d always --no-rom";
+        nhupgrade = "nh os switch -u -d always";
         nhclean = "nh clean all -k 3";
       };
     };
@@ -104,10 +104,10 @@
                 rev = "39e39e76f6710b40a4b66222c6688ece1da8d3a4";
                 hash = "sha256-Uv+j4sV+EO1RuQW73637S2DaZtNKJEpI3DNuOxmPDc4=";
               };
+              rtpFilePath = "rose-pine.tmux";
               postInstall = ''
                 substituteInPlace $target/rose-pine.tmux --replace-fail "#31748f" "#3e8fb0"
               '';
-              rtpFilePath = "rose-pine.tmux";
             }
           );
           extraConfig = ''
@@ -177,7 +177,10 @@
     };
     eza = {
       enable = true;
-      extraOptions = [ "--short-nix" ];
+      extraOptions = [
+        "--group-directories-first"
+        "--short-nix"
+      ];
     };
     fzf = {
       enable = true;
@@ -221,11 +224,11 @@
             rev = "6d556734541ccb04172e81fd58de4a35fff72d19";
             sha256 = "0sk4aq8ia5rh6p4vgmxc6449ypmn8lzr6czv7vfvc1wvabdwdrz7";
           };
+          file = "dist/rose-pine.tmTheme";
           postPatch = ''
             substituteInPlace dist/rose-pine.tmTheme --replace-fail "#31748f" "#3e8fb0"
           '';
         };
-        file = "dist/rose-pine.tmTheme";
       };
     };
     jq = {

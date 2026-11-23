@@ -5,6 +5,8 @@
     home-manager.url = "https://flakehub.com/f/nix-community/home-manager/0.1";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
+    microvm.url = "github:microvm-nix/microvm.nix";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs =
     inputs@{
@@ -13,14 +15,18 @@
       determinate,
       home-manager,
       agenix,
+      microvm,
       ...
     }:
     {
       nixosConfigurations.nix-lab = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix
+          ./vms.nix
           determinate.nixosModules.default
           agenix.nixosModules.default
+          microvm.nixosModules.host
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;

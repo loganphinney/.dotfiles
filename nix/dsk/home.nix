@@ -10,6 +10,7 @@
     username = "loganp";
     homeDirectory = "/home/loganp";
     stateVersion = "25.11";
+    sessionPath = [ "$HOME/scripts" ];
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";

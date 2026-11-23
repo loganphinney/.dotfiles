@@ -2,6 +2,7 @@
 - name: Assert media file permissions
   hosts: lab
   become: true
+  gather_facts: false
 
   vars:
     media_roots:
